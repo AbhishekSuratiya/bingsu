@@ -40,4 +40,5 @@ target 'bingsuMobile' do
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
+  pod 'RNSensors', :path => '../node_modules/react-native-sensors'
 end
