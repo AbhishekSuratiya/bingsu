@@ -6,7 +6,8 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   back: { position: 'absolute', left: 16 },
-  title: { fontSize: 20 },
+  title: { fontSize: 20, color: 'black' },
 });

@@ -1,15 +1,31 @@
 import React from 'react';
-import { Button, Text } from 'react-native';
+import { Button, View } from 'react-native';
+
+const sensors = ['accelerometer', 'gyroscope', 'magnetometer', 'barometer'];
 
 const HomeScreen = props => {
   return (
-    <>
-      <Text>HomeScreen</Text>
-      <Button
-        title={'GoTo About Screen'}
-        onPress={() => props.navigation.navigate('About')}
-      />
-    </>
+    <View
+      style={{
+        paddingVertical: 48,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        flex: 1,
+      }}>
+      {sensors.map(sensor => {
+        return (
+          <Button
+            key={sensor}
+            title={`Go To ${sensor} Screen`}
+            onPress={() =>
+              props.navigation.navigate('Sensor', {
+                sensorType: sensor,
+              })
+            }
+          />
+        );
+      })}
+    </View>
   );
 };
 

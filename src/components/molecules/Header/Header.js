@@ -5,7 +5,7 @@ const Header = ({ navigation, options }) => {
   return (
     <View style={styles.mainContainer}>
       <TouchableOpacity onPress={navigation.goBack} style={styles.back}>
-        <Text>Back</Text>
+        <Text style={{ color: 'black' }}>Back</Text>
       </TouchableOpacity>
       <Text style={styles.title}>{options.title}</Text>
     </View>

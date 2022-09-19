@@ -3,8 +3,8 @@ import { SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../components/screens/HomeScreen';
-import AboutScreen from '../components/screens/AboutScreen';
 import Header from '../components/molecules/Header/Header';
+import SensorScreen from '../components/screens/SensorScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,9 +15,9 @@ const screens = [
     options: { headerShown: false },
   },
   {
-    name: 'About',
-    component: AboutScreen,
-    options: { title: 'About title' },
+    name: 'Sensor',
+    component: SensorScreen,
+    options: { title: 'Sensor Screen' },
   },
 ];
 
@@ -25,10 +25,18 @@ const screenOptions = () => ({
   header: props => <Header {...props} />,
 });
 
+const navigationTheme = {
+  colors: {
+    primary: 'black',
+    text: 'black',
+    background: 'white',
+  },
+};
+
 const Navigator = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <NavigationContainer>
+      <NavigationContainer theme={navigationTheme}>
         <Stack.Navigator
           screenOptions={screenOptions}
           initialRouteName={'Home'}>
