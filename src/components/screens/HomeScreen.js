@@ -1,7 +1,13 @@
 import React from 'react';
 import { Button, View } from 'react-native';
 
-const sensors = ['accelerometer', 'gyroscope', 'magnetometer', 'barometer'];
+const sensors = [
+  'accelerometer',
+  'gyroscope',
+  'magnetometer',
+  'barometer',
+  'gps',
+];
 
 const HomeScreen = props => {
   return (

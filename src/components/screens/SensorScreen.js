@@ -8,6 +8,7 @@ import {
   SensorTypes,
   setUpdateIntervalForType,
 } from 'react-native-sensors';
+import GetLocation from 'react-native-get-location';
 
 const sensorMapper = {
   accelerometer,
@@ -23,38 +24,51 @@ const SensorScreen = ({ route, navigation }) => {
   useEffect(() => {
     navigation.setOptions({ title: route.params.sensorType.toUpperCase() });
 
-    setUpdateIntervalForType(SensorTypes[sensorType], 1000);
-    const subscription = sensorMapper[sensorType].subscribe({
-      next: data => {
-        setSensorData(prev => [...prev, data]);
-      },
-      error: error => console.log('The sensor is not available', error),
-      complete: () => console.log('Completed'),
-    });
+    if (sensorType !== 'gps') {
+      setUpdateIntervalForType(SensorTypes[sensorType], 1000);
+      const subscription = sensorMapper[sensorType].subscribe({
+        next: data => {
+          setSensorData(prev => [...prev, data]);
+        },
+        error: error => console.log('The sensor is not available', error),
+        complete: () => console.log('Completed'),
+      });
+      return () => subscription.unsubscribe();
+    } else {
+      const interval = setInterval(() => {
+        GetLocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 15000,
+        })
+          .then(location => setSensorData(prev => [...prev, location]))
+          .catch(error => {
+            const { code, message } = error;
+            console.warn(code, message);
+          });
+      }, 2000);
 
-    setTimeout(() => {
-      subscription.unsubscribe();
-    }, 300000);
-
-    return () => subscription.unsubscribe();
+      return () => clearInterval(interval);
+    }
   }, []);
+
+  const getDataText = data => {
+    if (sensorType === 'barometer') {
+      return `Pressure: ${data.pressure}`;
+    } else if (sensorType === 'gps') {
+      return `Altitude: ${data.altitude},    Latitude: ${data.latitude},    longitude: ${data.longitude}`;
+    } else {
+      return `x: ${data.x.toPrecision(4)},    y: ${data.y.toPrecision(
+        4,
+      )},    z: ${data.z.toPrecision(4)}`;
+    }
+  };
 
   return (
     <ScrollView style={{ flex: 1, padding: 16 }}>
       {sensorData.map(data => {
-        const { x, y, z } = data;
         return (
-          <View key={Math.random()}>
-            <Text
-              style={{
-                color: 'black',
-              }}>
-              {sensorType === 'barometer'
-                ? `Pressure: ${data.pressure}`
-                : `x: ${x.toPrecision(4)},    y: ${y.toPrecision(
-                    4,
-                  )},    z: ${z.toPrecision(4)}`}
-            </Text>
+          <View key={Math.random()} style={{ borderBottomWidth: 1 }}>
+            <Text style={{ color: 'black' }}>{getDataText(data)}</Text>
           </View>
         );
       })}
