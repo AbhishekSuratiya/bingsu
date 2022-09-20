@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, View } from 'react-native';
+import { Button, Platform, View } from 'react-native';
 
 const sensors = [
   'accelerometer',
@@ -7,6 +7,7 @@ const sensors = [
   'magnetometer',
   'barometer',
   'gps',
+  'ambientLight',
 ];
 
 const HomeScreen = props => {
@@ -18,19 +19,21 @@ const HomeScreen = props => {
         justifyContent: 'space-around',
         flex: 1,
       }}>
-      {sensors.map(sensor => {
-        return (
-          <Button
-            key={sensor}
-            title={`Go To ${sensor} Screen`}
-            onPress={() =>
-              props.navigation.navigate('Sensor', {
-                sensorType: sensor,
-              })
-            }
-          />
-        );
-      })}
+      {sensors
+        .filter(s => (Platform.OS === 'ios' && s === 'ambientLight' ? null : s))
+        .map(sensor => {
+          return (
+            <Button
+              key={sensor}
+              title={`Go To ${sensor} Screen`}
+              onPress={() =>
+                props.navigation.navigate('Sensor', {
+                  sensorType: sensor,
+                })
+              }
+            />
+          );
+        })}
     </View>
   );
 };

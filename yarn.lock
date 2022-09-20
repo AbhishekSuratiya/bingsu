@@ -5594,6 +5594,11 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-ambient-light-sensor@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-ambient-light-sensor/-/react-native-ambient-light-sensor-1.0.2.tgz#df699796f661280a2ebe54ace04f467f26c51365"
+  integrity sha512-KB5INg++HFxGfODA5J6amZtDI0jHxV1xhDU9yu/MQ+bPrWHCBwD6h0bfVhTW/3yB6GUkohV2VbSiUt/NbG1YAg==
+
 react-native-codegen@^0.70.5:
   version "0.70.5"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.70.5.tgz#afcfec394fc9357d870452eace5c7550e6ac403f"

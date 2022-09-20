@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { DeviceEventEmitter, ScrollView, Text, View } from 'react-native';
 import {
   accelerometer,
+  barometer,
   gyroscope,
   magnetometer,
-  barometer,
   SensorTypes,
   setUpdateIntervalForType,
 } from 'react-native-sensors';
 import GetLocation from 'react-native-get-location';
+import {
+  startLightSensor,
+  stopLightSensor,
+} from 'react-native-ambient-light-sensor';
 
 const sensorMapper = {
   accelerometer,
@@ -24,17 +28,16 @@ const SensorScreen = ({ route, navigation }) => {
   useEffect(() => {
     navigation.setOptions({ title: route.params.sensorType.toUpperCase() });
 
-    if (sensorType !== 'gps') {
-      setUpdateIntervalForType(SensorTypes[sensorType], 1000);
-      const subscription = sensorMapper[sensorType].subscribe({
-        next: data => {
-          setSensorData(prev => [...prev, data]);
-        },
-        error: error => console.log('The sensor is not available', error),
-        complete: () => console.log('Completed'),
-      });
-      return () => subscription.unsubscribe();
-    } else {
+    if (sensorType === 'ambientLight') {
+      startLightSensor();
+      const subscription = DeviceEventEmitter.addListener('LightSensor', data =>
+        setSensorData(prev => [...prev, data.lightValue]),
+      );
+      return () => {
+        stopLightSensor();
+        subscription?.remove();
+      };
+    } else if (sensorType === 'gps') {
       const interval = setInterval(() => {
         GetLocation.getCurrentPosition({
           enableHighAccuracy: true,
@@ -46,8 +49,17 @@ const SensorScreen = ({ route, navigation }) => {
             console.warn(code, message);
           });
       }, 2000);
-
       return () => clearInterval(interval);
+    } else {
+      setUpdateIntervalForType(SensorTypes[sensorType], 1000);
+      const subscription = sensorMapper[sensorType].subscribe({
+        next: data => {
+          setSensorData(prev => [...prev, data]);
+        },
+        error: error => console.log('The sensor is not available', error),
+        complete: () => console.log('Completed'),
+      });
+      return () => subscription.unsubscribe();
     }
   }, []);
 
@@ -56,6 +68,8 @@ const SensorScreen = ({ route, navigation }) => {
       return `Pressure: ${data.pressure}`;
     } else if (sensorType === 'gps') {
       return `Altitude: ${data.altitude},    Latitude: ${data.latitude},    longitude: ${data.longitude}`;
+    } else if (sensorType === 'ambientLight') {
+      return `Ambient light : ${data}`;
     } else {
       return `x: ${data.x.toPrecision(4)},    y: ${data.y.toPrecision(
         4,
