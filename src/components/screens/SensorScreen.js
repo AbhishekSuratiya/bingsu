@@ -13,6 +13,7 @@ import {
   startLightSensor,
   stopLightSensor,
 } from 'react-native-ambient-light-sensor';
+import Proximity from 'react-native-proximity';
 
 const sensorMapper = {
   accelerometer,
@@ -50,6 +51,11 @@ const SensorScreen = ({ route, navigation }) => {
           });
       }, 2000);
       return () => clearInterval(interval);
+    } else if (sensorType === 'proximity') {
+      const callback = ({ proximity }) =>
+        setSensorData(prev => [...prev, proximity]);
+      Proximity.addListener(callback);
+      return () => Proximity.removeListener(callback);
     } else {
       setUpdateIntervalForType(SensorTypes[sensorType], 1000);
       const subscription = sensorMapper[sensorType].subscribe({
@@ -70,6 +76,8 @@ const SensorScreen = ({ route, navigation }) => {
       return `Altitude: ${data.altitude},    Latitude: ${data.latitude},    longitude: ${data.longitude}`;
     } else if (sensorType === 'ambientLight') {
       return `Ambient light : ${data}`;
+    } else if (sensorType === 'proximity') {
+      return `Proximity : ${data}`;
     } else {
       return `x: ${data.x.toPrecision(4)},    y: ${data.y.toPrecision(
         4,

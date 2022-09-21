@@ -8,6 +8,7 @@ const sensors = [
   'barometer',
   'gps',
   'ambientLight',
+  'proximity',
 ];
 
 const HomeScreen = props => {
