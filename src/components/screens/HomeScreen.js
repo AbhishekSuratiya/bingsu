@@ -35,6 +35,10 @@ const HomeScreen = props => {
             />
           );
         })}
+      <Button
+        title={'Go To ScanQrScreen Screen'}
+        onPress={() => props.navigation.navigate('ScanQr')}
+      />
     </View>
   );
 };

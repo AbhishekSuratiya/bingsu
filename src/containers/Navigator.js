@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../components/screens/HomeScreen';
 import Header from '../components/molecules/Header/Header';
 import SensorScreen from '../components/screens/SensorScreen';
+import ScanQrScreen from '../components/screens/ScanQrScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,7 +18,11 @@ const screens = [
   {
     name: 'Sensor',
     component: SensorScreen,
-    options: { title: 'Sensor Screen' },
+  },
+  {
+    name: 'ScanQr',
+    component: ScanQrScreen,
+    options: { title: 'Scan QR Code' },
   },
 ];
 
