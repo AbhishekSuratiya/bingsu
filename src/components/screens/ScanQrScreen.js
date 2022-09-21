@@ -1,30 +1,51 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import * as React from 'react';
 
-const ScanQrScreen = props => {
-  const getPermission = async () => {
-    const cameraPermission = await Camera.getCameraPermissionStatus();
-    const newCameraPermission = await Camera.requestCameraPermission();
-    console.log({ cameraPermission, newCameraPermission });
-  };
-  useEffect(() => {
-    getPermission().then();
-  }, []);
+import { StyleSheet, Text } from 'react-native';
+import { useCameraDevices } from 'react-native-vision-camera';
+import { Camera } from 'react-native-vision-camera';
+import { useScanBarcodes, BarcodeFormat } from 'vision-camera-code-scanner';
 
+export default function ScanQrScreen() {
+  const [hasPermission, setHasPermission] = React.useState(false);
   const devices = useCameraDevices();
   const device = devices.back;
+
+  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
+    checkInverted: true,
+  });
+
+  React.useEffect(() => {
+    (async () => {
+      const status = await Camera.requestCameraPermission();
+      setHasPermission(status === 'authorized');
+    })();
+  }, []);
+
   return (
-    <View style={{ flex: 1 }}>
-      {!!device && (
+    device != null &&
+    hasPermission && (
+      <>
         <Camera
           style={StyleSheet.absoluteFill}
           device={device}
           isActive={true}
+          frameProcessor={frameProcessor}
+          frameProcessorFps={5}
         />
-      )}
-    </View>
+        {barcodes.map((barcode, idx) => (
+          <Text key={idx} style={styles.barcodeTextURL}>
+            {barcode.displayValue}
+          </Text>
+        ))}
+      </>
+    )
   );
-};
+}
 
-export default ScanQrScreen;
+const styles = StyleSheet.create({
+  barcodeTextURL: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});
