@@ -4,8 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../components/screens/HomeScreen';
 import Header from '../components/molecules/Header/Header';
-import SensorScreen from '../components/screens/SensorScreen';
+import DevSensorScreen from '../components/screens/DevSensorScreen';
 import ScanQrScreen from '../components/screens/ScanQrScreen';
+import SensorScreen from '../components/screens/SensorScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,13 +17,18 @@ const screens = [
     options: { headerShown: false },
   },
   {
-    name: 'Sensor',
-    component: SensorScreen,
+    name: 'DevSensor',
+    component: DevSensorScreen,
   },
   {
     name: 'ScanQr',
     component: ScanQrScreen,
     options: { title: 'Scan QR Code' },
+  },
+  {
+    name: 'Sensor',
+    component: SensorScreen,
+    options: { title: 'Sensors' },
   },
 ];
 
@@ -34,7 +40,7 @@ const navigationTheme = {
   colors: {
     primary: 'black',
     text: 'black',
-    background: 'white',
+    background: 'black',
   },
 };
 

@@ -11,6 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		4683A4A128DD3CA0000C082A /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4683A4A028DD3CA0000C082A /* icomoon.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B9CF8384AD319403D3677648 /* libPods-bingsuMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD0DC139E681587A1A6611D0 /* libPods-bingsuMobile.a */; };
 		FB8DDA67FDFB97482E05AD6B /* libPods-bingsuMobile-bingsuMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D80EF78D19F3C623239AA98 /* libPods-bingsuMobile-bingsuMobileTests.a */; };
@@ -38,6 +39,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = bingsuMobile/main.m; sourceTree = "<group>"; };
 		2305EFF25B71878B3F1C775A /* Pods-bingsuMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile.release.xcconfig"; path = "Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile.release.xcconfig"; sourceTree = "<group>"; };
 		42741DF317E38E75DB336D08 /* Pods-bingsuMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile.debug.xcconfig"; path = "Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile.debug.xcconfig"; sourceTree = "<group>"; };
+		4683A4A028DD3CA0000C082A /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = icomoon.ttf; path = ../assets/fonts/icomoon.ttf; sourceTree = "<group>"; };
 		7A17586BE50735D2DFC893F8 /* Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-bingsuMobile-bingsuMobileTests/Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7D80EF78D19F3C623239AA98 /* libPods-bingsuMobile-bingsuMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bingsuMobile-bingsuMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = bingsuMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				4683A4A028DD3CA0000C082A /* icomoon.ttf */,
 				13B07FAE1A68108700A75B9A /* bingsuMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* bingsuMobileTests */,
@@ -244,6 +247,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				4683A4A128DD3CA0000C082A /* icomoon.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

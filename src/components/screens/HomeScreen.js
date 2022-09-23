@@ -28,7 +28,7 @@ const HomeScreen = props => {
               key={sensor}
               title={`Go To ${sensor} Screen`}
               onPress={() =>
-                props.navigation.navigate('Sensor', {
+                props.navigation.navigate('DevSensor', {
                   sensorType: sensor,
                 })
               }
@@ -38,6 +38,10 @@ const HomeScreen = props => {
       <Button
         title={'Go To ScanQrScreen Screen'}
         onPress={() => props.navigation.navigate('ScanQr')}
+      />
+      <Button
+        title={'Go To All Sensor Screen'}
+        onPress={() => props.navigation.navigate('Sensor')}
       />
     </View>
   );

@@ -1,99 +1,95 @@
-import React, { useEffect, useState } from 'react';
-import { DeviceEventEmitter, ScrollView, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { ScrollView } from 'react-native';
+import SensorCard from '../organisms/SensorCard';
 import {
   accelerometer,
-  barometer,
   gyroscope,
   magnetometer,
   SensorTypes,
   setUpdateIntervalForType,
 } from 'react-native-sensors';
-import GetLocation from 'react-native-get-location';
-import {
-  startLightSensor,
-  stopLightSensor,
-} from 'react-native-ambient-light-sensor';
-import Proximity from 'react-native-proximity';
+import CameraSensorCard from '../organisms/CameraSensorCard';
 
-const sensorMapper = {
-  accelerometer,
-  gyroscope,
-  magnetometer,
-  barometer,
-};
+const SensorScreen = props => {
+  const [accelerometerData, setAccelerometerData] = useState([]);
+  const [gyroscopeData, setGyroscopeData] = useState([]);
+  const [magnetometerData, setMagnetometerData] = useState([]);
 
-const SensorScreen = ({ route, navigation }) => {
-  const [sensorData, setSensorData] = useState([]);
-  const { sensorType } = route.params;
+  const subscriptionAccelerometer = useRef(null);
+  const subscriptionGyroscope = useRef(null);
+  const subscriptionMagnetometer = useRef(null);
 
-  useEffect(() => {
-    navigation.setOptions({ title: route.params.sensorType.toUpperCase() });
-
-    if (sensorType === 'ambientLight') {
-      startLightSensor();
-      const subscription = DeviceEventEmitter.addListener('LightSensor', data =>
-        setSensorData(prev => [...prev, data.lightValue]),
-      );
-      return () => {
-        stopLightSensor();
-        subscription?.remove();
-      };
-    } else if (sensorType === 'gps') {
-      const interval = setInterval(() => {
-        GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          timeout: 15000,
-        })
-          .then(location => setSensorData(prev => [...prev, location]))
-          .catch(error => {
-            const { code, message } = error;
-            console.warn(code, message);
-          });
-      }, 2000);
-      return () => clearInterval(interval);
-    } else if (sensorType === 'proximity') {
-      const callback = ({ proximity }) =>
-        setSensorData(prev => [...prev, proximity]);
-      Proximity.addListener(callback);
-      return () => Proximity.removeListener(callback);
-    } else {
-      setUpdateIntervalForType(SensorTypes[sensorType], 1000);
-      const subscription = sensorMapper[sensorType].subscribe({
-        next: data => {
-          setSensorData(prev => [...prev, data]);
-        },
-        error: error => console.log('The sensor is not available', error),
-        complete: () => console.log('Completed'),
-      });
-      return () => subscription.unsubscribe();
-    }
-  }, []);
-
-  const getDataText = data => {
-    if (sensorType === 'barometer') {
-      return `Pressure: ${data.pressure}`;
-    } else if (sensorType === 'gps') {
-      return `Altitude: ${data.altitude},    Latitude: ${data.latitude},    longitude: ${data.longitude}`;
-    } else if (sensorType === 'ambientLight') {
-      return `Ambient light : ${data}`;
-    } else if (sensorType === 'proximity') {
-      return `Proximity : ${data}`;
-    } else {
-      return `x: ${data.x.toPrecision(4)},    y: ${data.y.toPrecision(
-        4,
-      )},    z: ${data.z.toPrecision(4)}`;
-    }
+  const startAccelerometer = () => {
+    setUpdateIntervalForType(SensorTypes.accelerometer, 1000);
+    subscriptionAccelerometer.current = accelerometer.subscribe({
+      next: data => {
+        setAccelerometerData(prev => [...prev.slice(-20), data]);
+      },
+      error: error => console.log('The sensor is not available', error),
+    });
+  };
+  const startGyroscope = () => {
+    setUpdateIntervalForType(SensorTypes.gyroscope, 1000);
+    subscriptionGyroscope.current = gyroscope.subscribe({
+      next: data => {
+        setGyroscopeData(prev => [...prev.slice(-20), data]);
+      },
+      error: error => console.log('The sensor is not available', error),
+    });
+  };
+  const startMagnetometer = () => {
+    setUpdateIntervalForType(SensorTypes.magnetometer, 1000);
+    subscriptionMagnetometer.current = magnetometer.subscribe({
+      next: data => {
+        setMagnetometerData(prev => [...prev.slice(-20), data]);
+      },
+      error: error => console.log('The sensor is not available', error),
+    });
   };
 
+  const stopAccelerometer = () => {
+    subscriptionAccelerometer.current.unsubscribe();
+  };
+  const stopGyroscope = () => {
+    subscriptionGyroscope.current.unsubscribe();
+  };
+  const stopMagnetometer = () => {
+    subscriptionMagnetometer.current.unsubscribe();
+  };
+
+  useEffect(() => {
+    startAccelerometer();
+    startGyroscope();
+    startMagnetometer();
+
+    return () => {
+      stopAccelerometer();
+      stopGyroscope();
+      stopMagnetometer();
+    };
+  }, []);
+
   return (
-    <ScrollView style={{ flex: 1, padding: 16 }}>
-      {sensorData.map(data => {
-        return (
-          <View key={Math.random()} style={{ borderBottomWidth: 1 }}>
-            <Text style={{ color: 'black' }}>{getDataText(data)}</Text>
-          </View>
-        );
-      })}
+    <ScrollView>
+      <SensorCard
+        sensorData={accelerometerData}
+        title={'Accelerometer'}
+        startSensor={startAccelerometer}
+        stopSensor={stopAccelerometer}
+      />
+      <SensorCard
+        sensorData={gyroscopeData}
+        title={'Gyroscope'}
+        startSensor={startGyroscope}
+        stopSensor={stopGyroscope}
+      />
+      <SensorCard
+        sensorData={magnetometerData}
+        title={'Magnetometer'}
+        startSensor={startMagnetometer}
+        stopSensor={stopMagnetometer}
+      />
+      <CameraSensorCard title={'Video'} />
     </ScrollView>
   );
 };

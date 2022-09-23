@@ -55,5 +55,9 @@
 	<false/>
 	<key>NSCameraUsageDescription</key>
     <string>$(PRODUCT_NAME) needs access to your Camera.</string>
+    <key>UIAppFonts</key>
+    <array>
+        <string>icomoon.ttf</string>
+    </array>
 </dict>
 </plist>
