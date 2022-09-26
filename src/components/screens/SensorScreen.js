@@ -9,6 +9,7 @@ import {
   setUpdateIntervalForType,
 } from 'react-native-sensors';
 import CameraSensorCard from '../organisms/CameraSensorCard';
+import styles from './SensorScreenStyles';
 
 const SensorScreen = props => {
   const [accelerometerData, setAccelerometerData] = useState([]);
@@ -76,18 +77,21 @@ const SensorScreen = props => {
         title={'Accelerometer'}
         startSensor={startAccelerometer}
         stopSensor={stopAccelerometer}
+        style={styles.sensorCard}
       />
       <SensorCard
         sensorData={gyroscopeData}
         title={'Gyroscope'}
         startSensor={startGyroscope}
         stopSensor={stopGyroscope}
+        style={styles.sensorCard}
       />
       <SensorCard
         sensorData={magnetometerData}
         title={'Magnetometer'}
         startSensor={startMagnetometer}
         stopSensor={stopMagnetometer}
+        style={styles.sensorCard}
       />
       <CameraSensorCard title={'Video'} />
     </ScrollView>

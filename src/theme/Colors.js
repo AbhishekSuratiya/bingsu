@@ -8,6 +8,7 @@ const colors = {
   white80: '#FFFFFFCC',
   white90: '#FFFFFFE6',
   white100: '#FFFFFF',
+  toggleOff: '#787880',
 };
 
 export default colors;
