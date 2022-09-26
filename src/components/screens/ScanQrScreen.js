@@ -4,6 +4,7 @@ import { StyleSheet, Text } from 'react-native';
 import { useCameraDevices } from 'react-native-vision-camera';
 import { Camera } from 'react-native-vision-camera';
 import { useScanBarcodes, BarcodeFormat } from 'vision-camera-code-scanner';
+import Colors from '../../theme/Colors';
 
 export default function ScanQrScreen() {
   const [hasPermission, setHasPermission] = React.useState(false);
@@ -26,7 +27,12 @@ export default function ScanQrScreen() {
     hasPermission && (
       <>
         <Camera
-          style={StyleSheet.absoluteFill}
+          style={{
+            width: '100%',
+            height: 350,
+            borderWidth: 1,
+            borderColor: 'red',
+          }}
           device={device}
           isActive={true}
           frameProcessor={frameProcessor}
@@ -37,15 +43,29 @@ export default function ScanQrScreen() {
             {barcode.displayValue}
           </Text>
         ))}
+        <Text style={styles.barcodeHeading}>{'How to connect to AWS?'}</Text>
+        <Text style={styles.steps}>
+          {'1. Create an account on aws.amazon.com'}
+        </Text>
+        <Text style={styles.steps}>{'2. Go to sensors dashboard'}</Text>
+        <Text style={styles.steps}>{'3. Click the generate QR button'}</Text>
+        <Text style={styles.steps}>{'4. Scan the QR with the app'}</Text>
       </>
     )
   );
 }
 
 const styles = StyleSheet.create({
-  barcodeTextURL: {
-    fontSize: 20,
+  barcodeHeading: {
+    fontSize: 16,
     color: 'white',
     fontWeight: 'bold',
+    marginTop: 40,
+    marginBottom: 16,
+  },
+  steps: {
+    fontSize: 13,
+    color: Colors.grey80,
+    marginBottom: 12,
   },
 });

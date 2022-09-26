@@ -7,7 +7,7 @@ import styles from './SensorCardStyles';
 import Collapsible from 'react-native-collapsible';
 
 const SensorCard = ({ sensorData, title, startSensor, stopSensor, style }) => {
-  const [isSensorListening, setIsSensorListening] = useState(true);
+  const [isSensorListening, setIsSensorListening] = useState(false);
   const xCoordinate = sensorData?.map(data => data.x);
   const yCoordinate = sensorData?.map(data => data.y);
   const zCoordinate = sensorData?.map(data => data.z);

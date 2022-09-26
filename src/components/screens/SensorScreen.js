@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import SensorCard from '../organisms/SensorCard';
 import {
   accelerometer,
@@ -12,8 +12,10 @@ import CameraSensorCard from '../organisms/CameraSensorCard';
 import styles from './SensorScreenStyles';
 import { AwsContext } from '../../containers/InitialiseAws';
 import { AWS_TOPIC_NAME } from '../../utils/contants';
+import Colors from '../../theme/Colors';
+import Button from '../atoms/Button';
 
-const SensorScreen = props => {
+const SensorScreen = ({ navigation }) => {
   const [accelerometerData, setAccelerometerData] = useState([]);
   const [gyroscopeData, setGyroscopeData] = useState([]);
   const [magnetometerData, setMagnetometerData] = useState([]);
@@ -102,19 +104,41 @@ const SensorScreen = props => {
   };
 
   useEffect(() => {
-    startAccelerometer();
-    startGyroscope();
-    startMagnetometer();
-
     return () => {
-      stopAccelerometer();
-      stopGyroscope();
-      stopMagnetometer();
+      // stopAccelerometer();
+      // stopGyroscope();
+      // stopMagnetometer();
     };
   }, []);
 
   return (
     <ScrollView>
+      <View
+        style={{
+          padding: 16,
+          paddingBottom: 0,
+        }}>
+        <View
+          style={{
+            padding: 16,
+            backgroundColor: Colors.dark5,
+            borderRadius: 8,
+          }}>
+          <Text
+            style={{ color: Colors.white100, marginBottom: 4, fontSize: 16 }}>
+            Connect to AWS
+          </Text>
+          <Text
+            style={{ color: Colors.grey80, fontSize: 13, marginBottom: 16 }}>
+            Save your sensor data by connecting to AWS
+          </Text>
+          <Button
+            title={'Connect'}
+            onPress={() => navigation.navigate('ScanQr')}
+          />
+        </View>
+      </View>
+
       <SensorCard
         sensorData={accelerometerData}
         title={'Accelerometer'}
