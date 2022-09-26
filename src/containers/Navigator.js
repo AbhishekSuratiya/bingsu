@@ -7,8 +7,11 @@ import Header from '../components/molecules/Header/Header';
 import DevSensorScreen from '../components/screens/DevSensorScreen';
 import ScanQrScreen from '../components/screens/ScanQrScreen';
 import SensorScreen from '../components/screens/SensorScreen';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Colors from '../theme/Colors';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const screens = [
   {
@@ -32,6 +35,39 @@ const screens = [
   },
 ];
 
+const tabBarActiveTintColor = Colors.blue;
+const tabBarInactiveTintColor = Colors.grey80;
+
+const tabScreens = [
+  {
+    name: 'Sensor',
+    component: SensorScreen,
+    options: {
+      title: 'Sensors',
+      tabBarActiveTintColor,
+      tabBarInactiveTintColor,
+    },
+  },
+  {
+    name: 'ScanQr',
+    component: ScanQrScreen,
+    options: {
+      title: 'Connect to AWS',
+      tabBarActiveTintColor,
+      tabBarInactiveTintColor,
+    },
+  },
+  {
+    name: 'Home',
+    component: HomeScreen,
+    options: {
+      headerShown: false,
+      tabBarActiveTintColor,
+      tabBarInactiveTintColor,
+    },
+  },
+];
+
 const screenOptions = () => ({
   header: props => <Header {...props} />,
 });
@@ -48,12 +84,26 @@ const Navigator = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <NavigationContainer theme={navigationTheme}>
-        <Stack.Navigator
-          screenOptions={screenOptions}
-          initialRouteName={'Home'}>
-          {screens.map(({ name, component, options }) => {
+        {/*TODO: Remove this if not required*/}
+        {/*<Stack.Navigator*/}
+        {/*  screenOptions={screenOptions}*/}
+        {/*  initialRouteName={'Home'}>*/}
+        {/*  {screens.map(({ name, component, options }) => {*/}
+        {/*    return (*/}
+        {/*      <Stack.Screen*/}
+        {/*        key={name}*/}
+        {/*        name={name}*/}
+        {/*        component={component}*/}
+        {/*        options={options}*/}
+        {/*      />*/}
+        {/*    );*/}
+        {/*  })}*/}
+        {/*</Stack.Navigator>*/}
+
+        <Tab.Navigator screenOptions={screenOptions}>
+          {tabScreens.map(({ name, component, options }) => {
             return (
-              <Stack.Screen
+              <Tab.Screen
                 key={name}
                 name={name}
                 component={component}
@@ -61,7 +111,7 @@ const Navigator = () => {
               />
             );
           })}
-        </Stack.Navigator>
+        </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaView>
   );

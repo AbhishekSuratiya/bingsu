@@ -11,6 +11,7 @@
     "postinstall": "npx rn-nodeify --install \"fs,util,path,tls,stream,buffer,global,process\" --hack"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.0",
     "@reduxjs/toolkit": "^1.8.5",
