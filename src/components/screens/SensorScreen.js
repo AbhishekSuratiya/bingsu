@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ScrollView } from 'react-native';
 import SensorCard from '../organisms/SensorCard';
 import {
@@ -10,6 +10,8 @@ import {
 } from 'react-native-sensors';
 import CameraSensorCard from '../organisms/CameraSensorCard';
 import styles from './SensorScreenStyles';
+import { AwsContext } from '../../containers/InitialiseAws';
+import { AWS_TOPIC_NAME } from '../../utils/contants';
 
 const SensorScreen = props => {
   const [accelerometerData, setAccelerometerData] = useState([]);
@@ -20,11 +22,26 @@ const SensorScreen = props => {
   const subscriptionGyroscope = useRef(null);
   const subscriptionMagnetometer = useRef(null);
 
+  const client = useContext(AwsContext);
+
   const startAccelerometer = () => {
     setUpdateIntervalForType(SensorTypes.accelerometer, 1000);
     subscriptionAccelerometer.current = accelerometer.subscribe({
       next: data => {
         setAccelerometerData(prev => [...prev.slice(-20), data]);
+        client &&
+          client.publish(
+            AWS_TOPIC_NAME,
+            JSON.stringify({
+              state: {
+                reported: {
+                  AccelerometerXMeasurement: data.x,
+                  AccelerometerYMeasurement: data.y,
+                  AccelerometerZMeasurement: data.z,
+                },
+              },
+            }),
+          );
       },
       error: error => console.log('The sensor is not available', error),
     });
@@ -34,6 +51,19 @@ const SensorScreen = props => {
     subscriptionGyroscope.current = gyroscope.subscribe({
       next: data => {
         setGyroscopeData(prev => [...prev.slice(-20), data]);
+        client &&
+          client.publish(
+            AWS_TOPIC_NAME,
+            JSON.stringify({
+              state: {
+                reported: {
+                  GyroscopeXMeasurement: data.x,
+                  GyroscopeYMeasurement: data.y,
+                  GyroscopeZMeasurement: data.z,
+                },
+              },
+            }),
+          );
       },
       error: error => console.log('The sensor is not available', error),
     });
@@ -43,6 +73,19 @@ const SensorScreen = props => {
     subscriptionMagnetometer.current = magnetometer.subscribe({
       next: data => {
         setMagnetometerData(prev => [...prev.slice(-20), data]);
+        client &&
+          client.publish(
+            AWS_TOPIC_NAME,
+            JSON.stringify({
+              state: {
+                reported: {
+                  MagnetometerXMeasurement: data.x,
+                  MagnetometerYMeasurement: data.y,
+                  MagnetometerZMeasurement: data.z,
+                },
+              },
+            }),
+          );
       },
       error: error => console.log('The sensor is not available', error),
     });
