@@ -4,6 +4,7 @@ import { Switch, Text, View } from 'react-native';
 import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import styles from './SensorCardStyles';
+import Collapsible from 'react-native-collapsible';
 
 const SensorCard = ({ sensorData, title, startSensor, stopSensor, style }) => {
   const [isSensorListening, setIsSensorListening] = useState(true);
@@ -37,7 +38,6 @@ const SensorCard = ({ sensorData, title, startSensor, stopSensor, style }) => {
 
   const renderCoordinates = () => (
     <View>
-      <Text style={styles.sensorTitle}>{title}</Text>
       <View style={styles.coordinatesContainer}>
         <View style={styles.coordinatesText}>
           <Text style={styles.coordinates}>x:</Text>
@@ -79,30 +79,39 @@ const SensorCard = ({ sensorData, title, startSensor, stopSensor, style }) => {
 
   return (
     <View style={[styles.root, style]}>
-      <View style={styles.card}>
+      <Collapsible
+        style={styles.card}
+        collapsed={!isSensorListening}
+        collapsedHeight={66}
+        enablePointerEvents>
         <View style={styles.header}>
-          {renderCoordinates()}
+          <View style={{ justifyContent: 'center' }}>
+            <Text style={styles.sensorTitle}>{title}</Text>
+            {isSensorListening && renderCoordinates()}
+          </View>
           {renderSwitch()}
         </View>
-        <View style={styles.yAxisContainer}>
-          <YAxis
-            data={data[max].data}
-            contentInset={verticalContentInset}
-            svg={axesSvg}
-            formatLabel={value => (value > 1 ? value : value?.toFixed(3))}
-          />
-          <View style={styles.lineChartContainer}>
-            <LineChart
-              style={styles.lineChart}
-              data={data}
-              svg={{ strokeWidth: 2.5 }}
-              curve={shape.curveNatural}
-              contentInset={verticalContentInset}>
-              <Grid svg={{ stroke: Colors.grey }} />
-            </LineChart>
+        {isSensorListening && (
+          <View style={styles.yAxisContainer}>
+            <YAxis
+              data={data[max].data}
+              contentInset={verticalContentInset}
+              svg={axesSvg}
+              formatLabel={value => (value > 1 ? value : value?.toFixed(3))}
+            />
+            <View style={styles.lineChartContainer}>
+              <LineChart
+                style={styles.lineChart}
+                data={data}
+                svg={{ strokeWidth: 2.5 }}
+                curve={shape.curveNatural}
+                contentInset={verticalContentInset}>
+                <Grid svg={{ stroke: Colors.grey }} />
+              </LineChart>
+            </View>
           </View>
-        </View>
-      </View>
+        )}
+      </Collapsible>
     </View>
   );
 };

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Aws from 'aws-sdk/dist/aws-sdk-react-native';
 import AwsIot from 'aws-iot-device-sdk';
 import { AWS_TOPIC_NAME } from '../utils/contants';
+import { useDispatch } from 'react-redux';
+import { awsAction } from '../redux/reducers/awsReducer';
 
 const AWS_REGION = 'us-west-2';
 const AWS_COGNITO_IDENTITY_POOL =
@@ -11,6 +13,7 @@ export const AwsContext = React.createContext();
 
 const InitialiseAws = ({ children }) => {
   const [awsClient, setAwsClient] = useState(null);
+  const dispatch = useDispatch();
   Aws.config.region = AWS_REGION;
   Aws.config.credentials = new Aws.CognitoIdentityCredentials({
     IdentityPoolId: AWS_COGNITO_IDENTITY_POOL,
@@ -37,6 +40,7 @@ const InitialiseAws = ({ children }) => {
           JSON.stringify({ message: 'Connected established ➡' }),
         );
         setAwsClient(client);
+        dispatch(awsAction.setIsAwsConnected(true));
       });
 
       client.on('message', (topic, message) => {

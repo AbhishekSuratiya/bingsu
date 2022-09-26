@@ -24,8 +24,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.dark5,
     borderRadius: 8,
+    height: 300,
   },
-  root: { height: 300, width: '100%' },
+  root: {
+    width: '100%',
+  },
 });
 
 export default styles;
