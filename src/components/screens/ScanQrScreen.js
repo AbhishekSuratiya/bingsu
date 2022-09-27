@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useCameraDevices } from 'react-native-vision-camera';
 import { Camera } from 'react-native-vision-camera';
@@ -14,6 +14,7 @@ import { CheckSvg } from '../../../assets/images/svg';
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = React.useState(false);
   const isAwsConnected = useSelector(state => state.awsStore.isAwsConnected);
+  const [isCameraActive, setIsCameraActive] = useState(true);
   const devices = useCameraDevices();
   const device = devices.back;
   const dispatch = useDispatch();
@@ -30,14 +31,19 @@ export default function ScanQrScreen({ navigation }) {
   }, []);
 
   React.useEffect(() => {
-    if (barcodes.length && barcodes[0].displayValue) {
-      const qrCodeData = JSON.parse(barcodes[0].displayValue);
-      dispatch(awsAction.setAwsRegion(qrCodeData.REGION));
-      dispatch(awsAction.setCognitoIdentityPool(qrCodeData.COGNITO_POOL_ID));
+    if (barcodes.length && barcodes[0].displayValue && isCameraActive) {
+      const { REGION, COGNITO_POOL_ID } = JSON.parse(barcodes[0].displayValue);
+      console.log({ REGION, COGNITO_POOL_ID }, '>>>>');
+      setIsCameraActive(false);
+      dispatch(awsAction.setAwsRegion(REGION));
+      dispatch(awsAction.setCognitoIdentityPool(COGNITO_POOL_ID));
     }
   }, [barcodes]);
 
   const disconnectFromAws = () => {
+    setIsCameraActive(true);
+    dispatch(awsAction.setAwsRegion(''));
+    dispatch(awsAction.setCognitoIdentityPool(''));
     client && client.end(AWS_TOPIC_NAME);
   };
 
@@ -65,7 +71,7 @@ export default function ScanQrScreen({ navigation }) {
         <Camera
           style={styles.cameraRoot}
           device={device}
-          isActive={true}
+          isActive={isCameraActive}
           frameProcessor={frameProcessor}
           frameProcessorFps={5}
         />
