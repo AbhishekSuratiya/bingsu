@@ -59,6 +59,10 @@ const InitialiseAws = ({ children }) => {
       client.on('error', error => {
         console.log(error);
       });
+      client.publish(
+        AWS_TOPIC_NAME,
+        JSON.stringify({ message: 'Connected established ➡' }),
+      );
     });
   };
   useEffect(() => {

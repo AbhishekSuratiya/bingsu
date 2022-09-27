@@ -5,6 +5,7 @@ import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import styles from './SensorCardStyles';
 import Collapsible from 'react-native-collapsible';
+import { SENSOR_CARD_HEADER } from '../../utils/contants';
 
 const SensorCard = ({ sensorData, title, startSensor, stopSensor, style }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
@@ -82,7 +83,7 @@ const SensorCard = ({ sensorData, title, startSensor, stopSensor, style }) => {
       <Collapsible
         style={styles.card}
         collapsed={!isSensorListening}
-        collapsedHeight={66}
+        collapsedHeight={SENSOR_CARD_HEADER}
         enablePointerEvents>
         <View style={styles.header}>
           <View style={{ justifyContent: 'center' }}>

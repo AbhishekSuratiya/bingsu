@@ -1,36 +1,42 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../theme/Colors';
 import Fonts from '../../theme/Fonts';
-import { SENSOR_CARD_HEADER, SENSOR_CARD_HEIGHT } from '../../utils/contants';
+import { SENSOR_CARD_HEADER } from '../../utils/contants';
 
 const styles = StyleSheet.create({
-  lineChart: { flex: 1 },
-  lineChartContainer: { flex: 1, marginLeft: 10 },
-  yAxisContainer: { flexDirection: 'row', flex: 1 },
-  coordinates: { color: Colors.white80, marginRight: 4 },
-  coordinatesText: { flexDirection: 'row', marginRight: 16 },
-  coordinatesContainer: { flexDirection: 'row', marginTop: 8 },
-  sensorTitle: {
-    color: Colors.white100,
-    fontSize: 16,
-    fontFamily: Fonts.icomoon,
-  },
-  header: {
-    flexDirection: 'row',
-    marginBottom: 16,
-    justifyContent: 'space-between',
-    height: SENSOR_CARD_HEADER,
-    alignItems: 'center',
-  },
   card: {
     padding: 16,
     paddingTop: 0,
     flex: 1,
     backgroundColor: Colors.dark5,
     borderRadius: 8,
-    height: SENSOR_CARD_HEIGHT,
+    height: 300,
+  },
+  cameraWrapper: {
+    flex: 1,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  title: {
+    color: Colors.white100,
+    fontSize: 16,
+    fontFamily: Fonts.icomoon,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: SENSOR_CARD_HEADER,
+    alignItems: 'center',
+  },
+  content: {
+    flex: 1,
+    backgroundColor: Colors.dark5,
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   root: {
+    padding: 16,
+    paddingBottom: 0,
     width: '100%',
   },
 });

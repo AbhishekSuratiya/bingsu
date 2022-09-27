@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Colors from '../../theme/Colors';
 import { StyleSheet, Switch, Text, View } from 'react-native';
-import Fonts from '../../theme/Fonts';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
-import styles from './SensorCardStyles';
+import styles from './CameraSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
+import { SENSOR_CARD_HEADER } from '../../utils/contants';
 
 const CameraSensorCard = ({ title }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
@@ -19,45 +19,23 @@ const CameraSensorCard = ({ title }) => {
     })();
   }, []);
   return (
-    <View style={{ height: 360, padding: 16, width: '100%' }}>
+    <View style={styles.root}>
       <Collapsible
         style={styles.card}
         collapsed={!isSensorListening}
-        collapsedHeight={66}
+        collapsedHeight={SENSOR_CARD_HEADER}
         enablePointerEvents>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: Colors.dark5,
-            borderRadius: 8,
-            overflow: 'hidden',
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginBottom: 16,
-              justifyContent: 'space-between',
-            }}>
-            <View style={{ justifyContent: 'center' }}>
-              <Text
-                style={{
-                  color: Colors.white100,
-                  fontSize: 16,
-                  fontFamily: Fonts.icomoon,
-                }}>
-                {title}
-              </Text>
-            </View>
-            <View>
-              <Switch
-                trackColor={{ false: '#787880', true: Colors.blue }}
-                thumbColor={'white'}
-                onValueChange={() => setIsSensorListening(val => !val)}
-                value={isSensorListening}
-              />
-            </View>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.title}>{title}</Text>
+            <Switch
+              trackColor={{ false: '#787880', true: Colors.blue }}
+              thumbColor={'white'}
+              onValueChange={() => setIsSensorListening(val => !val)}
+              value={isSensorListening}
+            />
           </View>
-          <View style={{ flex: 1, borderRadius: 12, overflow: 'hidden' }}>
+          <View style={styles.cameraWrapper}>
             {device != null && hasPermission && (
               <>
                 <Camera
