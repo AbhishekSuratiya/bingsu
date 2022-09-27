@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isAwsConnected: false,
+  awsRegion: '',
+  cognitoIdentityPool: '',
 };
 
 const awsSlice = createSlice({
@@ -10,6 +12,12 @@ const awsSlice = createSlice({
   reducers: {
     setIsAwsConnected(state, action) {
       state.isAwsConnected = action.payload;
+    },
+    setAwsRegion(state, action) {
+      state.awsRegion = action.payload;
+    },
+    setCognitoIdentityPool(state, action) {
+      state.cognitoIdentityPool = action.payload;
     },
   },
 });

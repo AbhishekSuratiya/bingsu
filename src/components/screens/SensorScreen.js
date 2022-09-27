@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import SensorCard from '../organisms/SensorCard';
 import {
   accelerometer,
@@ -11,9 +11,12 @@ import {
 import CameraSensorCard from '../organisms/CameraSensorCard';
 import styles from './SensorScreenStyles';
 import { AwsContext } from '../../containers/InitialiseAws';
-import { AWS_TOPIC_NAME } from '../../utils/contants';
-import Colors from '../../theme/Colors';
+import {
+  AWS_SEND_MESSAGE_INTERVAL,
+  AWS_TOPIC_NAME,
+} from '../../utils/contants';
 import Button from '../atoms/Button';
+import { useSelector } from 'react-redux';
 
 const SensorScreen = ({ navigation }) => {
   const [accelerometerData, setAccelerometerData] = useState([]);
@@ -25,9 +28,13 @@ const SensorScreen = ({ navigation }) => {
   const subscriptionMagnetometer = useRef(null);
 
   const client = useContext(AwsContext);
+  const isAwsConnected = useSelector(state => state.awsStore.isAwsConnected);
 
   const startAccelerometer = () => {
-    setUpdateIntervalForType(SensorTypes.accelerometer, 1000);
+    setUpdateIntervalForType(
+      SensorTypes.accelerometer,
+      AWS_SEND_MESSAGE_INTERVAL,
+    );
     subscriptionAccelerometer.current = accelerometer.subscribe({
       next: data => {
         setAccelerometerData(prev => [...prev.slice(-20), data]);
@@ -49,7 +56,7 @@ const SensorScreen = ({ navigation }) => {
     });
   };
   const startGyroscope = () => {
-    setUpdateIntervalForType(SensorTypes.gyroscope, 1000);
+    setUpdateIntervalForType(SensorTypes.gyroscope, AWS_SEND_MESSAGE_INTERVAL);
     subscriptionGyroscope.current = gyroscope.subscribe({
       next: data => {
         setGyroscopeData(prev => [...prev.slice(-20), data]);
@@ -71,7 +78,10 @@ const SensorScreen = ({ navigation }) => {
     });
   };
   const startMagnetometer = () => {
-    setUpdateIntervalForType(SensorTypes.magnetometer, 1000);
+    setUpdateIntervalForType(
+      SensorTypes.magnetometer,
+      AWS_SEND_MESSAGE_INTERVAL,
+    );
     subscriptionMagnetometer.current = magnetometer.subscribe({
       next: data => {
         setMagnetometerData(prev => [...prev.slice(-20), data]);
@@ -105,31 +115,18 @@ const SensorScreen = ({ navigation }) => {
 
   useEffect(() => {
     return () => {
-      // stopAccelerometer();
-      // stopGyroscope();
-      // stopMagnetometer();
+      stopAccelerometer();
+      stopGyroscope();
+      stopMagnetometer();
     };
   }, []);
 
-  return (
-    <ScrollView>
-      <View
-        style={{
-          padding: 16,
-          paddingBottom: 0,
-        }}>
-        <View
-          style={{
-            padding: 16,
-            backgroundColor: Colors.dark5,
-            borderRadius: 8,
-          }}>
-          <Text
-            style={{ color: Colors.white100, marginBottom: 4, fontSize: 16 }}>
-            Connect to AWS
-          </Text>
-          <Text
-            style={{ color: Colors.grey80, fontSize: 13, marginBottom: 16 }}>
+  const renderConnectToAwsCard = () => {
+    return (
+      <View style={styles.connectToAwsSpacing}>
+        <View style={styles.connectToAwsWrapper}>
+          <Text style={styles.connectToAws}>Connect to AWS</Text>
+          <Text style={styles.saveYourData}>
             Save your sensor data by connecting to AWS
           </Text>
           <Button
@@ -138,7 +135,12 @@ const SensorScreen = ({ navigation }) => {
           />
         </View>
       </View>
+    );
+  };
 
+  return (
+    <ScrollView>
+      {!isAwsConnected && renderConnectToAwsCard()}
       <SensorCard
         sensorData={accelerometerData}
         title={'Accelerometer'}

@@ -1,19 +1,25 @@
-import * as React from 'react';
-
-import { StyleSheet, Text } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { useCameraDevices } from 'react-native-vision-camera';
 import { Camera } from 'react-native-vision-camera';
 import { useScanBarcodes, BarcodeFormat } from 'vision-camera-code-scanner';
 import Colors from '../../theme/Colors';
+import { useDispatch, useSelector } from 'react-redux';
+import { awsAction } from '../../redux/reducers/awsReducer';
+import Button from '../atoms/Button';
+import { AwsContext } from '../../containers/InitialiseAws';
+import { AWS_TOPIC_NAME } from '../../utils/contants';
 
-export default function ScanQrScreen() {
+export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = React.useState(false);
+  const isAwsConnected = useSelector(state => state.awsStore.isAwsConnected);
   const devices = useCameraDevices();
   const device = devices.back;
-
+  const dispatch = useDispatch();
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,
   });
+  const client = useContext(AwsContext);
 
   React.useEffect(() => {
     (async () => {
@@ -22,34 +28,54 @@ export default function ScanQrScreen() {
     })();
   }, []);
 
+  React.useEffect(() => {
+    if (barcodes.length && barcodes[0].displayValue) {
+      const qrCodeData = JSON.parse(barcodes[0].displayValue);
+      dispatch(awsAction.setAwsRegion(qrCodeData.REGION));
+      dispatch(awsAction.setCognitoIdentityPool(qrCodeData.COGNITO_POOL_ID));
+    }
+  }, [barcodes]);
+
+  const disconnectFromAws = () => {
+    client && client.end(AWS_TOPIC_NAME);
+  };
+
+  if (isAwsConnected) {
+    return (
+      <View style={{ padding: 16, flex: 1 }}>
+        <View style={styles.connectedContainer}>
+          <Text style={styles.connected}>{'You are connected!'}</Text>
+          <Button
+            light
+            title={'View Sensors'}
+            onPress={() => navigation.navigate('Sensor')}
+          />
+        </View>
+        <Button negative title={'Disconnect'} onPress={disconnectFromAws} />
+      </View>
+    );
+  }
+
   return (
     device != null &&
     hasPermission && (
       <>
         <Camera
-          style={{
-            width: '100%',
-            height: 350,
-            borderWidth: 1,
-            borderColor: 'red',
-          }}
+          style={styles.cameraRoot}
           device={device}
           isActive={true}
           frameProcessor={frameProcessor}
           frameProcessorFps={5}
         />
-        {barcodes.map((barcode, idx) => (
-          <Text key={idx} style={styles.barcodeTextURL}>
-            {barcode.displayValue}
+        <View style={{ paddingHorizontal: 16 }}>
+          <Text style={styles.barcodeHeading}>{'How to connect to AWS?'}</Text>
+          <Text style={styles.steps}>
+            {'1. Create an account on aws.amazon.com'}
           </Text>
-        ))}
-        <Text style={styles.barcodeHeading}>{'How to connect to AWS?'}</Text>
-        <Text style={styles.steps}>
-          {'1. Create an account on aws.amazon.com'}
-        </Text>
-        <Text style={styles.steps}>{'2. Go to sensors dashboard'}</Text>
-        <Text style={styles.steps}>{'3. Click the generate QR button'}</Text>
-        <Text style={styles.steps}>{'4. Scan the QR with the app'}</Text>
+          <Text style={styles.steps}>{'2. Go to sensors dashboard'}</Text>
+          <Text style={styles.steps}>{'3. Click the generate QR button'}</Text>
+          <Text style={styles.steps}>{'4. Scan the QR with the app'}</Text>
+        </View>
       </>
     )
   );
@@ -58,7 +84,7 @@ export default function ScanQrScreen() {
 const styles = StyleSheet.create({
   barcodeHeading: {
     fontSize: 16,
-    color: 'white',
+    color: Colors.white100,
     fontWeight: 'bold',
     marginTop: 40,
     marginBottom: 16,
@@ -67,5 +93,20 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: Colors.grey80,
     marginBottom: 12,
+  },
+  connected: {
+    fontSize: 18,
+    color: Colors.white100,
+    fontWeight: 'bold',
+    marginBottom: 24,
+  },
+  connectedContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cameraRoot: {
+    width: '100%',
+    height: 350,
   },
 });

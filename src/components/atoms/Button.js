@@ -33,10 +33,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 12,
     borderRadius: 8,
+    width: '100%',
   },
   text: {
     color: Colors.blue,
     marginBottom: 4,
+    fontWeight: 'bold',
     fontSize: 16,
   },
 });
