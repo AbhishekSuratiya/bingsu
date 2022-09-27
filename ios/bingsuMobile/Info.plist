@@ -6,8 +6,14 @@
 	<string>AppIcon</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
 	<key>CFBundleDisplayName</key>
-	<string>bingsuMobile</string>
+	<string>Bingsu</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleVersion</key>
+    <string>4</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
