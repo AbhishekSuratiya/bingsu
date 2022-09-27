@@ -9,6 +9,7 @@ import { awsAction } from '../../redux/reducers/awsReducer';
 import Button from '../atoms/Button';
 import { AwsContext } from '../../containers/InitialiseAws';
 import { AWS_TOPIC_NAME } from '../../utils/contants';
+import { CheckSvg } from '../../../assets/images/svg';
 
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = React.useState(false);
@@ -42,8 +43,9 @@ export default function ScanQrScreen({ navigation }) {
 
   if (isAwsConnected) {
     return (
-      <View style={{ padding: 16, flex: 1 }}>
+      <View style={{ padding: 16, flex: 1, paddingTop: 0 }}>
         <View style={styles.connectedContainer}>
+          <CheckSvg />
           <Text style={styles.connected}>{'You are connected!'}</Text>
           <Button
             light
@@ -99,6 +101,7 @@ const styles = StyleSheet.create({
     color: Colors.white100,
     fontWeight: 'bold',
     marginBottom: 24,
+    marginTop: 38,
   },
   connectedContainer: {
     flex: 1,

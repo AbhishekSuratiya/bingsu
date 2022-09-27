@@ -9,6 +9,7 @@ import ScanQrScreen from '../components/screens/ScanQrScreen';
 import SensorScreen from '../components/screens/SensorScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Colors from '../theme/Colors';
+import { SensorSvg, QrCodeSvg, InfoSvg } from '../../assets/images/svg';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,6 +47,13 @@ const tabScreens = [
       title: 'Sensors',
       tabBarActiveTintColor,
       tabBarInactiveTintColor,
+      tabBarIcon: e => {
+        return (
+          <SensorSvg
+            fill={e.focused ? tabBarActiveTintColor : tabBarInactiveTintColor}
+          />
+        );
+      },
     },
   },
   {
@@ -55,6 +63,13 @@ const tabScreens = [
       title: 'Connect to AWS',
       tabBarActiveTintColor,
       tabBarInactiveTintColor,
+      tabBarIcon: e => {
+        return (
+          <QrCodeSvg
+            fill={e.focused ? tabBarActiveTintColor : tabBarInactiveTintColor}
+          />
+        );
+      },
     },
   },
   {
@@ -64,6 +79,13 @@ const tabScreens = [
       headerShown: false,
       tabBarActiveTintColor,
       tabBarInactiveTintColor,
+      tabBarIcon: e => {
+        return (
+          <InfoSvg
+            fill={e.focused ? tabBarActiveTintColor : tabBarInactiveTintColor}
+          />
+        );
+      },
     },
   },
 ];
