@@ -1,15 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useCameraDevices } from 'react-native-vision-camera';
-import { Camera } from 'react-native-vision-camera';
-import { useScanBarcodes, BarcodeFormat } from 'vision-camera-code-scanner';
+import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import { BarcodeFormat, useScanBarcodes } from 'vision-camera-code-scanner';
 import Colors from '../../theme/Colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { awsAction } from '../../redux/reducers/awsReducer';
 import Button from '../atoms/Button';
-import { AwsContext } from '../../containers/InitialiseAws';
-import { AWS_TOPIC_NAME } from '../../utils/contants';
 import { CheckSvg } from '../../../assets/images/svg';
+import isJsonString from '../../utils/isJsonString';
 
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = React.useState(false);
@@ -21,7 +19,6 @@ export default function ScanQrScreen({ navigation }) {
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,
   });
-  const client = useContext(AwsContext);
 
   React.useEffect(() => {
     (async () => {
@@ -32,19 +29,26 @@ export default function ScanQrScreen({ navigation }) {
 
   React.useEffect(() => {
     if (barcodes.length && barcodes[0].displayValue && isCameraActive) {
-      const { REGION, COGNITO_POOL_ID } = JSON.parse(barcodes[0].displayValue);
-      console.log({ REGION, COGNITO_POOL_ID }, '>>>>');
-      setIsCameraActive(false);
+      const { REGION, COGNITO_POOL_ID, COGNITO_UNAUTH_ROLE_ARN } =
+        isJsonString(barcodes[0].displayValue) &&
+        JSON.parse(barcodes[0].displayValue);
+      if (REGION && COGNITO_POOL_ID && COGNITO_UNAUTH_ROLE_ARN) {
+        setIsCameraActive(false);
+        dispatch(awsAction.setQrData(JSON.parse(barcodes[0].displayValue)));
+      }
       dispatch(awsAction.setAwsRegion(REGION));
       dispatch(awsAction.setCognitoIdentityPool(COGNITO_POOL_ID));
+      dispatch(awsAction.setRoleArn(COGNITO_UNAUTH_ROLE_ARN));
     }
   }, [barcodes]);
 
   const disconnectFromAws = () => {
     setIsCameraActive(true);
+    dispatch(awsAction.setQrData({}));
     dispatch(awsAction.setAwsRegion(''));
     dispatch(awsAction.setCognitoIdentityPool(''));
-    client && client.end(AWS_TOPIC_NAME);
+    dispatch(awsAction.setRoleArn(''));
+    dispatch(awsAction.setIsAwsConnected(false));
   };
 
   if (isAwsConnected) {

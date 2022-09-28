@@ -72,22 +72,22 @@ const tabScreens = [
       },
     },
   },
-  {
-    name: 'Home',
-    component: HomeScreen,
-    options: {
-      headerShown: false,
-      tabBarActiveTintColor,
-      tabBarInactiveTintColor,
-      tabBarIcon: e => {
-        return (
-          <InfoSvg
-            fill={e.focused ? tabBarActiveTintColor : tabBarInactiveTintColor}
-          />
-        );
-      },
-    },
-  },
+  // {
+  //   name: 'Home',
+  //   component: HomeScreen,
+  //   options: {
+  //     headerShown: false,
+  //     tabBarActiveTintColor,
+  //     tabBarInactiveTintColor,
+  //     tabBarIcon: e => {
+  //       return (
+  //         <InfoSvg
+  //           fill={e.focused ? tabBarActiveTintColor : tabBarInactiveTintColor}
+  //         />
+  //       );
+  //     },
+  //   },
+  // },
 ];
 
 const screenOptions = () => ({

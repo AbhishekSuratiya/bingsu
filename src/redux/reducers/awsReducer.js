@@ -4,6 +4,8 @@ const initialState = {
   isAwsConnected: false,
   awsRegion: '',
   cognitoIdentityPool: '',
+  roleArn: '',
+  qrData: {},
 };
 
 const awsSlice = createSlice({
@@ -18,6 +20,12 @@ const awsSlice = createSlice({
     },
     setCognitoIdentityPool(state, action) {
       state.cognitoIdentityPool = action.payload;
+    },
+    setRoleArn(state, action) {
+      state.roleArn = action.payload;
+    },
+    setQrData(state, action) {
+      state.qrData = action.payload;
     },
   },
 });
