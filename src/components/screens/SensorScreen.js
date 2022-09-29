@@ -39,8 +39,7 @@ const SensorScreen = ({ navigation }) => {
   const subscriptionOrientationMag = useRef(null);
   const subscriptionAltitude = useRef(null);
   const subscriptionProximity = useRef(null);
-  const orientationXYData = useRef(null);
-  orientationXYData.current = {};
+  const orientationXYData = useRef({});
 
   const client = useContext(AwsContext);
   const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
