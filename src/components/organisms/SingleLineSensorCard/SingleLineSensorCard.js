@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Switch, Text, View } from 'react-native';
 import styles from './SingleLineSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
-import Colors from '../../theme/Colors';
-import { SENSOR_CARD_HEADER } from '../../utils/contants';
+import Colors from '../../../theme/Colors';
+import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 
@@ -37,7 +37,7 @@ const SingleLineSensorCard = ({
             )}
           </View>
           <Switch
-            trackColor={{ false: '#787880', true: Colors.blue }}
+            trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
             thumbColor={Colors.white100}
             onValueChange={() => {
               if (isSensorListening) {

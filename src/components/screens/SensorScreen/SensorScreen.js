@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import MultiLineSensorCard from '../organisms/MultiLineSensorCard';
+import MultiLineSensorCard from '../../organisms/MultiLineSensorCard/MultiLineSensorCard';
 import {
   accelerometer,
   barometer,
@@ -9,18 +9,19 @@ import {
   SensorTypes,
   setUpdateIntervalForType,
 } from 'react-native-sensors';
-import CameraSensorCard from '../organisms/CameraSensorCard';
+import CameraSensorCard from '../../organisms/CameraSensorCard/CameraSensorCard';
 import styles from './SensorScreenStyles';
-import { AwsContext } from '../../containers/InitialiseAws';
-import { AWS_SEND_MESSAGE_INTERVAL } from '../../utils/contants';
-import Button from '../atoms/Button';
+import { AwsContext } from '../../../containers/InitialiseAws';
+import { AWS_SEND_MESSAGE_INTERVAL } from '../../../utils/contants';
+import Button from '../../atoms/Button';
 import { useSelector } from 'react-redux';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
-import SingleLineSensorCard from '../organisms/SingleLineSensorCard';
+import SingleLineSensorCard from '../../organisms/SingleLineSensorCard/SingleLineSensorCard';
 import GetLocation from 'react-native-get-location';
-import LocationSensorMap from '../organisms/LocationSensorMap';
+import LocationSensorMap from '../../organisms/LocationSensorMap/LocationSensorMap';
 import Proximity from 'react-native-proximity';
 import * as shape from 'd3-shape';
+import getCommandEntry from '../../../utils/getCommandEntry';
 
 const SensorScreen = ({ navigation }) => {
   const [accelerometerData, setAccelerometerData] = useState([]);
@@ -55,36 +56,21 @@ const SensorScreen = ({ navigation }) => {
         if (isAwsConnected) {
           const command = new BatchPutAssetPropertyValueCommand({
             entries: [
-              {
+              getCommandEntry({
                 entryId: 'AccelerometerXMeasurement',
                 propertyAlias: qrData.AssetModelAccelerometerXMeasurement,
-                propertyValues: [
-                  {
-                    value: { doubleValue: data.x },
-                    timestamp: { timeInSeconds: Date.now() / 1000 },
-                  },
-                ],
-              },
-              {
+                value: data.x,
+              }),
+              getCommandEntry({
                 entryId: 'AccelerometerYMeasurement',
                 propertyAlias: qrData.AssetModelAccelerometerYMeasurement,
-                propertyValues: [
-                  {
-                    value: { doubleValue: data.y },
-                    timestamp: { timeInSeconds: Date.now() / 1000 },
-                  },
-                ],
-              },
-              {
+                value: data.y,
+              }),
+              getCommandEntry({
                 entryId: 'AccelerometerZMeasurement',
                 propertyAlias: qrData.AssetModelAccelerometerZMeasurement,
-                propertyValues: [
-                  {
-                    value: { doubleValue: data.z },
-                    timestamp: { timeInSeconds: Date.now() / 1000 },
-                  },
-                ],
-              },
+                value: data.z,
+              }),
             ],
           });
           client?.send(command);
@@ -101,36 +87,21 @@ const SensorScreen = ({ navigation }) => {
         if (isAwsConnected) {
           const command = new BatchPutAssetPropertyValueCommand({
             entries: [
-              {
+              getCommandEntry({
                 entryId: 'GyroscopeXMeasurement',
                 propertyAlias: qrData.AssetModelGyroscopeXMeasurement,
-                propertyValues: [
-                  {
-                    value: { doubleValue: data.x },
-                    timestamp: { timeInSeconds: Date.now() / 1000 },
-                  },
-                ],
-              },
-              {
+                value: data.x,
+              }),
+              getCommandEntry({
                 entryId: 'GyroscopeYMeasurement',
                 propertyAlias: qrData.AssetModelGyroscopeYMeasurement,
-                propertyValues: [
-                  {
-                    value: { doubleValue: data.y },
-                    timestamp: { timeInSeconds: Date.now() / 1000 },
-                  },
-                ],
-              },
-              {
+                value: data.y,
+              }),
+              getCommandEntry({
                 entryId: 'GyroscopeZMeasurement',
                 propertyAlias: qrData.AssetModelGyroscopeZMeasurement,
-                propertyValues: [
-                  {
-                    value: { doubleValue: data.z },
-                    timestamp: { timeInSeconds: Date.now() / 1000 },
-                  },
-                ],
-              },
+                value: data.z,
+              }),
             ],
           });
           client?.send(command);
@@ -150,36 +121,21 @@ const SensorScreen = ({ navigation }) => {
         if (isAwsConnected) {
           const command = new BatchPutAssetPropertyValueCommand({
             entries: [
-              {
+              getCommandEntry({
                 entryId: 'MagnetometerXMeasurement',
                 propertyAlias: qrData.AssetModelMagnetometerXMeasurement,
-                propertyValues: [
-                  {
-                    value: { doubleValue: data.x },
-                    timestamp: { timeInSeconds: Date.now() / 1000 },
-                  },
-                ],
-              },
-              {
+                value: data.x,
+              }),
+              getCommandEntry({
                 entryId: 'MagnetometerYMeasurement',
                 propertyAlias: qrData.AssetModelMagnetometerYMeasurement,
-                propertyValues: [
-                  {
-                    value: { doubleValue: data.y },
-                    timestamp: { timeInSeconds: Date.now() / 1000 },
-                  },
-                ],
-              },
-              {
+                value: data.y,
+              }),
+              getCommandEntry({
                 entryId: 'MagnetometerZMeasurement',
                 propertyAlias: qrData.AssetModelMagnetometerZMeasurement,
-                propertyValues: [
-                  {
-                    value: { doubleValue: data.z },
-                    timestamp: { timeInSeconds: Date.now() / 1000 },
-                  },
-                ],
-              },
+                value: data.z,
+              }),
             ],
           });
           client?.send(command);
@@ -213,36 +169,21 @@ const SensorScreen = ({ navigation }) => {
           if (isAwsConnected) {
             const command = new BatchPutAssetPropertyValueCommand({
               entries: [
-                {
+                getCommandEntry({
                   entryId: 'AssetModelOrientationXMeasurement',
                   propertyAlias: qrData.AssetModelOrientationXMeasurement,
-                  propertyValues: [
-                    {
-                      value: { doubleValue: x },
-                      timestamp: { timeInSeconds: Date.now() / 1000 },
-                    },
-                  ],
-                },
-                {
+                  value: x,
+                }),
+                getCommandEntry({
                   entryId: 'AssetModelOrientationYMeasurement',
                   propertyAlias: qrData.AssetModelOrientationYMeasurement,
-                  propertyValues: [
-                    {
-                      value: { doubleValue: y },
-                      timestamp: { timeInSeconds: Date.now() / 1000 },
-                    },
-                  ],
-                },
-                {
+                  value: y,
+                }),
+                getCommandEntry({
                   entryId: 'AssetModelOrientationZMeasurement',
                   propertyAlias: qrData.AssetModelOrientationZMeasurement,
-                  propertyValues: [
-                    {
-                      value: { doubleValue: data.z },
-                      timestamp: { timeInSeconds: Date.now() / 1000 },
-                    },
-                  ],
-                },
+                  value: data.z,
+                }),
               ],
             });
             client?.send(command);
@@ -262,16 +203,11 @@ const SensorScreen = ({ navigation }) => {
         if (isAwsConnected) {
           const command = new BatchPutAssetPropertyValueCommand({
             entries: [
-              {
+              getCommandEntry({
                 entryId: 'AssetModelBarometerMeasurement',
                 propertyAlias: qrData.AssetModelBarometerMeasurement,
-                propertyValues: [
-                  {
-                    value: { doubleValue: data.pressure },
-                    timestamp: { timeInSeconds: Date.now() / 1000 },
-                  },
-                ],
-              },
+                value: data.pressure,
+              }),
             ],
           });
           client?.send(command);
@@ -292,16 +228,11 @@ const SensorScreen = ({ navigation }) => {
           if (isAwsConnected) {
             const command = new BatchPutAssetPropertyValueCommand({
               entries: [
-                {
+                getCommandEntry({
                   entryId: 'AssetModelAltitudeMeasurement',
                   propertyAlias: qrData.AssetModelAltitudeMeasurement,
-                  propertyValues: [
-                    {
-                      value: { doubleValue: location.altitude },
-                      timestamp: { timeInSeconds: Date.now() / 1000 },
-                    },
-                  ],
-                },
+                  value: location.altitude,
+                }),
               ],
             });
             client?.send(command);
@@ -319,16 +250,11 @@ const SensorScreen = ({ navigation }) => {
       if (isAwsConnected) {
         const command = new BatchPutAssetPropertyValueCommand({
           entries: [
-            {
+            getCommandEntry({
               entryId: 'AssetModelProximityValue',
               propertyAlias: qrData.AssetModelProximityValue,
-              propertyValues: [
-                {
-                  value: { doubleValue: proximity ? 1 : 0 },
-                  timestamp: { timeInSeconds: Date.now() / 1000 },
-                },
-              ],
-            },
+              value: proximity ? 1 : 0,
+            }),
           ],
         });
         client?.send(command);

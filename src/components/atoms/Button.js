@@ -5,12 +5,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 const Button = ({ title, light, negative, ...rest }) => {
   return (
     <TouchableOpacity
-      style={[
-        styles.root,
-        light && {
-          backgroundColor: Colors.white100,
-        },
-      ]}
+      style={[styles.root, light && { backgroundColor: Colors.white100 }]}
       {...rest}>
       <Text
         style={[

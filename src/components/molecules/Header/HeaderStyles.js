@@ -17,7 +17,7 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    color: 'white',
+    color: Colors.white100,
     fontFamily: Fonts.icomoon,
     marginBottom: 4,
   },

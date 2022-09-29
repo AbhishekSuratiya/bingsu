@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import Colors from '../../theme/Colors';
+import Colors from '../../../theme/Colors';
 import { Switch, Text, View } from 'react-native';
 import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import styles from './MultiLineSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
-import { SENSOR_CARD_HEADER } from '../../utils/contants';
+import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 
 const MultiLineSensorCard = ({
   sensorData,
@@ -93,7 +93,7 @@ const MultiLineSensorCard = ({
         collapsedHeight={SENSOR_CARD_HEADER}
         enablePointerEvents>
         <View style={styles.header}>
-          <View style={{ justifyContent: 'center' }}>
+          <View style={styles.title}>
             <Text style={styles.sensorTitle}>{title}</Text>
             {isSensorListening && renderCoordinates()}
           </View>

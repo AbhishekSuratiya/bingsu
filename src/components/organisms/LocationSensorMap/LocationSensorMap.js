@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Switch, Text, View } from 'react-native';
 import styles from './LocationSensorMapStyles';
 import Collapsible from 'react-native-collapsible';
-import Colors from '../../theme/Colors';
-import { SENSOR_CARD_HEADER } from '../../utils/contants';
+import Colors from '../../../theme/Colors';
+import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 import MapView from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import { useSelector } from 'react-redux';
-import { AwsContext } from '../../containers/InitialiseAws';
+import { AwsContext } from '../../../containers/InitialiseAws';
+import getCommandEntry from '../../../utils/getCommandEntry';
 
 const LocationSensorMap = ({ title }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
@@ -31,26 +32,16 @@ const LocationSensorMap = ({ title }) => {
           if (isAwsConnected) {
             const command = new BatchPutAssetPropertyValueCommand({
               entries: [
-                {
+                getCommandEntry({
                   entryId: 'AssetModelGPSLatMeasurement',
                   propertyAlias: qrData.AssetModelGPSLatMeasurement,
-                  propertyValues: [
-                    {
-                      value: { doubleValue: latitude },
-                      timestamp: { timeInSeconds: Date.now() / 1000 },
-                    },
-                  ],
-                },
-                {
+                  value: latitude,
+                }),
+                getCommandEntry({
                   entryId: 'AssetModelGPSGPSLongMeasurement',
                   propertyAlias: qrData.AssetModelGPSGPSLongMeasurement,
-                  propertyValues: [
-                    {
-                      value: { doubleValue: longitude },
-                      timestamp: { timeInSeconds: Date.now() / 1000 },
-                    },
-                  ],
-                },
+                  value: longitude,
+                }),
               ],
             });
             client?.send(command);
@@ -96,7 +87,7 @@ const LocationSensorMap = ({ title }) => {
             )}
           </View>
           <Switch
-            trackColor={{ false: '#787880', true: Colors.blue }}
+            trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
             thumbColor={Colors.white100}
             onValueChange={() => setIsSensorListening(val => !val)}
             value={isSensorListening}

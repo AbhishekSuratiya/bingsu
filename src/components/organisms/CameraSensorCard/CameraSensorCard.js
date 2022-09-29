@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Colors from '../../theme/Colors';
+import Colors from '../../../theme/Colors';
 import { StyleSheet, Switch, Text, View } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import styles from './CameraSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
-import { SENSOR_CARD_HEADER } from '../../utils/contants';
+import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 
 const CameraSensorCard = ({ title }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
@@ -31,8 +31,8 @@ const CameraSensorCard = ({ title }) => {
           <View style={styles.header}>
             <Text style={styles.title}>{title}</Text>
             <Switch
-              trackColor={{ false: '#787880', true: Colors.blue }}
-              thumbColor={'white'}
+              trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
+              thumbColor={Colors.white100}
               onValueChange={() => setIsSensorListening(val => !val)}
               value={isSensorListening}
             />

@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import Colors from '../../theme/Colors';
-import Fonts from '../../theme/Fonts';
-import { SENSOR_CARD_HEADER } from '../../utils/contants';
+import Colors from '../../../theme/Colors';
+import Fonts from '../../../theme/Fonts';
+import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 
 const styles = StyleSheet.create({
   card: {

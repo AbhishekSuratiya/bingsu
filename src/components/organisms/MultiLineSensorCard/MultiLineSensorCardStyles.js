@@ -1,7 +1,10 @@
 import { StyleSheet } from 'react-native';
-import Colors from '../../theme/Colors';
-import Fonts from '../../theme/Fonts';
-import { SENSOR_CARD_HEADER, SENSOR_CARD_HEIGHT } from '../../utils/contants';
+import Colors from '../../../theme/Colors';
+import Fonts from '../../../theme/Fonts';
+import {
+  SENSOR_CARD_HEADER,
+  SENSOR_CARD_HEIGHT,
+} from '../../../utils/contants';
 
 const styles = StyleSheet.create({
   lineChart: { flex: 1 },
@@ -33,6 +36,7 @@ const styles = StyleSheet.create({
   root: {
     width: '100%',
   },
+  title: { justifyContent: 'center' },
 });
 
 export default styles;

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { BarcodeFormat, useScanBarcodes } from 'vision-camera-code-scanner';
-import Colors from '../../theme/Colors';
 import { useDispatch, useSelector } from 'react-redux';
-import { awsAction } from '../../redux/reducers/awsReducer';
-import Button from '../atoms/Button';
-import { CheckSvg } from '../../../assets/images/svg';
-import isJsonString from '../../utils/isJsonString';
+import { awsAction } from '../../../redux/reducers/awsReducer';
+import Button from '../../atoms/Button';
+import { CheckSvg } from '../../../../assets/images/svg';
+import isJsonString from '../../../utils/isJsonString';
+import styles from './ScanQrScreenStyles';
 
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = React.useState(false);
@@ -53,7 +53,7 @@ export default function ScanQrScreen({ navigation }) {
 
   if (isAwsConnected) {
     return (
-      <View style={{ padding: 16, flex: 1, paddingTop: 0 }}>
+      <View style={styles.connectedWrapper}>
         <View style={styles.connectedContainer}>
           <CheckSvg />
           <Text style={styles.connected}>{'You are connected!'}</Text>
@@ -79,7 +79,7 @@ export default function ScanQrScreen({ navigation }) {
           frameProcessor={frameProcessor}
           frameProcessorFps={5}
         />
-        <View style={{ paddingHorizontal: 16 }}>
+        <View style={styles.stepsWrapper}>
           <Text style={styles.barcodeHeading}>{'How to connect to AWS?'}</Text>
           <Text style={styles.steps}>
             {'1. Create an account on aws.amazon.com'}
@@ -92,34 +92,3 @@ export default function ScanQrScreen({ navigation }) {
     )
   );
 }
-
-const styles = StyleSheet.create({
-  barcodeHeading: {
-    fontSize: 16,
-    color: Colors.white100,
-    fontWeight: 'bold',
-    marginTop: 40,
-    marginBottom: 16,
-  },
-  steps: {
-    fontSize: 13,
-    color: Colors.grey80,
-    marginBottom: 12,
-  },
-  connected: {
-    fontSize: 18,
-    color: Colors.white100,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    marginTop: 38,
-  },
-  connectedContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cameraRoot: {
-    width: '100%',
-    height: 350,
-  },
-});
