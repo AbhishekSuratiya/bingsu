@@ -63,6 +63,7 @@ const tabScreens = [
       title: 'Connect to AWS',
       tabBarActiveTintColor,
       tabBarInactiveTintColor,
+      unmountOnBlur: true,
       tabBarIcon: e => {
         return (
           <QrCodeSvg
