@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import SensorCard from '../organisms/SensorCard';
+import MultiLineSensorCard from '../organisms/MultiLineSensorCard';
 import {
   accelerometer,
+  barometer,
   gyroscope,
   magnetometer,
   SensorTypes,
@@ -11,24 +12,37 @@ import {
 import CameraSensorCard from '../organisms/CameraSensorCard';
 import styles from './SensorScreenStyles';
 import { AwsContext } from '../../containers/InitialiseAws';
-import {
-  AWS_SEND_MESSAGE_INTERVAL,
-  AWS_TOPIC_NAME,
-} from '../../utils/contants';
+import { AWS_SEND_MESSAGE_INTERVAL } from '../../utils/contants';
 import Button from '../atoms/Button';
 import { useSelector } from 'react-redux';
+import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
+import SingleLineSensorCard from '../organisms/SingleLineSensorCard';
+import GetLocation from 'react-native-get-location';
+import LocationSensorMap from '../organisms/LocationSensorMap';
+import Proximity from 'react-native-proximity';
+import * as shape from 'd3-shape';
 
 const SensorScreen = ({ navigation }) => {
   const [accelerometerData, setAccelerometerData] = useState([]);
   const [gyroscopeData, setGyroscopeData] = useState([]);
   const [magnetometerData, setMagnetometerData] = useState([]);
+  const [barometerData, setBarometerData] = useState([]);
+  const [orientationData, setOrientationData] = useState([]);
+  const [altitudeData, setAltitudeData] = useState([]);
+  const [proximityData, setProximityData] = useState([]);
 
   const subscriptionAccelerometer = useRef(null);
   const subscriptionGyroscope = useRef(null);
   const subscriptionMagnetometer = useRef(null);
+  const subscriptionBarometer = useRef(null);
+  const subscriptionOrientationAcc = useRef(null);
+  const subscriptionOrientationMag = useRef(null);
+  const subscriptionAltitude = useRef(null);
+  const subscriptionProximity = useRef(null);
+  const orientationXYData = useRef({});
 
   const client = useContext(AwsContext);
-  const isAwsConnected = useSelector(state => state.awsStore.isAwsConnected);
+  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
 
   const startAccelerometer = () => {
     setUpdateIntervalForType(
@@ -38,19 +52,43 @@ const SensorScreen = ({ navigation }) => {
     subscriptionAccelerometer.current = accelerometer.subscribe({
       next: data => {
         setAccelerometerData(prev => [...prev.slice(-20), data]);
-        client &&
-          client.publish(
-            AWS_TOPIC_NAME,
-            JSON.stringify({
-              state: {
-                reported: {
-                  AccelerometerXMeasurement: data.x,
-                  AccelerometerYMeasurement: data.y,
-                  AccelerometerZMeasurement: data.z,
-                },
+        if (isAwsConnected) {
+          const command = new BatchPutAssetPropertyValueCommand({
+            entries: [
+              {
+                entryId: 'AccelerometerXMeasurement',
+                propertyAlias: qrData.AssetModelAccelerometerXMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.x },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
               },
-            }),
-          );
+              {
+                entryId: 'AccelerometerYMeasurement',
+                propertyAlias: qrData.AssetModelAccelerometerYMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.y },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
+              },
+              {
+                entryId: 'AccelerometerZMeasurement',
+                propertyAlias: qrData.AssetModelAccelerometerZMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.z },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
+              },
+            ],
+          });
+          client?.send(command);
+        }
       },
       error: error => console.log('The sensor is not available', error),
     });
@@ -60,19 +98,43 @@ const SensorScreen = ({ navigation }) => {
     subscriptionGyroscope.current = gyroscope.subscribe({
       next: data => {
         setGyroscopeData(prev => [...prev.slice(-20), data]);
-        client &&
-          client.publish(
-            AWS_TOPIC_NAME,
-            JSON.stringify({
-              state: {
-                reported: {
-                  GyroscopeXMeasurement: data.x,
-                  GyroscopeYMeasurement: data.y,
-                  GyroscopeZMeasurement: data.z,
-                },
+        if (isAwsConnected) {
+          const command = new BatchPutAssetPropertyValueCommand({
+            entries: [
+              {
+                entryId: 'GyroscopeXMeasurement',
+                propertyAlias: qrData.AssetModelGyroscopeXMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.x },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
               },
-            }),
-          );
+              {
+                entryId: 'GyroscopeYMeasurement',
+                propertyAlias: qrData.AssetModelGyroscopeYMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.y },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
+              },
+              {
+                entryId: 'GyroscopeZMeasurement',
+                propertyAlias: qrData.AssetModelGyroscopeZMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.z },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
+              },
+            ],
+          });
+          client?.send(command);
+        }
       },
       error: error => console.log('The sensor is not available', error),
     });
@@ -85,22 +147,194 @@ const SensorScreen = ({ navigation }) => {
     subscriptionMagnetometer.current = magnetometer.subscribe({
       next: data => {
         setMagnetometerData(prev => [...prev.slice(-20), data]);
-        client &&
-          client.publish(
-            AWS_TOPIC_NAME,
-            JSON.stringify({
-              state: {
-                reported: {
-                  MagnetometerXMeasurement: data.x,
-                  MagnetometerYMeasurement: data.y,
-                  MagnetometerZMeasurement: data.z,
-                },
+        if (isAwsConnected) {
+          const command = new BatchPutAssetPropertyValueCommand({
+            entries: [
+              {
+                entryId: 'MagnetometerXMeasurement',
+                propertyAlias: qrData.AssetModelMagnetometerXMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.x },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
               },
-            }),
-          );
+              {
+                entryId: 'MagnetometerYMeasurement',
+                propertyAlias: qrData.AssetModelMagnetometerYMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.y },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
+              },
+              {
+                entryId: 'MagnetometerZMeasurement',
+                propertyAlias: qrData.AssetModelMagnetometerZMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.z },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
+              },
+            ],
+          });
+          client?.send(command);
+        }
       },
       error: error => console.log('The sensor is not available', error),
     });
+  };
+  const startOrientation = () => {
+    setUpdateIntervalForType(
+      SensorTypes.accelerometer,
+      AWS_SEND_MESSAGE_INTERVAL,
+    );
+    setUpdateIntervalForType(
+      SensorTypes.magnetometer,
+      AWS_SEND_MESSAGE_INTERVAL,
+    );
+    subscriptionOrientationAcc.current = accelerometer.subscribe({
+      next: data => {
+        orientationXYData.current.x = data.x;
+        orientationXYData.current.y = data.y;
+      },
+      error: error => console.log('The sensor is not available', error),
+    });
+    subscriptionOrientationMag.current = magnetometer.subscribe({
+      next: data => {
+        const x = orientationXYData.current.x;
+        const y = orientationXYData.current.y;
+        if (x && y) {
+          setOrientationData(prev => [...prev.slice(-20), { x, y, z: data.z }]);
+          if (isAwsConnected) {
+            const command = new BatchPutAssetPropertyValueCommand({
+              entries: [
+                {
+                  entryId: 'AssetModelOrientationXMeasurement',
+                  propertyAlias: qrData.AssetModelOrientationXMeasurement,
+                  propertyValues: [
+                    {
+                      value: { doubleValue: x },
+                      timestamp: { timeInSeconds: Date.now() / 1000 },
+                    },
+                  ],
+                },
+                {
+                  entryId: 'AssetModelOrientationYMeasurement',
+                  propertyAlias: qrData.AssetModelOrientationYMeasurement,
+                  propertyValues: [
+                    {
+                      value: { doubleValue: y },
+                      timestamp: { timeInSeconds: Date.now() / 1000 },
+                    },
+                  ],
+                },
+                {
+                  entryId: 'AssetModelOrientationZMeasurement',
+                  propertyAlias: qrData.AssetModelOrientationZMeasurement,
+                  propertyValues: [
+                    {
+                      value: { doubleValue: data.z },
+                      timestamp: { timeInSeconds: Date.now() / 1000 },
+                    },
+                  ],
+                },
+              ],
+            });
+            client?.send(command);
+          }
+        }
+      },
+      error: error => console.log('The sensor is not available', error),
+    });
+  };
+
+  const startBarometer = () => {
+    setUpdateIntervalForType(SensorTypes.barometer, AWS_SEND_MESSAGE_INTERVAL);
+    subscriptionBarometer.current = barometer.subscribe({
+      next: data => {
+        setBarometerData(prev => [...prev.slice(-20), data.pressure]);
+
+        if (isAwsConnected) {
+          const command = new BatchPutAssetPropertyValueCommand({
+            entries: [
+              {
+                entryId: 'AssetModelBarometerMeasurement',
+                propertyAlias: qrData.AssetModelBarometerMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.pressure },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
+              },
+            ],
+          });
+          client?.send(command);
+        }
+      },
+      error: error => console.log('The sensor is not available', error),
+    });
+  };
+
+  const startAltitude = () => {
+    subscriptionAltitude.current = setInterval(() => {
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 10000,
+      })
+        .then(location => {
+          setAltitudeData(prev => [...prev.slice(-20), location.altitude]);
+          if (isAwsConnected) {
+            const command = new BatchPutAssetPropertyValueCommand({
+              entries: [
+                {
+                  entryId: 'AssetModelAltitudeMeasurement',
+                  propertyAlias: qrData.AssetModelAltitudeMeasurement,
+                  propertyValues: [
+                    {
+                      value: { doubleValue: location.altitude },
+                      timestamp: { timeInSeconds: Date.now() / 1000 },
+                    },
+                  ],
+                },
+              ],
+            });
+            client?.send(command);
+          }
+        })
+        .catch(error => {
+          const { code, message } = error;
+          console.warn(code, message);
+        });
+    }, 1000);
+  };
+  const startProximity = () => {
+    subscriptionProximity.current = ({ proximity }) => {
+      setProximityData(prev => [...prev.slice(-20), proximity ? 1 : 0]);
+      if (isAwsConnected) {
+        const command = new BatchPutAssetPropertyValueCommand({
+          entries: [
+            {
+              entryId: 'AssetModelProximityValue',
+              propertyAlias: qrData.AssetModelProximityValue,
+              propertyValues: [
+                {
+                  value: { doubleValue: proximity ? 1 : 0 },
+                  timestamp: { timeInSeconds: Date.now() / 1000 },
+                },
+              ],
+            },
+          ],
+        });
+        client?.send(command);
+      }
+    };
+    Proximity.addListener(subscriptionProximity.current);
   };
 
   const stopAccelerometer = () => {
@@ -112,12 +346,29 @@ const SensorScreen = ({ navigation }) => {
   const stopMagnetometer = () => {
     subscriptionMagnetometer.current.unsubscribe();
   };
+  const stopOrientation = () => {
+    subscriptionOrientationMag.current.unsubscribe();
+    subscriptionOrientationAcc.current.unsubscribe();
+  };
+  const stopBarometer = () => {
+    subscriptionBarometer.current.unsubscribe();
+  };
+  const stopAltitude = () => {
+    clearInterval(subscriptionAltitude.current);
+  };
+  const stopProximity = () => {
+    Proximity.removeListener(subscriptionProximity.current);
+  };
 
   useEffect(() => {
+    startAccelerometer();
     return () => {
       stopAccelerometer();
       stopGyroscope();
       stopMagnetometer();
+      stopBarometer();
+      stopAltitude();
+      startProximity();
     };
   }, []);
 
@@ -141,28 +392,59 @@ const SensorScreen = ({ navigation }) => {
   return (
     <ScrollView>
       {!isAwsConnected && renderConnectToAwsCard()}
-      <SensorCard
+      <MultiLineSensorCard
         sensorData={accelerometerData}
         title={'Accelerometer'}
         startSensor={startAccelerometer}
         stopSensor={stopAccelerometer}
         style={styles.sensorCard}
+        defaultListening
       />
-      <SensorCard
+      <MultiLineSensorCard
         sensorData={gyroscopeData}
         title={'Gyroscope'}
         startSensor={startGyroscope}
         stopSensor={stopGyroscope}
         style={styles.sensorCard}
       />
-      <SensorCard
+      <MultiLineSensorCard
         sensorData={magnetometerData}
         title={'Magnetometer'}
         startSensor={startMagnetometer}
         stopSensor={stopMagnetometer}
         style={styles.sensorCard}
       />
+      <MultiLineSensorCard
+        sensorData={orientationData}
+        title={'Orientation'}
+        startSensor={startOrientation}
+        stopSensor={stopOrientation}
+        style={styles.sensorCard}
+      />
       <CameraSensorCard title={'Video'} />
+      <LocationSensorMap title={'GPS'} />
+      <SingleLineSensorCard
+        sensorData={barometerData}
+        title={'Barometer'}
+        startSensor={startBarometer}
+        stopSensor={stopBarometer}
+        units={'hPA'}
+      />
+      <SingleLineSensorCard
+        sensorData={altitudeData}
+        title={'Altitude'}
+        startSensor={startAltitude}
+        stopSensor={stopAltitude}
+        units={'m'}
+      />
+      <SingleLineSensorCard
+        sensorData={proximityData}
+        title={'Proximity'}
+        startSensor={startProximity}
+        stopSensor={stopProximity}
+        curve={shape.curveLinear}
+        hideSubtitle
+      />
     </ScrollView>
   );
 };

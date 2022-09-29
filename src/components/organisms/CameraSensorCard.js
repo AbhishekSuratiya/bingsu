@@ -13,11 +13,13 @@ const CameraSensorCard = ({ title }) => {
   const device = devices.back;
 
   React.useEffect(() => {
-    (async () => {
-      const status = await Camera.requestCameraPermission();
-      setHasPermission(status === 'authorized');
-    })();
-  }, []);
+    if (isSensorListening) {
+      (async () => {
+        const status = await Camera.requestCameraPermission();
+        setHasPermission(status === 'authorized');
+      })();
+    }
+  }, [isSensorListening]);
   return (
     <View style={styles.root}>
       <Collapsible

@@ -1,73 +1,56 @@
 import React, { useEffect, useState } from 'react';
-import Aws from 'aws-sdk/dist/aws-sdk-react-native';
-import AwsIot from 'aws-iot-device-sdk';
-import { AWS_IOT_ENDPOINT, AWS_TOPIC_NAME } from '../utils/contants';
+import AWS from 'aws-sdk';
 import { useDispatch, useSelector } from 'react-redux';
 import { awsAction } from '../redux/reducers/awsReducer';
+import 'react-native-get-random-values';
+import 'react-native-url-polyfill/auto';
+import { IoTSiteWiseClient } from '@aws-sdk/client-iotsitewise';
 
 export const AwsContext = React.createContext();
 
 const InitialiseAws = ({ children }) => {
-  const { awsRegion, cognitoIdentityPool } = useSelector(
+  const { awsRegion, cognitoIdentityPool, roleArn } = useSelector(
     state => state.awsStore,
   );
   const [awsClient, setAwsClient] = useState(null);
+  const [sessionToken, setSessionToken] = useState('');
+  const [secretAccessKey, setSecretAccessKey] = useState('');
+  const [accessKeyId, setAccessKeyId] = useState('');
+
   const dispatch = useDispatch();
-  const initialise = () => {
-    Aws.config.region = awsRegion;
-    Aws.config.credentials = new Aws.CognitoIdentityCredentials({
-      IdentityPoolId: cognitoIdentityPool,
+
+  const getClient = async () => {
+    const client = new IoTSiteWiseClient({
+      region: awsRegion,
+      credentials: { accessKeyId, secretAccessKey, sessionToken },
     });
-    Aws.config.credentials.get(() => {
-      const config = {};
-      let client = null;
-
-      config.host = AWS_IOT_ENDPOINT;
-      config.protocol = 'wss';
-      config.clientId = `client-${Math.floor(Math.random() * 100000 + 1)}`;
-      config.accessKeyId = Aws.config.credentials.accessKeyId;
-      config.secretKey = Aws.config.credentials.secretAccessKey;
-      config.sessionToken = Aws.config.credentials.sessionToken;
-
-      client = AwsIot.device(config);
-      client.on('connect', () => {
-        console.log('Connected established ➡');
-        client.subscribe(AWS_TOPIC_NAME);
-        client.publish(
-          AWS_TOPIC_NAME,
-          JSON.stringify({ message: 'Connected established ➡' }),
-        );
-        setAwsClient(client);
-        dispatch(awsAction.setIsAwsConnected(true));
-      });
-
-      client.on('close', () => {
-        console.log('Disconnected ➡');
-        client.subscribe(AWS_TOPIC_NAME);
-        client.publish(
-          AWS_TOPIC_NAME,
-          JSON.stringify({ message: 'Disconnected ➡' }),
-        );
-        setAwsClient(null);
-        dispatch(awsAction.setIsAwsConnected(false));
-      });
-
-      client.on('message', (topic, message) => {
-        console.log(topic, message.toString());
-      });
-
-      client.on('error', error => {
-        console.log(error);
-      });
-      client.publish(
-        AWS_TOPIC_NAME,
-        JSON.stringify({ message: 'Connected established ➡' }),
-      );
-    });
+    setAwsClient(client);
   };
+
+  const initialise = async () => {
+    AWS.config.region = awsRegion;
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: cognitoIdentityPool,
+      RoleArn: roleArn,
+    });
+    AWS.config.credentials.get(() => {
+      setAccessKeyId(AWS.config.credentials.accessKeyId);
+      setSecretAccessKey(AWS.config.credentials.secretAccessKey);
+      setSessionToken(AWS.config.credentials.sessionToken);
+    });
+    dispatch(awsAction.setIsAwsConnected(true));
+  };
+
   useEffect(() => {
-    awsRegion && cognitoIdentityPool && initialise();
-  }, [awsRegion, cognitoIdentityPool]);
+    awsRegion && cognitoIdentityPool && roleArn && initialise();
+  }, [awsRegion, cognitoIdentityPool, roleArn]);
+
+  useEffect(() => {
+    if (accessKeyId && secretAccessKey && sessionToken) {
+      getClient();
+    }
+  }, [accessKeyId, secretAccessKey, sessionToken]);
+
   return (
     <AwsContext.Provider value={awsClient}>{children}</AwsContext.Provider>
   );

@@ -63,6 +63,7 @@ const tabScreens = [
       title: 'Connect to AWS',
       tabBarActiveTintColor,
       tabBarInactiveTintColor,
+      unmountOnBlur: true,
       tabBarIcon: e => {
         return (
           <QrCodeSvg
@@ -72,22 +73,22 @@ const tabScreens = [
       },
     },
   },
-  {
-    name: 'Home',
-    component: HomeScreen,
-    options: {
-      headerShown: false,
-      tabBarActiveTintColor,
-      tabBarInactiveTintColor,
-      tabBarIcon: e => {
-        return (
-          <InfoSvg
-            fill={e.focused ? tabBarActiveTintColor : tabBarInactiveTintColor}
-          />
-        );
-      },
-    },
-  },
+  // {
+  //   name: 'Home',
+  //   component: HomeScreen,
+  //   options: {
+  //     headerShown: false,
+  //     tabBarActiveTintColor,
+  //     tabBarInactiveTintColor,
+  //     tabBarIcon: e => {
+  //       return (
+  //         <InfoSvg
+  //           fill={e.focused ? tabBarActiveTintColor : tabBarInactiveTintColor}
+  //         />
+  //       );
+  //     },
+  //   },
+  // },
 ];
 
 const screenOptions = () => ({
