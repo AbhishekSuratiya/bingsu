@@ -99,7 +99,7 @@ const MultiLineSensorCard = ({
           </View>
           {renderSwitch()}
         </View>
-        {isSensorListening && (
+        {isSensorListening && sensorData.length > 0 && (
           <View style={styles.yAxisContainer}>
             <YAxis
               data={data[max].data}

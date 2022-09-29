@@ -59,7 +59,7 @@ const SingleLineSensorCard = ({
               <LineChart
                 style={styles.lineChart}
                 data={sensorData}
-                svg={{ strokeWidth: 2.5, stroke: Colors.green }}
+                svg={{ strokeWidth: 2.5, stroke: Colors.blue }}
                 curve={shape.curveBasis}
                 contentInset={verticalContentInset}>
                 <Grid svg={{ stroke: Colors.grey }} />

@@ -23,11 +23,16 @@ const SensorScreen = ({ navigation }) => {
   const [gyroscopeData, setGyroscopeData] = useState([]);
   const [magnetometerData, setMagnetometerData] = useState([]);
   const [barometerData, setBarometerData] = useState([]);
+  const [orientationData, setOrientationData] = useState([]);
 
   const subscriptionAccelerometer = useRef(null);
   const subscriptionGyroscope = useRef(null);
   const subscriptionMagnetometer = useRef(null);
   const subscriptionBarometer = useRef(null);
+  const subscriptionOrientationAcc = useRef(null);
+  const subscriptionOrientationMag = useRef(null);
+  const orientationXYData = useRef(null);
+  orientationXYData.current = {};
 
   const client = useContext(AwsContext);
   const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
@@ -176,6 +181,70 @@ const SensorScreen = ({ navigation }) => {
       error: error => console.log('The sensor is not available', error),
     });
   };
+  const startOrientation = () => {
+    setUpdateIntervalForType(
+      SensorTypes.accelerometer,
+      AWS_SEND_MESSAGE_INTERVAL,
+    );
+    setUpdateIntervalForType(
+      SensorTypes.magnetometer,
+      AWS_SEND_MESSAGE_INTERVAL,
+    );
+    subscriptionOrientationAcc.current = accelerometer.subscribe({
+      next: data => {
+        orientationXYData.current.x = data.x;
+        orientationXYData.current.y = data.y;
+      },
+      error: error => console.log('The sensor is not available', error),
+    });
+    subscriptionOrientationMag.current = magnetometer.subscribe({
+      next: data => {
+        const x = orientationXYData.current.x;
+        const y = orientationXYData.current.y;
+        if (x && y) {
+          setOrientationData(prev => [...prev.slice(-20), { x, y, z: data.z }]);
+          if (isAwsConnected) {
+            const command = new BatchPutAssetPropertyValueCommand({
+              entries: [
+                {
+                  entryId: 'AssetModelOrientationXMeasurement',
+                  propertyAlias: qrData.AssetModelOrientationXMeasurement,
+                  propertyValues: [
+                    {
+                      value: { doubleValue: x },
+                      timestamp: { timeInSeconds: Date.now() / 1000 },
+                    },
+                  ],
+                },
+                {
+                  entryId: 'AssetModelOrientationYMeasurement',
+                  propertyAlias: qrData.AssetModelOrientationYMeasurement,
+                  propertyValues: [
+                    {
+                      value: { doubleValue: y },
+                      timestamp: { timeInSeconds: Date.now() / 1000 },
+                    },
+                  ],
+                },
+                {
+                  entryId: 'AssetModelOrientationZMeasurement',
+                  propertyAlias: qrData.AssetModelOrientationYMeasurement,
+                  propertyValues: [
+                    {
+                      value: { doubleValue: data.z },
+                      timestamp: { timeInSeconds: Date.now() / 1000 },
+                    },
+                  ],
+                },
+              ],
+            });
+            client?.send(command);
+          }
+        }
+      },
+      error: error => console.log('The sensor is not available', error),
+    });
+  };
 
   const startBarometer = () => {
     setUpdateIntervalForType(SensorTypes.barometer, AWS_SEND_MESSAGE_INTERVAL);
@@ -213,6 +282,10 @@ const SensorScreen = ({ navigation }) => {
   };
   const stopMagnetometer = () => {
     subscriptionMagnetometer.current.unsubscribe();
+  };
+  const stopOrientation = () => {
+    subscriptionOrientationMag.current.unsubscribe();
+    subscriptionOrientationAcc.current.unsubscribe();
   };
   const stopBarometer = () => {
     subscriptionBarometer.current.unsubscribe();
@@ -268,6 +341,13 @@ const SensorScreen = ({ navigation }) => {
         title={'Magnetometer'}
         startSensor={startMagnetometer}
         stopSensor={stopMagnetometer}
+        style={styles.sensorCard}
+      />
+      <MultiLineSensorCard
+        sensorData={orientationData}
+        title={'Orientation'}
+        startSensor={startOrientation}
+        stopSensor={stopOrientation}
         style={styles.sensorCard}
       />
       <CameraSensorCard title={'Video'} />
