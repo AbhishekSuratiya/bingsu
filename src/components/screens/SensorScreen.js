@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import SensorCard from '../organisms/SensorCard';
+import MultiLineSensorCard from '../organisms/MultiLineSensorCard';
 import {
   accelerometer,
+  barometer,
   gyroscope,
   magnetometer,
   SensorTypes,
@@ -15,15 +16,18 @@ import { AWS_SEND_MESSAGE_INTERVAL } from '../../utils/contants';
 import Button from '../atoms/Button';
 import { useSelector } from 'react-redux';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
+import SingleLineSensorCard from '../organisms/SingleLineSensorCard';
 
 const SensorScreen = ({ navigation }) => {
   const [accelerometerData, setAccelerometerData] = useState([]);
   const [gyroscopeData, setGyroscopeData] = useState([]);
   const [magnetometerData, setMagnetometerData] = useState([]);
+  const [barometerData, setBarometerData] = useState([]);
 
   const subscriptionAccelerometer = useRef(null);
   const subscriptionGyroscope = useRef(null);
   const subscriptionMagnetometer = useRef(null);
+  const subscriptionBarometer = useRef(null);
 
   const client = useContext(AwsContext);
   const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
@@ -173,6 +177,34 @@ const SensorScreen = ({ navigation }) => {
     });
   };
 
+  const startBarometer = () => {
+    setUpdateIntervalForType(SensorTypes.barometer, AWS_SEND_MESSAGE_INTERVAL);
+    subscriptionBarometer.current = barometer.subscribe({
+      next: data => {
+        setBarometerData(prev => [...prev.slice(-20), data.pressure]);
+
+        if (isAwsConnected) {
+          const command = new BatchPutAssetPropertyValueCommand({
+            entries: [
+              {
+                entryId: 'AssetModelBarometerMeasurement',
+                propertyAlias: qrData.AssetModelBarometerMeasurement,
+                propertyValues: [
+                  {
+                    value: { doubleValue: data.pressure },
+                    timestamp: { timeInSeconds: Date.now() / 1000 },
+                  },
+                ],
+              },
+            ],
+          });
+          client?.send(command);
+        }
+      },
+      error: error => console.log('The sensor is not available', error),
+    });
+  };
+
   const stopAccelerometer = () => {
     subscriptionAccelerometer.current.unsubscribe();
   };
@@ -182,12 +214,17 @@ const SensorScreen = ({ navigation }) => {
   const stopMagnetometer = () => {
     subscriptionMagnetometer.current.unsubscribe();
   };
+  const stopBarometer = () => {
+    subscriptionBarometer.current.unsubscribe();
+  };
 
   useEffect(() => {
+    startAccelerometer();
     return () => {
       stopAccelerometer();
       stopGyroscope();
       stopMagnetometer();
+      stopBarometer();
     };
   }, []);
 
@@ -211,21 +248,22 @@ const SensorScreen = ({ navigation }) => {
   return (
     <ScrollView>
       {!isAwsConnected && renderConnectToAwsCard()}
-      <SensorCard
+      <MultiLineSensorCard
         sensorData={accelerometerData}
         title={'Accelerometer'}
         startSensor={startAccelerometer}
         stopSensor={stopAccelerometer}
         style={styles.sensorCard}
+        defaultListening
       />
-      <SensorCard
+      <MultiLineSensorCard
         sensorData={gyroscopeData}
         title={'Gyroscope'}
         startSensor={startGyroscope}
         stopSensor={stopGyroscope}
         style={styles.sensorCard}
       />
-      <SensorCard
+      <MultiLineSensorCard
         sensorData={magnetometerData}
         title={'Magnetometer'}
         startSensor={startMagnetometer}
@@ -233,6 +271,12 @@ const SensorScreen = ({ navigation }) => {
         style={styles.sensorCard}
       />
       <CameraSensorCard title={'Video'} />
+      <SingleLineSensorCard
+        sensorData={barometerData}
+        title={'Barometer'}
+        startSensor={startBarometer}
+        stopSensor={stopBarometer}
+      />
     </ScrollView>
   );
 };

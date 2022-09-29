@@ -4,6 +4,10 @@ import Fonts from '../../theme/Fonts';
 import { SENSOR_CARD_HEADER } from '../../utils/contants';
 
 const styles = StyleSheet.create({
+  lineChart: { flex: 1 },
+  lineChartContainer: { flex: 1, marginLeft: 10 },
+  yAxisContainer: { flexDirection: 'row', flex: 1 },
+  currentValue: { color: Colors.white80, marginTop: 8 },
   card: {
     padding: 16,
     paddingTop: 0,
@@ -24,7 +28,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   content: {
-    flex: 1,
     backgroundColor: Colors.dark5,
     borderRadius: 8,
     overflow: 'hidden',

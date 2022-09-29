@@ -3,12 +3,19 @@ import Colors from '../../theme/Colors';
 import { Switch, Text, View } from 'react-native';
 import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
-import styles from './SensorCardStyles';
+import styles from './MultiLineSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
 import { SENSOR_CARD_HEADER } from '../../utils/contants';
 
-const SensorCard = ({ sensorData, title, startSensor, stopSensor, style }) => {
-  const [isSensorListening, setIsSensorListening] = useState(false);
+const MultiLineSensorCard = ({
+  sensorData,
+  title,
+  startSensor,
+  stopSensor,
+  style,
+  defaultListening,
+}) => {
+  const [isSensorListening, setIsSensorListening] = useState(defaultListening);
   const xCoordinate = sensorData?.map(data => data.x);
   const yCoordinate = sensorData?.map(data => data.y);
   const zCoordinate = sensorData?.map(data => data.z);
@@ -98,14 +105,14 @@ const SensorCard = ({ sensorData, title, startSensor, stopSensor, style }) => {
               data={data[max].data}
               contentInset={verticalContentInset}
               svg={axesSvg}
-              formatLabel={value => (value > 1 ? value : value?.toFixed(3))}
+              formatLabel={value => value?.toFixed(3)}
             />
             <View style={styles.lineChartContainer}>
               <LineChart
                 style={styles.lineChart}
                 data={data}
                 svg={{ strokeWidth: 2.5 }}
-                curve={shape.curveNatural}
+                curve={shape.curveBasis}
                 contentInset={verticalContentInset}>
                 <Grid svg={{ stroke: Colors.grey }} />
               </LineChart>
@@ -117,4 +124,4 @@ const SensorCard = ({ sensorData, title, startSensor, stopSensor, style }) => {
   );
 };
 
-export default SensorCard;
+export default MultiLineSensorCard;
