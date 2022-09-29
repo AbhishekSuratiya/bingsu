@@ -12,6 +12,7 @@ const SingleLineSensorCard = ({
   startSensor,
   stopSensor,
   sensorData,
+  units,
 }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const verticalContentInset = { top: 10, bottom: 10 };
@@ -27,10 +28,10 @@ const SingleLineSensorCard = ({
         <View style={styles.header}>
           <View>
             <Text style={styles.title}>{title}</Text>
-            {isSensorListening && (
+            {isSensorListening && sensorData.length > 0 && (
               <Text style={styles.currentValue}>{`${sensorData[
                 sensorData.length - 1
-              ]?.toFixed(4)} hPA`}</Text>
+              ]?.toFixed(4)} ${units}`}</Text>
             )}
           </View>
           <Switch

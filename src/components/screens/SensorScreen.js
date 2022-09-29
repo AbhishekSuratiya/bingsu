@@ -17,6 +17,7 @@ import Button from '../atoms/Button';
 import { useSelector } from 'react-redux';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import SingleLineSensorCard from '../organisms/SingleLineSensorCard';
+import GetLocation from 'react-native-get-location';
 
 const SensorScreen = ({ navigation }) => {
   const [accelerometerData, setAccelerometerData] = useState([]);
@@ -24,6 +25,7 @@ const SensorScreen = ({ navigation }) => {
   const [magnetometerData, setMagnetometerData] = useState([]);
   const [barometerData, setBarometerData] = useState([]);
   const [orientationData, setOrientationData] = useState([]);
+  const [altitudeData, setAltitudeData] = useState([]);
 
   const subscriptionAccelerometer = useRef(null);
   const subscriptionGyroscope = useRef(null);
@@ -31,6 +33,7 @@ const SensorScreen = ({ navigation }) => {
   const subscriptionBarometer = useRef(null);
   const subscriptionOrientationAcc = useRef(null);
   const subscriptionOrientationMag = useRef(null);
+  const subscriptionAltitude = useRef(null);
   const orientationXYData = useRef(null);
   orientationXYData.current = {};
 
@@ -274,6 +277,39 @@ const SensorScreen = ({ navigation }) => {
     });
   };
 
+  const startAltitude = () => {
+    subscriptionAltitude.current = setInterval(() => {
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 10000,
+      })
+        .then(location => {
+          setAltitudeData(prev => [...prev, location.altitude]);
+          if (isAwsConnected) {
+            const command = new BatchPutAssetPropertyValueCommand({
+              entries: [
+                {
+                  entryId: 'AssetModelAltitudeMeasurement',
+                  propertyAlias: qrData.AssetModelAltitudeMeasurement,
+                  propertyValues: [
+                    {
+                      value: { doubleValue: location.altitude },
+                      timestamp: { timeInSeconds: Date.now() / 1000 },
+                    },
+                  ],
+                },
+              ],
+            });
+            client?.send(command);
+          }
+        })
+        .catch(error => {
+          const { code, message } = error;
+          console.warn(code, message);
+        });
+    }, 1000);
+  };
+
   const stopAccelerometer = () => {
     subscriptionAccelerometer.current.unsubscribe();
   };
@@ -289,6 +325,9 @@ const SensorScreen = ({ navigation }) => {
   };
   const stopBarometer = () => {
     subscriptionBarometer.current.unsubscribe();
+  };
+  const stopAltitude = () => {
+    clearInterval(subscriptionAltitude.current);
   };
 
   useEffect(() => {
@@ -356,6 +395,14 @@ const SensorScreen = ({ navigation }) => {
         title={'Barometer'}
         startSensor={startBarometer}
         stopSensor={stopBarometer}
+        units={'hPA'}
+      />
+      <SingleLineSensorCard
+        sensorData={altitudeData}
+        title={'Altitude'}
+        startSensor={startAltitude}
+        stopSensor={stopAltitude}
+        units={'m'}
       />
     </ScrollView>
   );
