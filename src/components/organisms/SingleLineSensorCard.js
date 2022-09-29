@@ -13,6 +13,8 @@ const SingleLineSensorCard = ({
   stopSensor,
   sensorData,
   units,
+  curve,
+  hideSubtitle,
 }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const verticalContentInset = { top: 10, bottom: 10 };
@@ -28,7 +30,7 @@ const SingleLineSensorCard = ({
         <View style={styles.header}>
           <View>
             <Text style={styles.title}>{title}</Text>
-            {isSensorListening && sensorData.length > 0 && (
+            {isSensorListening && !hideSubtitle && sensorData.length > 0 && (
               <Text style={styles.currentValue}>{`${sensorData[
                 sensorData.length - 1
               ]?.toFixed(4)} ${units}`}</Text>
@@ -61,7 +63,7 @@ const SingleLineSensorCard = ({
                 style={styles.lineChart}
                 data={sensorData}
                 svg={{ strokeWidth: 2.5, stroke: Colors.blue }}
-                curve={shape.curveBasis}
+                curve={curve || shape.curveBasis}
                 contentInset={verticalContentInset}>
                 <Grid svg={{ stroke: Colors.grey }} />
               </LineChart>

@@ -19,6 +19,8 @@ import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import SingleLineSensorCard from '../organisms/SingleLineSensorCard';
 import GetLocation from 'react-native-get-location';
 import LocationSensorMap from '../organisms/LocationSensorMap';
+import Proximity from 'react-native-proximity';
+import * as shape from 'd3-shape';
 
 const SensorScreen = ({ navigation }) => {
   const [accelerometerData, setAccelerometerData] = useState([]);
@@ -27,6 +29,7 @@ const SensorScreen = ({ navigation }) => {
   const [barometerData, setBarometerData] = useState([]);
   const [orientationData, setOrientationData] = useState([]);
   const [altitudeData, setAltitudeData] = useState([]);
+  const [proximityData, setProximityData] = useState([]);
 
   const subscriptionAccelerometer = useRef(null);
   const subscriptionGyroscope = useRef(null);
@@ -35,6 +38,7 @@ const SensorScreen = ({ navigation }) => {
   const subscriptionOrientationAcc = useRef(null);
   const subscriptionOrientationMag = useRef(null);
   const subscriptionAltitude = useRef(null);
+  const subscriptionProximity = useRef(null);
   const orientationXYData = useRef(null);
   orientationXYData.current = {};
 
@@ -285,7 +289,7 @@ const SensorScreen = ({ navigation }) => {
         timeout: 10000,
       })
         .then(location => {
-          setAltitudeData(prev => [...prev, location.altitude]);
+          setAltitudeData(prev => [...prev.slice(-20), location.altitude]);
           if (isAwsConnected) {
             const command = new BatchPutAssetPropertyValueCommand({
               entries: [
@@ -310,6 +314,29 @@ const SensorScreen = ({ navigation }) => {
         });
     }, 1000);
   };
+  const startProximity = () => {
+    subscriptionProximity.current = ({ proximity }) => {
+      setProximityData(prev => [...prev.slice(-20), proximity ? 1 : 0]);
+      if (isAwsConnected) {
+        const command = new BatchPutAssetPropertyValueCommand({
+          entries: [
+            {
+              entryId: 'AssetModelProximityValue',
+              propertyAlias: qrData.AssetModelProximityValue,
+              propertyValues: [
+                {
+                  value: { doubleValue: proximity ? 1 : 0 },
+                  timestamp: { timeInSeconds: Date.now() / 1000 },
+                },
+              ],
+            },
+          ],
+        });
+        client?.send(command);
+      }
+    };
+    Proximity.addListener(subscriptionProximity.current);
+  };
 
   const stopAccelerometer = () => {
     subscriptionAccelerometer.current.unsubscribe();
@@ -330,6 +357,9 @@ const SensorScreen = ({ navigation }) => {
   const stopAltitude = () => {
     clearInterval(subscriptionAltitude.current);
   };
+  const stopProximity = () => {
+    Proximity.removeListener(subscriptionProximity.current);
+  };
 
   useEffect(() => {
     startAccelerometer();
@@ -338,6 +368,8 @@ const SensorScreen = ({ navigation }) => {
       stopGyroscope();
       stopMagnetometer();
       stopBarometer();
+      stopAltitude();
+      startProximity();
     };
   }, []);
 
@@ -405,6 +437,14 @@ const SensorScreen = ({ navigation }) => {
         startSensor={startAltitude}
         stopSensor={stopAltitude}
         units={'m'}
+      />
+      <SingleLineSensorCard
+        sensorData={proximityData}
+        title={'Proximity'}
+        startSensor={startProximity}
+        stopSensor={stopProximity}
+        curve={shape.curveLinear}
+        hideSubtitle
       />
     </ScrollView>
   );
