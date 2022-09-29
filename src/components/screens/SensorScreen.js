@@ -18,6 +18,7 @@ import { useSelector } from 'react-redux';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import SingleLineSensorCard from '../organisms/SingleLineSensorCard';
 import GetLocation from 'react-native-get-location';
+import LocationSensorMap from '../organisms/LocationSensorMap';
 
 const SensorScreen = ({ navigation }) => {
   const [accelerometerData, setAccelerometerData] = useState([]);
@@ -231,7 +232,7 @@ const SensorScreen = ({ navigation }) => {
                 },
                 {
                   entryId: 'AssetModelOrientationZMeasurement',
-                  propertyAlias: qrData.AssetModelOrientationYMeasurement,
+                  propertyAlias: qrData.AssetModelOrientationZMeasurement,
                   propertyValues: [
                     {
                       value: { doubleValue: data.z },
@@ -390,6 +391,7 @@ const SensorScreen = ({ navigation }) => {
         style={styles.sensorCard}
       />
       <CameraSensorCard title={'Video'} />
+      <LocationSensorMap title={'GPS'} />
       <SingleLineSensorCard
         sensorData={barometerData}
         title={'Barometer'}
