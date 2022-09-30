@@ -27,6 +27,12 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 0,
   },
+  connectToAwsTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  bulbIcon: { marginRight: 8 },
 });
 
 export default styles;

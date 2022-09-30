@@ -45,6 +45,8 @@ const SensorScreen = ({ navigation }) => {
   const [proximityData, setProximityData] = useState([]);
   const [ambientLightData, setAmbientLightData] = useState([]);
 
+  const [isBarometerAvailable, setIsBarometerAvailable] = useState(true);
+
   const subscriptionAccelerometer = useRef(null);
   const subscriptionGyroscope = useRef(null);
   const subscriptionMagnetometer = useRef(null);
@@ -213,7 +215,6 @@ const SensorScreen = ({ navigation }) => {
     subscriptionBarometer.current = barometer.subscribe({
       next: data => {
         setBarometerData(prev => [...prev.slice(-20), data.pressure]);
-
         if (isAwsConnected) {
           const command = new BatchPutAssetPropertyValueCommand({
             entries: [
@@ -227,7 +228,10 @@ const SensorScreen = ({ navigation }) => {
           client?.send(command);
         }
       },
-      error: error => console.log('The sensor is not available', error),
+      error: error => {
+        setIsBarometerAvailable(false);
+        console.log('The sensor is not available', error);
+      },
     });
   };
 
@@ -315,6 +319,10 @@ const SensorScreen = ({ navigation }) => {
 
   useEffect(() => {
     startAccelerometer();
+    startBarometer();
+    setTimeout(() => {
+      stopBarometer();
+    }, AWS_SEND_MESSAGE_INTERVAL * 2);
     return () => {
       stopAccelerometer();
       stopGyroscope();
@@ -330,13 +338,8 @@ const SensorScreen = ({ navigation }) => {
     return (
       <View style={styles.connectToAwsSpacing}>
         <View style={styles.connectToAwsWrapper}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginBottom: 16,
-            }}>
-            <View style={{ marginRight: 8 }}>
+          <View style={styles.connectToAwsTitle}>
+            <View style={styles.bulbIcon}>
               <BulbSvg fill={Colors.blue} />
             </View>
             <View>
@@ -389,13 +392,15 @@ const SensorScreen = ({ navigation }) => {
       />
       <CameraSensorCard title={'Video'} />
       <LocationSensorMap title={'GPS'} />
-      <SingleLineSensorCard
-        sensorData={barometerData}
-        title={'Barometer'}
-        startSensor={startBarometer}
-        stopSensor={stopBarometer}
-        units={'hPA'}
-      />
+      {isBarometerAvailable && (
+        <SingleLineSensorCard
+          sensorData={barometerData}
+          title={'Barometer'}
+          startSensor={startBarometer}
+          stopSensor={stopBarometer}
+          units={'hPA'}
+        />
+      )}
       <SingleLineSensorCard
         sensorData={altitudeData}
         title={'Altitude'}
