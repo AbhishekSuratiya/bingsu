@@ -268,11 +268,16 @@ const SensorScreen = ({ navigation }) => {
       if (isAwsConnected) {
         const command = new BatchPutAssetPropertyValueCommand({
           entries: [
-            getCommandEntry({
+            {
               entryId: 'AssetModelProximityValue',
               propertyAlias: qrData.AssetModelProximityValue,
-              value: proximity ? 1 : 0,
-            }),
+              propertyValues: [
+                {
+                  value: { integerValue: proximity ? 1 : 0 },
+                  timestamp: { timeInSeconds: Date.now() / 1000 },
+                },
+              ],
+            },
           ],
         });
         client?.send(command);
