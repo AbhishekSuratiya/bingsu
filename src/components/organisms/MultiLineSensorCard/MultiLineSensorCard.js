@@ -50,19 +50,19 @@ const MultiLineSensorCard = ({
         <View style={styles.coordinatesText}>
           <Text style={styles.coordinates}>x:</Text>
           <Text style={{ color: Colors.red }}>
-            {xCoordinate[xCoordinate.length - 1]?.toFixed(3)}
+            {xCoordinate[xCoordinate.length - 1]?.toFixed(4)}
           </Text>
         </View>
         <View style={styles.coordinatesText}>
           <Text style={styles.coordinates}>y:</Text>
           <Text style={{ color: Colors.green }}>
-            {yCoordinate[yCoordinate.length - 1]?.toFixed(3)}
+            {yCoordinate[yCoordinate.length - 1]?.toFixed(4)}
           </Text>
         </View>
         <View style={styles.coordinatesText}>
           <Text style={styles.coordinates}>z:</Text>
           <Text style={{ color: Colors.blue }}>
-            {zCoordinate[zCoordinate.length - 1]?.toFixed(3)}
+            {zCoordinate[zCoordinate.length - 1]?.toFixed(4)}
           </Text>
         </View>
       </View>
@@ -105,7 +105,7 @@ const MultiLineSensorCard = ({
               data={data[max].data}
               contentInset={verticalContentInset}
               svg={axesSvg}
-              formatLabel={value => value?.toFixed(3)}
+              formatLabel={value => value?.toFixed(4)}
             />
             <View style={styles.lineChartContainer}>
               <LineChart

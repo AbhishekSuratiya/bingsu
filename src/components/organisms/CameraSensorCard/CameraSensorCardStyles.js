@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.white100,
     fontSize: 16,
-    fontFamily: Fonts.icomoon,
   },
   header: {
     flexDirection: 'row',

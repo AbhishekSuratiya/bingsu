@@ -32,6 +32,8 @@ import {
   startLightSensor,
   stopLightSensor,
 } from 'react-native-ambient-light-sensor';
+import BulbSvg from '../../../../assets/images/svg/bulbSvg';
+import Colors from '../../../theme/Colors';
 
 const SensorScreen = ({ navigation }) => {
   const [accelerometerData, setAccelerometerData] = useState([]);
@@ -328,10 +330,22 @@ const SensorScreen = ({ navigation }) => {
     return (
       <View style={styles.connectToAwsSpacing}>
         <View style={styles.connectToAwsWrapper}>
-          <Text style={styles.connectToAws}>Connect to AWS</Text>
-          <Text style={styles.saveYourData}>
-            Save your sensor data by connecting to AWS
-          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 16,
+            }}>
+            <View style={{ marginRight: 8 }}>
+              <BulbSvg fill={Colors.blue} />
+            </View>
+            <View>
+              <Text style={styles.connectToAws}>Connect to AWS</Text>
+              <Text style={styles.saveYourData}>
+                Save your sensor data by connecting to AWS
+              </Text>
+            </View>
+          </View>
           <Button
             title={'Connect'}
             onPress={() => navigation.navigate('ScanQr')}

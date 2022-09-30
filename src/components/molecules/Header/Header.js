@@ -2,21 +2,17 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import styles from './HeaderStyles';
 import { useSelector } from 'react-redux';
-import Colors from '../../../theme/Colors';
 
 const Header = ({ options }) => {
   const isAwsConnected = useSelector(state => state.awsStore.isAwsConnected);
 
   return (
     <View style={styles.mainContainer}>
-      <View style={{ alignItems: 'center' }}>
+      <View>
         <Text style={styles.title}>{options.title}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={styles.connectionStatusWrapper}>
           <View
-            style={[
-              styles.dot,
-              !isAwsConnected && { backgroundColor: Colors.red },
-            ]}
+            style={[styles.dot, !isAwsConnected && styles.dotDisConnected]}
           />
           <Text style={styles.connectionStatus}>
             {isAwsConnected ? 'Connected to AWS' : 'Not Connected to AWS'}

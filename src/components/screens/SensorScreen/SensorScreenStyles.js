@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
   saveYourData: {
     color: Colors.grey80,
     fontSize: 13,
-    marginBottom: 16,
   },
   connectToAws: {
     color: Colors.white100,
