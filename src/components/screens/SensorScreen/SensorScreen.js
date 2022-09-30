@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import {
+  DeviceEventEmitter,
+  Platform,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import MultiLineSensorCard from '../../organisms/MultiLineSensorCard/MultiLineSensorCard';
 import {
   accelerometer,
@@ -22,6 +28,10 @@ import LocationSensorMap from '../../organisms/LocationSensorMap/LocationSensorM
 import Proximity from 'react-native-proximity';
 import * as shape from 'd3-shape';
 import getCommandEntry from '../../../utils/getCommandEntry';
+import {
+  startLightSensor,
+  stopLightSensor,
+} from 'react-native-ambient-light-sensor';
 
 const SensorScreen = ({ navigation }) => {
   const [accelerometerData, setAccelerometerData] = useState([]);
@@ -31,6 +41,7 @@ const SensorScreen = ({ navigation }) => {
   const [orientationData, setOrientationData] = useState([]);
   const [altitudeData, setAltitudeData] = useState([]);
   const [proximityData, setProximityData] = useState([]);
+  const [ambientLightData, setAmbientLightData] = useState([]);
 
   const subscriptionAccelerometer = useRef(null);
   const subscriptionGyroscope = useRef(null);
@@ -40,6 +51,7 @@ const SensorScreen = ({ navigation }) => {
   const subscriptionOrientationMag = useRef(null);
   const subscriptionAltitude = useRef(null);
   const subscriptionProximity = useRef(null);
+  const subscriptionAmbientLight = useRef(null);
   const orientationXYData = useRef({});
 
   const client = useContext(AwsContext);
@@ -263,6 +275,15 @@ const SensorScreen = ({ navigation }) => {
     Proximity.addListener(subscriptionProximity.current);
   };
 
+  const startAmbientLight = () => {
+    startLightSensor();
+    subscriptionAmbientLight.current = DeviceEventEmitter.addListener(
+      'LightSensor',
+      data => {
+        setAmbientLightData(prev => [...prev.slice(-20), data.lightValue]);
+      },
+    );
+  };
   const stopAccelerometer = () => {
     subscriptionAccelerometer.current.unsubscribe();
   };
@@ -285,6 +306,10 @@ const SensorScreen = ({ navigation }) => {
   const stopProximity = () => {
     Proximity.removeListener(subscriptionProximity.current);
   };
+  const stopAmbientLight = () => {
+    stopLightSensor();
+    subscriptionAmbientLight.current?.remove();
+  };
 
   useEffect(() => {
     startAccelerometer();
@@ -294,7 +319,8 @@ const SensorScreen = ({ navigation }) => {
       stopMagnetometer();
       stopBarometer();
       stopAltitude();
-      startProximity();
+      stopProximity();
+      stopAmbientLight();
     };
   }, []);
 
@@ -316,7 +342,7 @@ const SensorScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={styles.root}>
       {!isAwsConnected && renderConnectToAwsCard()}
       <MultiLineSensorCard
         sensorData={accelerometerData}
@@ -369,8 +395,19 @@ const SensorScreen = ({ navigation }) => {
         startSensor={startProximity}
         stopSensor={stopProximity}
         curve={shape.curveLinear}
+        toFixed={1}
         hideSubtitle
       />
+      {Platform.OS === 'android' && (
+        <SingleLineSensorCard
+          sensorData={ambientLightData}
+          title={'Ambient Light'}
+          startSensor={startAmbientLight}
+          stopSensor={stopAmbientLight}
+          units={'lux'}
+          toFixed={1}
+        />
+      )}
     </ScrollView>
   );
 };

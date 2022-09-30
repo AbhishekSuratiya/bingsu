@@ -2,6 +2,9 @@ import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
 
 const styles = StyleSheet.create({
+  root: {
+    paddingBottom: 16,
+  },
   sensorCard: {
     padding: 16,
     paddingBottom: 0,

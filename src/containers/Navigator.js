@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Header from '../components/molecules/Header/Header';
 import ScanQrScreen from '../components/screens/ScanQrScreen/ScanQrScreen';
@@ -51,6 +51,11 @@ const tabScreens = [
 
 const screenOptions = () => ({
   header: props => <Header {...props} />,
+  tabBarStyle: {
+    height: 80,
+    paddingBottom: 24,
+    backgroundColor: Colors.black,
+  },
 });
 
 const navigationTheme = {
@@ -64,6 +69,11 @@ const navigationTheme = {
 const Navigator = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar
+        barStyle="light-content"
+        hidden={false}
+        backgroundColor={Colors.dark5}
+      />
       <NavigationContainer theme={navigationTheme}>
         <Tab.Navigator screenOptions={screenOptions}>
           {tabScreens.map(({ name, component, options }) => {
