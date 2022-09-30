@@ -60,6 +60,16 @@ const LocationSensorMap = ({ title }) => {
 
   useEffect(() => {
     if (isSensorListening) {
+      stopGps();
+      startGps();
+    } else {
+      startGps();
+      stopGps();
+    }
+  }, [isAwsConnected]);
+
+  useEffect(() => {
+    if (isSensorListening) {
       startGps();
     } else {
       stopGps();

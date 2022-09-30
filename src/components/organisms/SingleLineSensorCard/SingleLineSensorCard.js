@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Switch, Text, View } from 'react-native';
 import styles from './SingleLineSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
@@ -6,6 +6,7 @@ import Colors from '../../../theme/Colors';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
+import { useSelector } from 'react-redux';
 
 const SingleLineSensorCard = ({
   title,
@@ -18,6 +19,18 @@ const SingleLineSensorCard = ({
   toFixed,
 }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
+  const { isAwsConnected } = useSelector(state => state.awsStore);
+
+  useEffect(() => {
+    if (isSensorListening) {
+      stopSensor();
+      startSensor();
+    } else {
+      startSensor();
+      stopSensor();
+    }
+  }, [isAwsConnected]);
+
   const verticalContentInset = { top: 10, bottom: 10 };
   const axesSvg = { fontSize: 10, fill: Colors.white80 };
 

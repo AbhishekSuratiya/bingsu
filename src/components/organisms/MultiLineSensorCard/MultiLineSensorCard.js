@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Colors from '../../../theme/Colors';
 import { Switch, Text, View } from 'react-native';
 import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
@@ -6,6 +6,7 @@ import * as shape from 'd3-shape';
 import styles from './MultiLineSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
+import { useSelector } from 'react-redux';
 
 const MultiLineSensorCard = ({
   sensorData,
@@ -16,6 +17,18 @@ const MultiLineSensorCard = ({
   defaultListening,
 }) => {
   const [isSensorListening, setIsSensorListening] = useState(defaultListening);
+  const { isAwsConnected } = useSelector(state => state.awsStore);
+
+  useEffect(() => {
+    if (isSensorListening) {
+      stopSensor();
+      startSensor();
+    } else {
+      startSensor();
+      stopSensor();
+    }
+  }, [isAwsConnected]);
+
   const xCoordinate = sensorData?.map(data => data.x);
   const yCoordinate = sensorData?.map(data => data.y);
   const zCoordinate = sensorData?.map(data => data.z);

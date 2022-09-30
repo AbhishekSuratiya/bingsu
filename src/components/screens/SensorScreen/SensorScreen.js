@@ -291,20 +291,20 @@ const SensorScreen = ({ navigation }) => {
     );
   };
   const stopAccelerometer = () => {
-    subscriptionAccelerometer.current.unsubscribe();
+    subscriptionAccelerometer.current?.unsubscribe();
   };
   const stopGyroscope = () => {
-    subscriptionGyroscope.current.unsubscribe();
+    subscriptionGyroscope.current?.unsubscribe();
   };
   const stopMagnetometer = () => {
-    subscriptionMagnetometer.current.unsubscribe();
+    subscriptionMagnetometer.current?.unsubscribe();
   };
   const stopOrientation = () => {
-    subscriptionOrientationMag.current.unsubscribe();
-    subscriptionOrientationAcc.current.unsubscribe();
+    subscriptionOrientationMag.current?.unsubscribe();
+    subscriptionOrientationAcc.current?.unsubscribe();
   };
   const stopBarometer = () => {
-    subscriptionBarometer.current.unsubscribe();
+    subscriptionBarometer.current?.unsubscribe();
   };
   const stopAltitude = () => {
     clearInterval(subscriptionAltitude.current);
