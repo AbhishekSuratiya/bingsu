@@ -68,27 +68,30 @@ const navigationTheme = {
 
 const Navigator = () => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor={Colors.dark5}
-      />
-      <NavigationContainer theme={navigationTheme}>
-        <Tab.Navigator screenOptions={screenOptions}>
-          {tabScreens.map(({ name, component, options }) => {
-            return (
-              <Tab.Screen
-                key={name}
-                name={name}
-                component={component}
-                options={options}
-              />
-            );
-          })}
-        </Tab.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={{ flex: 0, backgroundColor: Colors.black }} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.black }}>
+        <StatusBar
+          barStyle="light-content"
+          hidden={false}
+          backgroundColor={Colors.black}
+        />
+        <NavigationContainer theme={navigationTheme}>
+          <Tab.Navigator screenOptions={screenOptions}>
+            {tabScreens.map(({ name, component, options }) => {
+              return (
+                <Tab.Screen
+                  key={name}
+                  name={name}
+                  component={component}
+                  options={options}
+                />
+              );
+            })}
+          </Tab.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </>
   );
 };
 
