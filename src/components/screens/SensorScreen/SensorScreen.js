@@ -417,16 +417,17 @@ const SensorScreen = ({ navigation }) => {
         toFixed={1}
         hideSubtitle
       />
-      {Platform.OS === 'android' && (
-        <SingleLineSensorCard
-          sensorData={ambientLightData}
-          title={'Ambient Light'}
-          startSensor={startAmbientLight}
-          stopSensor={stopAmbientLight}
-          units={'lux'}
-          toFixed={1}
-        />
-      )}
+      {/*TODO:Need to enable this once ios is also ready*/}
+      {/*{Platform.OS === 'android' && (*/}
+      {/*  <SingleLineSensorCard*/}
+      {/*    sensorData={ambientLightData}*/}
+      {/*    title={'Ambient Light'}*/}
+      {/*    startSensor={startAmbientLight}*/}
+      {/*    stopSensor={stopAmbientLight}*/}
+      {/*    units={'lux'}*/}
+      {/*    toFixed={1}*/}
+      {/*  />*/}
+      {/*)}*/}
     </ScrollView>
   );
 };
