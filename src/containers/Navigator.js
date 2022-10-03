@@ -7,6 +7,7 @@ import SensorScreen from '../components/screens/SensorScreen/SensorScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Colors from '../theme/Colors';
 import { QrCodeSvg, SensorSvg } from '../../assets/images/svg';
+import RNBootSplash from 'react-native-bootsplash';
 
 const Tab = createBottomTabNavigator();
 
@@ -76,7 +77,9 @@ const Navigator = () => {
           hidden={false}
           backgroundColor={Colors.black}
         />
-        <NavigationContainer theme={navigationTheme}>
+        <NavigationContainer
+          theme={navigationTheme}
+          onReady={() => RNBootSplash.hide()}>
           <Tab.Navigator screenOptions={screenOptions}>
             {tabScreens.map(({ name, component, options }) => {
               return (
