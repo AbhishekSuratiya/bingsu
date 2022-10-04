@@ -1,23 +1,59 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Text, View } from 'react-native';
 import styles from './HeaderStyles';
 import { useSelector } from 'react-redux';
+import { Easing } from 'react-native-reanimated';
 
 const Header = ({ options }) => {
-  const isAwsConnected = useSelector(state => state.awsStore.isAwsConnected);
+  const animation = useRef(new Animated.Value(1)).current;
+  const { isAwsConnected, isScanning } = useSelector(state => state.awsStore);
+
+  useEffect(() => {
+    if (isScanning) {
+      Animated.loop(
+        Animated.timing(animation, {
+          toValue: 6,
+          duration: 1000,
+          useNativeDriver: false,
+        }),
+        {
+          iterations: -1,
+        },
+      ).start();
+    }
+  }, [isScanning, animation]);
+
+  const renderHeader = () => {
+    return isScanning ? (
+      <>
+        <View style={styles.animationContainer}>
+          <Animated.View
+            style={[
+              styles.animatedDot,
+              {
+                width: animation,
+                height: animation,
+              },
+            ]}
+          />
+        </View>
+        <Text style={styles.connectionStatus}>Scanning</Text>
+      </>
+    ) : (
+      <>
+        <View style={[styles.dot, !isAwsConnected && styles.dotDisConnected]} />
+        <Text style={styles.connectionStatus}>
+          {isAwsConnected ? 'Connected to AWS' : 'Not Connected to AWS'}
+        </Text>
+      </>
+    );
+  };
 
   return (
     <View style={styles.mainContainer}>
       <View>
         <Text style={styles.title}>{options.title}</Text>
-        <View style={styles.connectionStatusWrapper}>
-          <View
-            style={[styles.dot, !isAwsConnected && styles.dotDisConnected]}
-          />
-          <Text style={styles.connectionStatus}>
-            {isAwsConnected ? 'Connected to AWS' : 'Not Connected to AWS'}
-          </Text>
-        </View>
+        <View style={styles.connectionStatusWrapper}>{renderHeader()}</View>
       </View>
     </View>
   );
