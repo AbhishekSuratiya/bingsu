@@ -6,6 +6,7 @@ const initialState = {
   cognitoIdentityPool: '',
   roleArn: '',
   qrData: {},
+  isScanning: false,
 };
 
 const awsSlice = createSlice({
@@ -26,6 +27,9 @@ const awsSlice = createSlice({
     },
     setQrData(state, action) {
       state.qrData = action.payload;
+    },
+    setIsScanning(state, action) {
+      state.isScanning = action.payload;
     },
   },
 });

@@ -39,6 +39,7 @@ const InitialiseAws = ({ children }) => {
       setSessionToken(AWS.config.credentials.sessionToken);
     });
     dispatch(awsAction.setIsAwsConnected(true));
+    dispatch(awsAction.setIsScanning(false));
   };
 
   useEffect(() => {

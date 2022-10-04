@@ -19,6 +19,17 @@ export default StyleSheet.create({
     fontSize: 13,
     color: Colors.grey,
   },
+  animationContainer: {
+    width: 6,
+    height: 6,
+    marginRight: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  animatedDot: {
+    backgroundColor: Colors.orange,
+    borderRadius: 10,
+  },
   dot: {
     width: 6,
     height: 6,
