@@ -323,7 +323,6 @@ const SensorScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    startAccelerometer();
     startBarometer();
     setTimeout(() => {
       stopBarometer();
