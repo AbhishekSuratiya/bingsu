@@ -79,7 +79,7 @@ const Navigator = () => {
         />
         <NavigationContainer
           theme={navigationTheme}
-          onReady={() => RNBootSplash.hide()}>
+          onReady={() => setTimeout(RNBootSplash.hide, 4000)}>
           <Tab.Navigator screenOptions={screenOptions}>
             {tabScreens.map(({ name, component, options }) => {
               return (
