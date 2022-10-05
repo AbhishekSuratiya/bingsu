@@ -6,8 +6,9 @@ import ScanQrScreen from '../components/screens/ScanQrScreen/ScanQrScreen';
 import SensorScreen from '../components/screens/SensorScreen/SensorScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Colors from '../theme/Colors';
-import { QrCodeSvg, SensorSvg } from '../../assets/images/svg';
+import { QrCodeSvg, SensorSvg, InfoSvg } from '../../assets/images/svg';
 import RNBootSplash from 'react-native-bootsplash';
+import LearnMoreScreen from '../components/screens/LearnMoreScreen/LearnMoreScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,6 +43,23 @@ const tabScreens = [
       tabBarIcon: e => {
         return (
           <QrCodeSvg
+            fill={e.focused ? tabBarActiveTintColor : tabBarInactiveTintColor}
+          />
+        );
+      },
+    },
+  },
+  {
+    name: 'LearnMore',
+    component: LearnMoreScreen,
+    options: {
+      title: 'Learn More',
+      tabBarActiveTintColor,
+      tabBarInactiveTintColor,
+      unmountOnBlur: true,
+      tabBarIcon: e => {
+        return (
+          <InfoSvg
             fill={e.focused ? tabBarActiveTintColor : tabBarInactiveTintColor}
           />
         );
