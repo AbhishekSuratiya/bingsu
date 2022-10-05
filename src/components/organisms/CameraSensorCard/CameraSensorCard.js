@@ -57,6 +57,9 @@ const CameraSensorCard = ({ title }) => {
                 injectedJavaScript={script}
                 containerStyle={styles.webView}
                 onLoad={() => setIsLoading(false)}
+                originWhitelist={['*']}
+                allowsInlineMediaPlayback={true}
+                scrollEnabled={false}
               />
             )}
             {isLoading && (
