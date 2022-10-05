@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Colors from '../../../theme/Colors';
 import { Platform, Switch, Text, View } from 'react-native';
 import styles from './CameraSensorCardStyles';
@@ -6,12 +6,13 @@ import Collapsible from 'react-native-collapsible';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 import WebView from 'react-native-webview';
 import { useSelector } from 'react-redux';
+import { Camera, useCameraDevices } from 'react-native-vision-camera';
 
 const CameraSensorCard = ({ title }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
-  const { qrData, secretAccessKey, sessionToken, accessKeyId } = useSelector(
-    state => state.awsStore,
-  );
+  const [hasPermission, setHasPermission] = React.useState(false);
+  const { isAwsConnected, qrData, secretAccessKey, sessionToken, accessKeyId } =
+    useSelector(state => state.awsStore);
   const script = useMemo(() => {
     return `
             formValues.channelName = '${qrData.KinesisVideoChannelName}'
@@ -25,6 +26,17 @@ const CameraSensorCard = ({ title }) => {
   const sourceUri =
     (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
     'Web.bundle/index.html';
+  const devices = useCameraDevices();
+  const device = devices.front;
+
+  useEffect(() => {
+    if (isSensorListening) {
+      (async () => {
+        const status = await Camera.requestCameraPermission();
+        setHasPermission(status === 'authorized');
+      })();
+    }
+  }, [isSensorListening]);
 
   return (
     <View style={styles.root}>
@@ -46,7 +58,7 @@ const CameraSensorCard = ({ title }) => {
             />
           </View>
           <View style={styles.cameraWrapper}>
-            {isSensorListening && accessKeyId && (
+            {isSensorListening && accessKeyId ? (
               <WebView
                 source={{ uri: sourceUri }}
                 geolocationEnabled={true}
@@ -58,6 +70,16 @@ const CameraSensorCard = ({ title }) => {
                 allowsInlineMediaPlayback={true}
                 scrollEnabled={false}
               />
+            ) : (
+              device != null &&
+              hasPermission &&
+              !isAwsConnected && (
+                <Camera
+                  style={styles.webView}
+                  device={device}
+                  isActive={isSensorListening}
+                />
+              )
             )}
           </View>
         </View>
