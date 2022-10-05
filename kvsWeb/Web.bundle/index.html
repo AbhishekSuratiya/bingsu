@@ -12,10 +12,13 @@
 <body>
 
 <div class="d-none" id="master">
+    <div class="loader"></div>
+
     <video
             autoplay
             class="local-view"
             muted
+            onCanPlayThrough="hideLoader()"
             playsinline
     />
 </div>

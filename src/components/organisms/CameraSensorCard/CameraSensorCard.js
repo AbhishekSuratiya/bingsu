@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import Colors from '../../../theme/Colors';
-import { ActivityIndicator, Switch, Text, View } from 'react-native';
+import { Platform, Switch, Text, View } from 'react-native';
 import styles from './CameraSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 
 const CameraSensorCard = ({ title }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const { qrData, secretAccessKey, sessionToken, accessKeyId } = useSelector(
     state => state.awsStore,
   );
@@ -42,7 +41,6 @@ const CameraSensorCard = ({ title }) => {
               thumbColor={Colors.white100}
               onValueChange={() => {
                 setIsSensorListening(val => !val);
-                setIsLoading(true);
               }}
               value={isSensorListening}
             />
@@ -56,17 +54,9 @@ const CameraSensorCard = ({ title }) => {
                 javaScriptEnabled={true}
                 injectedJavaScript={script}
                 containerStyle={styles.webView}
-                onLoad={() => setIsLoading(false)}
                 originWhitelist={['*']}
                 allowsInlineMediaPlayback={true}
                 scrollEnabled={false}
-              />
-            )}
-            {isLoading && (
-              <ActivityIndicator
-                style={styles.spinner}
-                color={Colors.blue}
-                size="large"
               />
             )}
           </View>

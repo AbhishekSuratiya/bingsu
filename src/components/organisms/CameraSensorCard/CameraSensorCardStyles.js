@@ -41,11 +41,6 @@ const styles = StyleSheet.create({
     flex: 0,
     height: 250,
   },
-  spinner: {
-    position: 'absolute',
-    top: '45%',
-    left: '45%',
-  },
 });
 
 export default styles;

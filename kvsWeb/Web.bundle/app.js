@@ -53,3 +53,7 @@ async function startMasterStream() {
   const localView = $('#master .local-view')[0];
   startMaster(localView, null, formValues, onStatsReport, event => {});
 }
+
+function hideLoader() {
+  $('.loader').addClass('loader_hidden');
+}
