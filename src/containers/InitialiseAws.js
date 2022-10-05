@@ -9,13 +9,15 @@ import { IoTSiteWiseClient } from '@aws-sdk/client-iotsitewise';
 export const AwsContext = React.createContext();
 
 const InitialiseAws = ({ children }) => {
-  const { awsRegion, cognitoIdentityPool, roleArn } = useSelector(
-    state => state.awsStore,
-  );
+  const {
+    awsRegion,
+    cognitoIdentityPool,
+    roleArn,
+    secretAccessKey,
+    sessionToken,
+    accessKeyId,
+  } = useSelector(state => state.awsStore);
   const [awsClient, setAwsClient] = useState(null);
-  const [sessionToken, setSessionToken] = useState('');
-  const [secretAccessKey, setSecretAccessKey] = useState('');
-  const [accessKeyId, setAccessKeyId] = useState('');
 
   const dispatch = useDispatch();
 
@@ -34,9 +36,11 @@ const InitialiseAws = ({ children }) => {
       RoleArn: roleArn,
     });
     AWS.config.credentials.get(() => {
-      setAccessKeyId(AWS.config.credentials.accessKeyId);
-      setSecretAccessKey(AWS.config.credentials.secretAccessKey);
-      setSessionToken(AWS.config.credentials.sessionToken);
+      dispatch(awsAction.setAccessKeyId(AWS.config.credentials.accessKeyId));
+      dispatch(awsAction.setSessionToken(AWS.config.credentials.sessionToken));
+      dispatch(
+        awsAction.setSecretAccessKey(AWS.config.credentials.secretAccessKey),
+      );
     });
     dispatch(awsAction.setIsAwsConnected(true));
     dispatch(awsAction.setIsScanning(false));

@@ -1,25 +1,32 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Colors from '../../../theme/Colors';
-import { StyleSheet, Switch, Text, View } from 'react-native';
-import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import { ActivityIndicator, Switch, Text, View } from 'react-native';
 import styles from './CameraSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
+import WebView from 'react-native-webview';
+import { useSelector } from 'react-redux';
 
 const CameraSensorCard = ({ title }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
-  const [hasPermission, setHasPermission] = React.useState(false);
-  const devices = useCameraDevices();
-  const device = devices.back;
+  const [isLoading, setIsLoading] = useState(true);
+  const { qrData, secretAccessKey, sessionToken, accessKeyId } = useSelector(
+    state => state.awsStore,
+  );
+  const script = useMemo(() => {
+    return `
+            formValues.channelName = '${qrData.KinesisVideoChannelName}'
+            formValues.region = '${qrData.REGION}'
+            formValues.accessKeyId = '${accessKeyId}'
+            formValues.secretAccessKey = '${secretAccessKey}'
+            formValues.sessionToken = '${sessionToken}'
+            startMasterStream()`;
+  }, [qrData, accessKeyId, secretAccessKey, sessionToken]);
 
-  React.useEffect(() => {
-    if (isSensorListening) {
-      (async () => {
-        const status = await Camera.requestCameraPermission();
-        setHasPermission(status === 'authorized');
-      })();
-    }
-  }, [isSensorListening]);
+  const sourceUri =
+    (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
+    'Web.bundle/index.html';
+
   return (
     <View style={styles.root}>
       <Collapsible
@@ -33,19 +40,31 @@ const CameraSensorCard = ({ title }) => {
             <Switch
               trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
               thumbColor={Colors.white100}
-              onValueChange={() => setIsSensorListening(val => !val)}
+              onValueChange={() => {
+                setIsSensorListening(val => !val);
+                setIsLoading(true);
+              }}
               value={isSensorListening}
             />
           </View>
           <View style={styles.cameraWrapper}>
-            {device != null && hasPermission && (
-              <>
-                <Camera
-                  style={StyleSheet.absoluteFill}
-                  device={device}
-                  isActive={isSensorListening}
-                />
-              </>
+            {isSensorListening && accessKeyId && (
+              <WebView
+                source={{ uri: sourceUri }}
+                geolocationEnabled={true}
+                mediaPlaybackRequiresUserAction={false}
+                javaScriptEnabled={true}
+                injectedJavaScript={script}
+                containerStyle={styles.webView}
+                onLoad={() => setIsLoading(false)}
+              />
+            )}
+            {isLoading && (
+              <ActivityIndicator
+                style={styles.spinner}
+                color={Colors.blue}
+                size="large"
+              />
             )}
           </View>
         </View>

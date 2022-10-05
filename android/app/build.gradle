@@ -133,7 +133,9 @@ android {
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-
+    sourceSets {
+        main { assets.srcDirs = ['src/main/assets', '../../kvsWeb'] }
+    }
     defaultConfig {
         applicationId "com.makeen.bingsu"
         minSdkVersion rootProject.ext.minSdkVersion

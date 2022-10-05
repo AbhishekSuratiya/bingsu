@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KVS WebRTC</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link href="./app.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.585.0.min.js"></script>
+    <script src="https://unpkg.com/amazon-kinesis-video-streams-webrtc/dist/kvs-webrtc.min.js"></script>
+</head>
+<body>
+
+<div class="d-none" id="master">
+    <video
+            autoplay
+            class="local-view"
+            muted
+            playsinline
+    />
+</div>
+
+<script src="./master.js"></script>
+<script src="./app.js"></script>
+
+</body>
+</html>

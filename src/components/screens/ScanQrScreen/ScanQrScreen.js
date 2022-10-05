@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { BarcodeFormat, useScanBarcodes } from 'vision-camera-code-scanner';
@@ -59,6 +59,9 @@ export default function ScanQrScreen({ navigation }) {
     dispatch(awsAction.setCognitoIdentityPool(''));
     dispatch(awsAction.setRoleArn(''));
     dispatch(awsAction.setIsAwsConnected(false));
+    dispatch(awsAction.setAccessKeyId(null));
+    dispatch(awsAction.setSessionToken(null));
+    dispatch(awsAction.setSecretAccessKey(null));
   };
 
   if (isAwsConnected) {
@@ -97,5 +100,7 @@ export default function ScanQrScreen({ navigation }) {
         </View>
       </>
     );
-  } else null;
+  } else {
+    return null;
+  }
 }

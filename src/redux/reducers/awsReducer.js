@@ -7,6 +7,9 @@ const initialState = {
   roleArn: '',
   qrData: {},
   isScanning: false,
+  sessionToken: '',
+  secretAccessKey: '',
+  accessKeyId: '',
 };
 
 const awsSlice = createSlice({
@@ -30,6 +33,15 @@ const awsSlice = createSlice({
     },
     setIsScanning(state, action) {
       state.isScanning = action.payload;
+    },
+    setAccessKeyId(state, action) {
+      state.accessKeyId = action.payload;
+    },
+    setSessionToken(state, action) {
+      state.sessionToken = action.payload;
+    },
+    setSecretAccessKey(state, action) {
+      state.secretAccessKey = action.payload;
     },
   },
 });

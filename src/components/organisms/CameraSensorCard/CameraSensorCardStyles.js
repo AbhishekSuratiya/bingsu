@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
-import Fonts from '../../../theme/Fonts';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 
 const styles = StyleSheet.create({
@@ -37,6 +36,15 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 0,
     width: '100%',
+  },
+  webView: {
+    flex: 0,
+    height: 250,
+  },
+  spinner: {
+    position: 'absolute',
+    top: '45%',
+    left: '45%',
   },
 });
 
