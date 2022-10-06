@@ -1,14 +1,9 @@
-import React, { useContext, useRef, useState } from 'react';
-import { DeviceEventEmitter, ScrollView, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
 import styles from './SensorScreenStyles';
-import { AwsContext } from '../../../containers/InitialiseAws';
 import Button from '../../atoms/Button';
 import { useSelector } from 'react-redux';
 import LocationSensorMap from '../../organisms/LocationSensorMap/LocationSensorMap';
-import {
-  startLightSensor,
-  stopLightSensor,
-} from 'react-native-ambient-light-sensor';
 import BulbSvg from '../../../../assets/images/svg/bulbSvg';
 import Colors from '../../../theme/Colors';
 import AccelerometerSensor from '../../organisms/AccelerometerSensor/AccelerometerSensor';
@@ -19,26 +14,11 @@ import OrientationSensor from '../../organisms/OrientationSensor/OrientationSens
 import AltitudeSensor from '../../organisms/AltitudeSensor/AltitudeSensor';
 import ProximitySensor from '../../organisms/ProximitySensor/ProximitySensor';
 import BarometerSensor from '../../organisms/BarometerSensor/BarometerSensor';
+import AmbientLightSensor from '../../organisms/AmbientLightSensor/AmbientLightSensor';
 
 const SensorScreen = ({ navigation }) => {
-  const [ambientLightData, setAmbientLightData] = useState([]);
   const [isBarometerAvailable, setIsBarometerAvailable] = useState(true);
-  const subscriptionAmbientLight = useRef(null);
-  const client = useContext(AwsContext);
-  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
-  const startAmbientLight = () => {
-    startLightSensor();
-    subscriptionAmbientLight.current = DeviceEventEmitter.addListener(
-      'LightSensor',
-      data => {
-        setAmbientLightData(prev => [...prev.slice(-20), data.lightValue]);
-      },
-    );
-  };
-  const stopAmbientLight = () => {
-    stopLightSensor();
-    subscriptionAmbientLight.current?.remove();
-  };
+  const { isAwsConnected } = useSelector(state => state.awsStore);
 
   const renderConnectToAwsCard = () => {
     return (
@@ -78,17 +58,7 @@ const SensorScreen = ({ navigation }) => {
       )}
       <AltitudeSensor />
       <ProximitySensor />
-      {/*TODO:Need to enable this once ios is also ready*/}
-      {/*{Platform.OS === 'android' && (*/}
-      {/*  <SingleLineSensorCard*/}
-      {/*    sensorData={ambientLightData}*/}
-      {/*    title={'Ambient Light'}*/}
-      {/*    startSensor={startAmbientLight}*/}
-      {/*    stopSensor={stopAmbientLight}*/}
-      {/*    units={'lux'}*/}
-      {/*    toFixed={1}*/}
-      {/*  />*/}
-      {/*)}*/}
+      <AmbientLightSensor />
     </ScrollView>
   );
 };
