@@ -1,0 +1,71 @@
+import React, { useContext, useRef, useState } from 'react';
+import {
+  accelerometer,
+  SensorTypes,
+  setUpdateIntervalForType,
+} from 'react-native-sensors';
+import { AWS_SEND_MESSAGE_INTERVAL } from '../../../utils/contants';
+import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
+import getCommandEntry from '../../../utils/getCommandEntry';
+import { AwsContext } from '../../../containers/InitialiseAws';
+import { useSelector } from 'react-redux';
+import styles from '../../screens/SensorScreen/SensorScreenStyles';
+import MultiLineSensorCard from '../MultiLineSensorCard/MultiLineSensorCard';
+
+const AccelerometerSensor = props => {
+  const [accelerometerData, setAccelerometerData] = useState([]);
+  const subscriptionAccelerometer = useRef(null);
+  const client = useContext(AwsContext);
+  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+
+  const startAccelerometer = () => {
+    setUpdateIntervalForType(
+      SensorTypes.accelerometer,
+      AWS_SEND_MESSAGE_INTERVAL,
+    );
+    subscriptionAccelerometer.current = accelerometer.subscribe({
+      next: data => {
+        setAccelerometerData(prev => [...prev.slice(-20), data]);
+        if (isAwsConnected) {
+          const command = new BatchPutAssetPropertyValueCommand({
+            entries: [
+              getCommandEntry({
+                entryId: 'AccelerometerXMeasurement',
+                propertyAlias: qrData.AssetModelAccelerometerXMeasurement,
+                value: data.x,
+              }),
+              getCommandEntry({
+                entryId: 'AccelerometerYMeasurement',
+                propertyAlias: qrData.AssetModelAccelerometerYMeasurement,
+                value: data.y,
+              }),
+              getCommandEntry({
+                entryId: 'AccelerometerZMeasurement',
+                propertyAlias: qrData.AssetModelAccelerometerZMeasurement,
+                value: data.z,
+              }),
+            ],
+          });
+          client?.send(command);
+        }
+      },
+      error: error => console.log('The sensor is not available', error),
+    });
+  };
+  const stopAccelerometer = () => {
+    subscriptionAccelerometer.current?.unsubscribe();
+  };
+
+  return (
+    <MultiLineSensorCard
+      sensorData={accelerometerData}
+      title={'Accelerometer'}
+      startSensor={startAccelerometer}
+      stopSensor={stopAccelerometer}
+      style={styles.sensorCard}
+      defaultListening
+    />
+  );
+};
+
+export default AccelerometerSensor;

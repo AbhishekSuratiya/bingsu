@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Colors from '../../../theme/Colors';
-import { Platform, Switch, Text, View } from 'react-native';
+import { ActivityIndicator, Platform, Switch, Text, View } from 'react-native';
 import styles from './CameraSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
@@ -38,6 +38,46 @@ const CameraSensorCard = ({ title }) => {
     }
   }, [isSensorListening]);
 
+  const renderCamera = () => {
+    if (device != null && hasPermission && !isAwsConnected) {
+      return (
+        <Camera
+          style={styles.webView}
+          device={device}
+          isActive={isSensorListening}
+        />
+      );
+    }
+    if (
+      isSensorListening &&
+      accessKeyId &&
+      secretAccessKey &&
+      sessionToken &&
+      isAwsConnected
+    ) {
+      return (
+        <WebView
+          source={{ uri: sourceUri }}
+          geolocationEnabled={true}
+          mediaPlaybackRequiresUserAction={false}
+          javaScriptEnabled={true}
+          injectedJavaScript={script}
+          containerStyle={styles.webView}
+          originWhitelist={['*']}
+          allowsInlineMediaPlayback={true}
+          scrollEnabled={false}
+        />
+      );
+    }
+    return (
+      <ActivityIndicator
+        style={styles.spinner}
+        color={Colors.blue}
+        size="large"
+      />
+    );
+  };
+
   return (
     <View style={styles.root}>
       <Collapsible
@@ -57,31 +97,7 @@ const CameraSensorCard = ({ title }) => {
               value={isSensorListening}
             />
           </View>
-          <View style={styles.cameraWrapper}>
-            {isSensorListening && accessKeyId ? (
-              <WebView
-                source={{ uri: sourceUri }}
-                geolocationEnabled={true}
-                mediaPlaybackRequiresUserAction={false}
-                javaScriptEnabled={true}
-                injectedJavaScript={script}
-                containerStyle={styles.webView}
-                originWhitelist={['*']}
-                allowsInlineMediaPlayback={true}
-                scrollEnabled={false}
-              />
-            ) : (
-              device != null &&
-              hasPermission &&
-              !isAwsConnected && (
-                <Camera
-                  style={styles.webView}
-                  device={device}
-                  isActive={isSensorListening}
-                />
-              )
-            )}
-          </View>
+          <View style={styles.cameraWrapper}>{renderCamera()}</View>
         </View>
       </Collapsible>
     </View>

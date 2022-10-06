@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, Text, View } from 'react-native';
 import styles from './HeaderStyles';
 import { useSelector } from 'react-redux';
-import { Easing } from 'react-native-reanimated';
 
 const Header = ({ options }) => {
   const animation = useRef(new Animated.Value(1)).current;

@@ -56,7 +56,6 @@ const tabScreens = [
       title: 'Learn More',
       tabBarActiveTintColor,
       tabBarInactiveTintColor,
-      unmountOnBlur: true,
       tabBarIcon: e => {
         return (
           <InfoSvg
