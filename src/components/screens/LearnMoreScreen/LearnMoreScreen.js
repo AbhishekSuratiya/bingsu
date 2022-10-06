@@ -1,16 +1,12 @@
-import React from 'react';
-import WebView from 'react-native-webview';
+import React, { useEffect } from 'react';
+import { Linking } from 'react-native';
 import { LEARN_MORE_LINK } from '../../../utils/contants';
-import { ActivityIndicator } from 'react-native';
-import Colors from '../../../theme/Colors';
 
-const LearnMoreScreen = () => (
-  <WebView
-    source={{ uri: LEARN_MORE_LINK }}
-    renderLoading={() => {
-      return <ActivityIndicator color={Colors.blue} size="large" />;
-    }}
-  />
-);
+const LearnMoreScreen = () => {
+  useEffect(() => {
+    Linking.openURL(LEARN_MORE_LINK);
+  }, []);
+  return null;
+};
 
 export default LearnMoreScreen;

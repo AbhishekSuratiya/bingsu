@@ -34,6 +34,9 @@ const CameraSensorCard = ({ title }) => {
       (async () => {
         const status = await Camera.requestCameraPermission();
         setHasPermission(status === 'authorized');
+        if (status === 'denied') {
+          setIsSensorListening(false);
+        }
       })();
     }
   }, [isSensorListening]);
@@ -82,7 +85,7 @@ const CameraSensorCard = ({ title }) => {
     <View style={styles.root}>
       <Collapsible
         style={styles.card}
-        collapsed={!isSensorListening}
+        collapsed={!hasPermission || !isSensorListening}
         collapsedHeight={SENSOR_CARD_HEADER}
         enablePointerEvents>
         <View style={styles.content}>
