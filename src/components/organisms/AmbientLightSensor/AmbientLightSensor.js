@@ -8,6 +8,8 @@ import {
 import { DeviceEventEmitter, Platform } from 'react-native';
 import SingleLineSensorCard from '../SingleLineSensorCard/SingleLineSensorCard';
 import { AWS_SEND_MESSAGE_INTERVAL } from '../../../utils/contants';
+import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
+import getCommandEntry from '../../../utils/getCommandEntry';
 
 const AmbientLightSensor = props => {
   const [ambientLightData, setAmbientLightData] = useState([]);
@@ -25,6 +27,18 @@ const AmbientLightSensor = props => {
         if (Date.now() - timer.current > AWS_SEND_MESSAGE_INTERVAL) {
           timer.current = Date.now();
           setAmbientLightData(prev => [...prev.slice(-20), data.lightValue]);
+          if (isAwsConnected) {
+            const command = new BatchPutAssetPropertyValueCommand({
+              entries: [
+                getCommandEntry({
+                  entryId: 'AssetModelAmbientLightMeasurement',
+                  propertyAlias: qrData.AssetModelAmbientLightMeasurement,
+                  value: data.lightValue,
+                }),
+              ],
+            });
+            client?.send(command);
+          }
         }
       },
     );
