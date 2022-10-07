@@ -9,12 +9,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.dark5,
     borderRadius: 8,
-    height: 300,
   },
   cameraWrapper: {
     flex: 1,
-    borderRadius: 12,
     overflow: 'hidden',
+    height: 250,
   },
   title: {
     color: Colors.white100,
@@ -39,10 +38,12 @@ const styles = StyleSheet.create({
   },
   webView: {
     flex: 0,
+    width: '50%',
     height: 250,
+    alignSelf: 'center',
   },
   spinner: {
-    top: '30%',
+    top: '40%',
   },
 });
 
