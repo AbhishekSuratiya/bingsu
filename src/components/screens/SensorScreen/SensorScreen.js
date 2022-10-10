@@ -38,6 +38,7 @@ const SensorScreen = ({ navigation }) => {
           <Button
             title={'Connect'}
             onPress={() => navigation.navigate('ScanQr')}
+            light
           />
         </View>
       </View>

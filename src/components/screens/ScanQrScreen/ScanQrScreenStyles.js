@@ -12,6 +12,8 @@ const styles = StyleSheet.create({
   steps: {
     fontSize: 13,
     color: Colors.grey80,
+  },
+  bullets: {
     marginBottom: 12,
   },
   connected: {

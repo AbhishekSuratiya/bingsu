@@ -8,6 +8,8 @@ import Button from '../../atoms/Button';
 import { CheckSvg } from '../../../../assets/images/svg';
 import isJsonString from '../../../utils/isJsonString';
 import styles from './ScanQrScreenStyles';
+import Bullet from '../../atoms/Bullet/Bullet';
+import { SETUP_INSTRUCTIONS } from '../../../utils/contants';
 
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(false);
@@ -91,12 +93,11 @@ export default function ScanQrScreen({ navigation }) {
         />
         <View style={styles.stepsWrapper}>
           <Text style={styles.barcodeHeading}>{'How to connect to AWS?'}</Text>
-          <Text style={styles.steps}>
-            {'1. Create an account on aws.amazon.com'}
-          </Text>
-          <Text style={styles.steps}>{'2. Go to sensors dashboard'}</Text>
-          <Text style={styles.steps}>{'3. Click the generate QR button'}</Text>
-          <Text style={styles.steps}>{'4. Scan the QR with the app'}</Text>
+          {SETUP_INSTRUCTIONS.map((e, i) => (
+            <Bullet number={i + 1} style={styles.bullets}>
+              <Text style={styles.steps}>{e}</Text>
+            </Bullet>
+          ))}
         </View>
       </>
     );
