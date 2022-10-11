@@ -1,16 +1,25 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Colors from '../../../theme/Colors';
-import { ActivityIndicator, Platform, Switch, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import styles from './CameraSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
-import { SENSOR_CARD_HEADER } from '../../../utils/contants';
+import { CAMERA_VIEW, SENSOR_CARD_HEADER } from '../../../utils/contants';
 import WebView from 'react-native-webview';
 import { useSelector } from 'react-redux';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 
+const { rear, front } = CAMERA_VIEW;
 const CameraSensorCard = ({ title }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const [hasPermission, setHasPermission] = React.useState(false);
+  const [cameraFacing, setCameraFacing] = useState(rear);
   const { isAwsConnected, qrData, secretAccessKey, sessionToken, accessKeyId } =
     useSelector(state => state.awsStore);
   const script = useMemo(() => {
@@ -20,14 +29,19 @@ const CameraSensorCard = ({ title }) => {
             formValues.accessKeyId = '${accessKeyId}'
             formValues.secretAccessKey = '${secretAccessKey}'
             formValues.sessionToken = '${sessionToken}'
+            constraints.video = {
+                                  facingMode: '${cameraFacing}',
+                                  width: { ideal: 720 },
+                                  height: { ideal: 1280 },
+                                }
             startMasterStream()`;
-  }, [qrData, accessKeyId, secretAccessKey, sessionToken]);
+  }, [qrData, accessKeyId, secretAccessKey, sessionToken, cameraFacing]);
 
   const sourceUri =
     (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
     'Web.bundle/index.html';
   const devices = useCameraDevices();
-  const device = devices.front;
+  const device = cameraFacing === front ? devices.front : devices.back;
 
   useEffect(() => {
     if (isSensorListening) {
@@ -60,6 +74,7 @@ const CameraSensorCard = ({ title }) => {
     ) {
       return (
         <WebView
+          key={cameraFacing}
           source={{ uri: sourceUri }}
           geolocationEnabled={true}
           mediaPlaybackRequiresUserAction={false}
@@ -78,6 +93,35 @@ const CameraSensorCard = ({ title }) => {
         color={Colors.blue}
         size="large"
       />
+    );
+  };
+
+  const renderCameraSwitchBtn = () => {
+    return (
+      <View style={styles.switchCameraWrapper}>
+        <TouchableOpacity
+          style={[
+            styles.switchCameraButton,
+            {
+              backgroundColor:
+                cameraFacing === rear ? Colors.grey : Colors.transparent,
+            },
+          ]}
+          onPress={() => setCameraFacing(rear)}>
+          <Text style={styles.cameraBtnText}>{'Back Camera'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.switchCameraButton,
+            {
+              backgroundColor:
+                cameraFacing === front ? Colors.grey : Colors.transparent,
+            },
+          ]}
+          onPress={() => setCameraFacing(front)}>
+          <Text style={styles.cameraBtnText}>{'Front Camera'}</Text>
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -100,6 +144,7 @@ const CameraSensorCard = ({ title }) => {
               value={isSensorListening}
             />
           </View>
+          {isSensorListening && renderCameraSwitchBtn()}
           <View style={styles.cameraWrapper}>{renderCamera()}</View>
         </View>
       </Collapsible>

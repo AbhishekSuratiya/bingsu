@@ -12,6 +12,7 @@ const colors = {
   white100: '#FFFFFF',
   toggleOff: '#787880',
   orange: '#E59524',
+  transparent: 'transparent',
 };
 
 export default colors;

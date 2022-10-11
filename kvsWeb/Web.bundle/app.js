@@ -11,7 +11,6 @@ const formValues = {
   sendVideo: true,
   sendAudio: false,
   openDataChannel: false,
-  widescreen: true,
   fullscreen: false,
   useTrickleICE: true,
   natTraversalDisabled: false,

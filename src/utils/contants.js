@@ -7,3 +7,7 @@ export const SETUP_INSTRUCTIONS = [
   'In the Cloudformation console under outputs, open the BingsuDashBoard link.',
   'Scan the QR code with this app.',
 ];
+export const CAMERA_VIEW = {
+  rear: 'environment',
+  front: 'user',
+};

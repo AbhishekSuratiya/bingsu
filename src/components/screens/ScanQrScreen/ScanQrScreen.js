@@ -94,7 +94,7 @@ export default function ScanQrScreen({ navigation }) {
         <View style={styles.stepsWrapper}>
           <Text style={styles.barcodeHeading}>{'How to connect to AWS?'}</Text>
           {SETUP_INSTRUCTIONS.map((e, i) => (
-            <Bullet number={i + 1} style={styles.bullets}>
+            <Bullet number={i + 1} style={styles.bullets} key={i}>
               <Text style={styles.steps}>{e}</Text>
             </Bullet>
           ))}

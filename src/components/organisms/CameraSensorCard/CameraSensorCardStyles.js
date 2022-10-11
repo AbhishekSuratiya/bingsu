@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   cameraWrapper: {
     flex: 1,
     overflow: 'hidden',
-    height: 250,
+    height: 180,
   },
   title: {
     color: Colors.white100,
@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     backgroundColor: Colors.dark5,
-    borderRadius: 8,
     overflow: 'hidden',
   },
   root: {
@@ -37,13 +36,32 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   webView: {
-    flex: 0,
-    width: '50%',
-    height: 250,
-    alignSelf: 'center',
+    width: '100%',
+    justifyContent: 'center',
+    height: 180,
   },
   spinner: {
     top: '40%',
+  },
+  switchCameraWrapper: {
+    width: '100%',
+    height: 36,
+    borderRadius: 8,
+    marginBottom: 8,
+    backgroundColor: Colors.dark4,
+    flexDirection: 'row',
+    padding: 3,
+    top: -8,
+  },
+  switchCameraButton: {
+    width: '50%',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cameraBtnText: {
+    fontSize: 13,
+    color: Colors.white100,
   },
 });
 
