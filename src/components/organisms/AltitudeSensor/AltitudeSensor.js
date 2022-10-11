@@ -1,49 +1,45 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AwsContext } from '../../../containers/InitialiseAws';
-import { useSelector } from 'react-redux';
-import GetLocation from 'react-native-get-location';
+import { useDispatch, useSelector } from 'react-redux';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import getCommandEntry from '../../../utils/getCommandEntry';
 import SingleLineSensorCard from '../SingleLineSensorCard/SingleLineSensorCard';
+import { locationAction } from '../../../redux/reducers/locationReducer';
 
 const AltitudeSensor = props => {
-  const [altitudeData, setAltitudeData] = useState([]);
-  const subscriptionAltitude = useRef(null);
   const client = useContext(AwsContext);
   const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const { altitude, isAltitudeListening } = useSelector(
+    state => state.locationStore,
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isAwsConnected && isAltitudeListening) {
+      const command = new BatchPutAssetPropertyValueCommand({
+        entries: [
+          getCommandEntry({
+            entryId: 'AssetModelAltitudeMeasurement',
+            propertyAlias: qrData.AssetModelAltitudeMeasurement,
+            value: altitude[altitude.length - 1],
+          }),
+        ],
+      });
+      client?.send(command);
+    }
+  }, [altitude, isAwsConnected, isAltitudeListening]);
+
   const startAltitude = () => {
-    subscriptionAltitude.current = setInterval(() => {
-      GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 10000,
-      })
-        .then(location => {
-          setAltitudeData(prev => [...prev.slice(-20), location.altitude]);
-          if (isAwsConnected) {
-            const command = new BatchPutAssetPropertyValueCommand({
-              entries: [
-                getCommandEntry({
-                  entryId: 'AssetModelAltitudeMeasurement',
-                  propertyAlias: qrData.AssetModelAltitudeMeasurement,
-                  value: location.altitude,
-                }),
-              ],
-            });
-            client?.send(command);
-          }
-        })
-        .catch(error => {
-          const { code, message } = error;
-          console.warn(code, message);
-        });
-    }, 1000);
+    dispatch(locationAction.setIsAltitudeListening(true));
   };
+
   const stopAltitude = () => {
-    clearInterval(subscriptionAltitude.current);
+    dispatch(locationAction.setIsAltitudeListening(false));
   };
+
   return (
     <SingleLineSensorCard
-      sensorData={altitudeData}
+      sensorData={altitude}
       title={'Altitude'}
       startSensor={startAltitude}
       stopSensor={stopAltitude}

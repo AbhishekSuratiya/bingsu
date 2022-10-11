@@ -15,6 +15,7 @@ import AltitudeSensor from '../../organisms/AltitudeSensor/AltitudeSensor';
 import ProximitySensor from '../../organisms/ProximitySensor/ProximitySensor';
 import BarometerSensor from '../../organisms/BarometerSensor/BarometerSensor';
 import AmbientLightSensor from '../../organisms/AmbientLightSensor/AmbientLightSensor';
+import LocationManager from '../../atoms/LocationManager';
 
 const SensorScreen = ({ navigation }) => {
   const [isBarometerAvailable, setIsBarometerAvailable] = useState(true);
@@ -48,6 +49,7 @@ const SensorScreen = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.root}>
       {!isAwsConnected && renderConnectToAwsCard()}
+      <LocationManager />
       <AccelerometerSensor />
       <GyroscopeSensor />
       <MagnetometerSensor />

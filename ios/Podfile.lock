@@ -361,6 +361,8 @@ PODS:
     - glog
   - react-native-ambient-light-sensor (1.0.2):
     - React-Core
+  - react-native-geolocation-service (5.3.1):
+    - React
   - react-native-get-random-values (1.8.0):
     - React-Core
   - react-native-maps (1.3.2):
@@ -539,6 +541,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-ambient-light-sensor (from `../node_modules/react-native-ambient-light-sensor`)
+  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-proximity (from `../node_modules/react-native-proximity`)
@@ -642,6 +645,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-ambient-light-sensor:
     :path: "../node_modules/react-native-ambient-light-sensor"
+  react-native-geolocation-service:
+    :path: "../node_modules/react-native-geolocation-service"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-maps:
@@ -744,6 +749,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 1363be638eccfe1aea1b10dd42e632b0397e5ec8
   React-logger: 7bd569e3857d74ed412ce0a5c51f421ff7d4ca7f
   react-native-ambient-light-sensor: 2567fe5cf797c473d4301baa44370fbb00454b9a
+  react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-maps: 085f614cf14d3637b2048bb9752da5b1c27c2886
   react-native-proximity: 763a2aadbbba84178a4b58e59141e0efc8dfa499
