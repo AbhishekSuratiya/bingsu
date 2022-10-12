@@ -17,6 +17,8 @@ const SingleLineSensorCard = ({
   curve,
   hideSubtitle,
   toFixed,
+  permissionDenied,
+  checkingForPermission,
 }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const { isAwsConnected } = useSelector(state => state.awsStore);
@@ -30,6 +32,20 @@ const SingleLineSensorCard = ({
       stopSensor();
     }
   }, [isAwsConnected]);
+
+  useEffect(() => {
+    if (permissionDenied && !checkingForPermission) {
+      setIsSensorListening(false);
+    }
+  }, [checkingForPermission]);
+
+  useEffect(() => {
+    if (isSensorListening) {
+      startSensor();
+    } else {
+      stopSensor();
+    }
+  }, [isSensorListening]);
 
   const verticalContentInset = { top: 10, bottom: 10 };
   const axesSvg = { fontSize: 10, fill: Colors.white80 };
@@ -53,14 +69,7 @@ const SingleLineSensorCard = ({
           <Switch
             trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
             thumbColor={Colors.white100}
-            onValueChange={() => {
-              if (isSensorListening) {
-                stopSensor();
-              } else {
-                startSensor();
-              }
-              setIsSensorListening(val => !val);
-            }}
+            onValueChange={() => setIsSensorListening(val => !val)}
             value={isSensorListening}
           />
         </View>

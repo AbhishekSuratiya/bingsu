@@ -6,12 +6,15 @@ import getCommandEntry from '../../../utils/getCommandEntry';
 import SingleLineSensorCard from '../SingleLineSensorCard/SingleLineSensorCard';
 import { locationAction } from '../../../redux/reducers/locationReducer';
 
-const AltitudeSensor = props => {
+const AltitudeSensor = () => {
   const client = useContext(AwsContext);
   const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
-  const { altitude, isAltitudeListening } = useSelector(
-    state => state.locationStore,
-  );
+  const {
+    altitude,
+    isAltitudeListening,
+    hasLocationPermission,
+    checkingForPermission,
+  } = useSelector(state => state.locationStore);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -44,6 +47,8 @@ const AltitudeSensor = props => {
       startSensor={startAltitude}
       stopSensor={stopAltitude}
       units={'m'}
+      permissionDenied={!hasLocationPermission}
+      checkingForPermission={checkingForPermission}
     />
   );
 };

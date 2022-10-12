@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
-import Fonts from '../../../theme/Fonts';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 
 const styles = StyleSheet.create({
@@ -15,6 +14,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark5,
     borderRadius: 8,
     height: 300,
+    minHeight: SENSOR_CARD_HEADER,
   },
   title: {
     color: Colors.white100,
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 0,
     width: '100%',
+    minHeight: SENSOR_CARD_HEADER,
   },
 });
 

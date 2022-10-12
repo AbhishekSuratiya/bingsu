@@ -16,9 +16,12 @@ const LocationSensorMap = ({ title }) => {
   const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
   const client = useContext(AwsContext);
   const dispatch = useDispatch();
-  const { coordinates, isGpsListening } = useSelector(
-    state => state.locationStore,
-  );
+  const {
+    coordinates,
+    isGpsListening,
+    hasLocationPermission,
+    checkingForPermission,
+  } = useSelector(state => state.locationStore);
 
   useEffect(() => {
     if (isAwsConnected && isGpsListening) {
@@ -47,6 +50,12 @@ const LocationSensorMap = ({ title }) => {
   const stopGps = () => {
     dispatch(locationAction.setIsGpsListening(false));
   };
+
+  useEffect(() => {
+    if (!hasLocationPermission && !checkingForPermission) {
+      setIsSensorListening(false);
+    }
+  }, [checkingForPermission]);
 
   useEffect(() => {
     if (isSensorListening) {

@@ -11,6 +11,7 @@ const LocationManager = () => {
     state => state.locationStore,
   );
   const requestLocationPermission = async () => {
+    dispatch(locationAction.setCheckingForPermission(true));
     if (Platform.OS === 'android') {
       try {
         const response = await PermissionsAndroid.request(
@@ -26,6 +27,7 @@ const LocationManager = () => {
       const response = await Geolocation.requestAuthorization('whenInUse');
       dispatch(locationAction.setHasLocationPermission(response === 'granted'));
     }
+    dispatch(locationAction.setCheckingForPermission(false));
   };
 
   const startLocation = () => {
@@ -36,6 +38,7 @@ const LocationManager = () => {
       },
       error => {
         console.log(error.code, error.message);
+        Geolocation.stopObserving();
       },
       { enableHighAccuracy: true, interval: 1000, distanceFilter: 1 },
     );

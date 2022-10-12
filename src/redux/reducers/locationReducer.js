@@ -9,6 +9,7 @@ const initialState = {
     latitude: null,
     longitude: null,
   },
+  checkingForPermission: false,
 };
 
 const locationSlice = createSlice({
@@ -29,6 +30,9 @@ const locationSlice = createSlice({
     },
     setCoordinates(state, action) {
       state.coordinates = action.payload;
+    },
+    setCheckingForPermission(state, action) {
+      state.checkingForPermission = action.payload;
     },
   },
 });
