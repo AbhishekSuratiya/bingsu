@@ -27,6 +27,8 @@ const InitialiseAws = ({ children }) => {
       credentials: { accessKeyId, secretAccessKey, sessionToken },
     });
     setAwsClient(client);
+    dispatch(awsAction.setIsConnecting(false));
+    dispatch(awsAction.setIsAwsConnected(true));
   };
 
   const initialise = async () => {
@@ -42,8 +44,6 @@ const InitialiseAws = ({ children }) => {
         awsAction.setSecretAccessKey(AWS.config.credentials.secretAccessKey),
       );
     });
-    dispatch(awsAction.setIsAwsConnected(true));
-    dispatch(awsAction.setIsScanning(false));
   };
 
   useEffect(() => {

@@ -14,7 +14,7 @@ import { SETUP_INSTRUCTIONS } from '../../../utils/contants';
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(true);
-  const { isAwsConnected, isScanning } = useSelector(state => state.awsStore);
+  const { isAwsConnected } = useSelector(state => state.awsStore);
   const dispatch = useDispatch();
   const devices = useCameraDevices();
   const device = devices.back;
@@ -27,17 +27,16 @@ export default function ScanQrScreen({ navigation }) {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'authorized');
     })();
+    return () => {
+      dispatch(awsAction.setIsScanning(false));
+    };
   }, []);
 
   useEffect(() => {
-    if (device != null && hasPermission && !isAwsConnected && !isScanning) {
+    if (device != null && hasPermission && !isAwsConnected) {
       dispatch(awsAction.setIsScanning(true));
     }
-
-    return () => {
-      isScanning && dispatch(awsAction.setIsScanning(false));
-    };
-  }, [device, hasPermission, isAwsConnected, isScanning]);
+  }, [device, hasPermission, isAwsConnected]);
 
   useEffect(() => {
     if (barcodes.length && barcodes[0].displayValue && isCameraActive) {
@@ -45,12 +44,14 @@ export default function ScanQrScreen({ navigation }) {
         isJsonString(barcodes[0].displayValue) &&
         JSON.parse(barcodes[0].displayValue);
       if (REGION && COGNITO_POOL_ID && COGNITO_UNAUTH_ROLE_ARN) {
+        dispatch(awsAction.setIsScanning(false));
+        dispatch(awsAction.setIsConnecting(true));
         setIsCameraActive(false);
         dispatch(awsAction.setQrData(JSON.parse(barcodes[0].displayValue)));
+        dispatch(awsAction.setAwsRegion(REGION));
+        dispatch(awsAction.setCognitoIdentityPool(COGNITO_POOL_ID));
+        dispatch(awsAction.setRoleArn(COGNITO_UNAUTH_ROLE_ARN));
       }
-      dispatch(awsAction.setAwsRegion(REGION));
-      dispatch(awsAction.setCognitoIdentityPool(COGNITO_POOL_ID));
-      dispatch(awsAction.setRoleArn(COGNITO_UNAUTH_ROLE_ARN));
     }
   }, [barcodes]);
 

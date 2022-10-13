@@ -5,7 +5,9 @@ import { useSelector } from 'react-redux';
 
 const Header = ({ options }) => {
   const animation = useRef(new Animated.Value(1)).current;
-  const { isAwsConnected, isScanning } = useSelector(state => state.awsStore);
+  const { isAwsConnected, isScanning, isConnecting } = useSelector(
+    state => state.awsStore,
+  );
 
   useEffect(() => {
     if (isScanning) {
@@ -23,7 +25,7 @@ const Header = ({ options }) => {
   }, [isScanning, animation]);
 
   const renderHeader = () => {
-    return isScanning ? (
+    return isScanning || isConnecting ? (
       <>
         <View style={styles.animationContainer}>
           <Animated.View
@@ -36,7 +38,9 @@ const Header = ({ options }) => {
             ]}
           />
         </View>
-        <Text style={styles.connectionStatus}>Scanning</Text>
+        <Text style={styles.connectionStatus}>
+          {isScanning ? 'Scanning' : 'Connecting'}
+        </Text>
       </>
     ) : (
       <>

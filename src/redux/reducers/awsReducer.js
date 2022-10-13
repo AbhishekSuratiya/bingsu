@@ -10,6 +10,7 @@ const initialState = {
   sessionToken: '',
   secretAccessKey: '',
   accessKeyId: '',
+  isConnecting: false,
 };
 
 const awsSlice = createSlice({
@@ -33,6 +34,9 @@ const awsSlice = createSlice({
     },
     setIsScanning(state, action) {
       state.isScanning = action.payload;
+    },
+    setIsConnecting(state, action) {
+      state.isConnecting = action.payload;
     },
     setAccessKeyId(state, action) {
       state.accessKeyId = action.payload;
