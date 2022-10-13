@@ -10,11 +10,16 @@ import isJsonString from '../../../utils/isJsonString';
 import styles from './ScanQrScreenStyles';
 import Bullet from '../../atoms/Bullet/Bullet';
 import { SETUP_INSTRUCTIONS } from '../../../utils/contants';
+import Colors from '../../../theme/Colors';
+import Lottie from 'lottie-react-native';
+import Success from '../../../../assets/images/json/success.json';
+import Fail from '../../../../assets/images/json/fail.json';
 
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(true);
-  const { isAwsConnected } = useSelector(state => state.awsStore);
+  const [isValidQr, setIsValidQr] = useState(false);
+  const { isAwsConnected, isScanning } = useSelector(state => state.awsStore);
   const dispatch = useDispatch();
   const devices = useCameraDevices();
   const device = devices.back;
@@ -47,10 +52,20 @@ export default function ScanQrScreen({ navigation }) {
         dispatch(awsAction.setIsScanning(false));
         dispatch(awsAction.setIsConnecting(true));
         setIsCameraActive(false);
+        setIsValidQr(true);
         dispatch(awsAction.setQrData(JSON.parse(barcodes[0].displayValue)));
         dispatch(awsAction.setAwsRegion(REGION));
         dispatch(awsAction.setCognitoIdentityPool(COGNITO_POOL_ID));
         dispatch(awsAction.setRoleArn(COGNITO_UNAUTH_ROLE_ARN));
+      } else {
+        dispatch(awsAction.setIsScanning(false));
+        setIsCameraActive(false);
+        setIsValidQr(false);
+
+        setTimeout(() => {
+          dispatch(awsAction.setIsScanning(true));
+          setIsCameraActive(true);
+        }, 5000);
       }
     }
   }, [barcodes]);
@@ -92,6 +107,27 @@ export default function ScanQrScreen({ navigation }) {
           frameProcessor={frameProcessor}
           frameProcessorFps={5}
         />
+        <View style={styles.cameraOverlay}>
+          <View
+            style={[
+              styles.animation,
+              {
+                borderColor: isScanning
+                  ? Colors.green
+                  : !isValidQr && Colors.red,
+              },
+            ]}>
+            {!isScanning && (
+              <Lottie
+                source={isValidQr ? Success : Fail}
+                autoPlay
+                style={styles.animatedIcon}
+                loop={false}
+              />
+            )}
+          </View>
+        </View>
+
         <View style={styles.stepsWrapper}>
           <Text style={styles.barcodeHeading}>{'How to connect to AWS?'}</Text>
           {SETUP_INSTRUCTIONS.map((e, i) => (

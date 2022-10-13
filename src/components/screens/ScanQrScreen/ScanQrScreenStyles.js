@@ -38,6 +38,25 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   stepsWrapper: { paddingHorizontal: 16 },
+  cameraOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 350,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  animation: {
+    borderWidth: 5,
+    width: '65%',
+    aspectRatio: 1,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  animatedIcon: { width: '50%' },
 });
 
 export default styles;
