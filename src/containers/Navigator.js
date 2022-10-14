@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StatusBar } from 'react-native';
+import { Linking, SafeAreaView, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Header from '../components/molecules/Header/Header';
 import ScanQrScreen from '../components/screens/ScanQrScreen/ScanQrScreen';
@@ -9,6 +9,7 @@ import Colors from '../theme/Colors';
 import { QrCodeSvg, SensorSvg, InfoSvg } from '../../assets/images/svg';
 import RNBootSplash from 'react-native-bootsplash';
 import LearnMoreScreen from '../components/screens/LearnMoreScreen/LearnMoreScreen';
+import { LEARN_MORE_LINK } from '../utils/contants';
 
 const Tab = createBottomTabNavigator();
 
@@ -106,6 +107,14 @@ const Navigator = () => {
                   name={name}
                   component={component}
                   options={options}
+                  listeners={{
+                    tabPress: e => {
+                      if (name === 'LearnMore') {
+                        e.preventDefault();
+                        Linking.openURL(LEARN_MORE_LINK);
+                      }
+                    },
+                  }}
                 />
               );
             })}
