@@ -14,6 +14,7 @@ import Colors from '../../../theme/Colors';
 import Lottie from 'lottie-react-native';
 import Success from '../../../../assets/images/json/success.json';
 import Fail from '../../../../assets/images/json/fail.json';
+import { removeData, storeData } from '../../../utils/asyncStorage';
 
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(false);
@@ -57,6 +58,7 @@ export default function ScanQrScreen({ navigation }) {
         dispatch(awsAction.setAwsRegion(REGION));
         dispatch(awsAction.setCognitoIdentityPool(COGNITO_POOL_ID));
         dispatch(awsAction.setRoleArn(COGNITO_UNAUTH_ROLE_ARN));
+        storeData('qrCode', barcodes[0].displayValue);
       } else {
         dispatch(awsAction.setIsScanning(false));
         setIsCameraActive(false);
@@ -80,6 +82,7 @@ export default function ScanQrScreen({ navigation }) {
     dispatch(awsAction.setAccessKeyId(null));
     dispatch(awsAction.setSessionToken(null));
     dispatch(awsAction.setSecretAccessKey(null));
+    removeData('qrCode');
   };
 
   if (isAwsConnected) {

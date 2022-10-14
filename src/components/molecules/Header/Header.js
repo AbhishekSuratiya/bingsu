@@ -10,7 +10,7 @@ const Header = ({ options }) => {
   );
 
   useEffect(() => {
-    if (isScanning) {
+    if (isScanning || isConnecting) {
       Animated.loop(
         Animated.timing(animation, {
           toValue: 6,
@@ -22,7 +22,7 @@ const Header = ({ options }) => {
         },
       ).start();
     }
-  }, [isScanning, animation]);
+  }, [isScanning, animation, isConnecting]);
 
   const renderHeader = () => {
     return isScanning || isConnecting ? (
