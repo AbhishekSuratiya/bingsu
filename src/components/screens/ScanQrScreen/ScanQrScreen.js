@@ -14,13 +14,16 @@ import Colors from '../../../theme/Colors';
 import Lottie from 'lottie-react-native';
 import Success from '../../../../assets/images/json/success.json';
 import Fail from '../../../../assets/images/json/fail.json';
+import Loading from '../../../../assets/images/json/loading.json';
 import { removeData, storeData } from '../../../utils/asyncStorage';
 
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(true);
   const [isValidQr, setIsValidQr] = useState(false);
-  const { isAwsConnected, isScanning } = useSelector(state => state.awsStore);
+  const { isAwsConnected, isScanning, isConnecting } = useSelector(
+    state => state.awsStore,
+  );
   const dispatch = useDispatch();
   const devices = useCameraDevices();
   const device = devices.back;
@@ -120,12 +123,12 @@ export default function ScanQrScreen({ navigation }) {
                   : !isValidQr && Colors.red,
               },
             ]}>
-            {!isScanning && (
+            {(!isScanning || isConnecting) && (
               <Lottie
-                source={isValidQr ? Success : Fail}
+                source={isConnecting ? Loading : isValidQr ? Success : Fail}
                 autoPlay
                 style={styles.animatedIcon}
-                loop={false}
+                loop={isConnecting}
               />
             )}
           </View>

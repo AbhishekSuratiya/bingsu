@@ -45,7 +45,10 @@ const InitialiseAws = ({ children }) => {
     });
     setAwsClient(client);
     dispatch(awsAction.setIsConnecting(false));
-    dispatch(awsAction.setIsAwsConnected(true));
+    // Delay to show check animation properly
+    setTimeout(() => {
+      dispatch(awsAction.setIsAwsConnected(true));
+    }, 500);
   };
 
   const initialise = async () => {
