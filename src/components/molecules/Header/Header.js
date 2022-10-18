@@ -5,9 +5,8 @@ import { useSelector } from 'react-redux';
 
 const Header = ({ options }) => {
   const animation = useRef(new Animated.Value(1)).current;
-  const { isAwsConnected, isScanning, isConnecting } = useSelector(
-    state => state.awsStore,
-  );
+  const { isAwsConnected, isScanning, isConnecting, showValidatedAnimation } =
+    useSelector(state => state.awsStore);
 
   useEffect(() => {
     if (isScanning || isConnecting) {
@@ -44,9 +43,18 @@ const Header = ({ options }) => {
       </>
     ) : (
       <>
-        <View style={[styles.dot, !isAwsConnected && styles.dotDisConnected]} />
+        <View
+          style={[
+            styles.dot,
+            !isAwsConnected &&
+              !showValidatedAnimation &&
+              styles.dotDisConnected,
+          ]}
+        />
         <Text style={styles.connectionStatus}>
-          {isAwsConnected ? 'Connected to AWS' : 'Not Connected to AWS'}
+          {isAwsConnected || showValidatedAnimation
+            ? 'Connected to AWS'
+            : 'Not Connected to AWS'}
         </Text>
       </>
     );

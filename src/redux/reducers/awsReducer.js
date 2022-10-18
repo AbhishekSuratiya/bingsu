@@ -11,6 +11,7 @@ const initialState = {
   secretAccessKey: '',
   accessKeyId: '',
   isConnecting: false,
+  showValidatedAnimation: false,
 };
 
 const awsSlice = createSlice({
@@ -46,6 +47,9 @@ const awsSlice = createSlice({
     },
     setSecretAccessKey(state, action) {
       state.secretAccessKey = action.payload;
+    },
+    setShowValidatedAnimation(state, action) {
+      state.showValidatedAnimation = action.payload;
     },
   },
 });
