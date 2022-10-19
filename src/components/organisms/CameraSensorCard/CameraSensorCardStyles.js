@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.dark5,
     borderRadius: 8,
+    minHeight: SENSOR_CARD_HEADER,
   },
   cameraWrapper: {
     flex: 1,
@@ -62,6 +63,25 @@ const styles = StyleSheet.create({
   cameraBtnText: {
     fontSize: 13,
     color: Colors.white100,
+  },
+  allowText: {
+    fontSize: 16,
+    color: Colors.white100,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginTop: 24,
+  },
+  allowTextDesc: {
+    fontSize: 16,
+    color: Colors.grey80,
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 40,
+  },
+  allowCard: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 300,
   },
 });
 

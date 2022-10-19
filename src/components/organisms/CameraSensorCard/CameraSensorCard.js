@@ -14,11 +14,16 @@ import { CAMERA_VIEW, SENSOR_CARD_HEADER } from '../../../utils/contants';
 import WebView from 'react-native-webview';
 import { useSelector } from 'react-redux';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import Button from '../../atoms/Button';
+import { CameraSvg } from '../../../../assets/images/svg';
+import { openSettings } from 'react-native-permissions';
 
 const { rear, front } = CAMERA_VIEW;
 const CameraSensorCard = ({ title }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const [hasPermission, setHasPermission] = React.useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
   const [cameraFacing, setCameraFacing] = useState(rear);
   const { isAwsConnected, qrData, secretAccessKey, sessionToken, accessKeyId } =
     useSelector(state => state.awsStore);
@@ -47,8 +52,16 @@ const CameraSensorCard = ({ title }) => {
     if (isSensorListening) {
       (async () => {
         const status = await Camera.requestCameraPermission();
+        check(PERMISSIONS.IOS.CAMERA).then(result => {
+          if (result === RESULTS.BLOCKED) {
+            if (!isBlocked) {
+              setIsSensorListening(false);
+            }
+            setIsBlocked(true);
+          }
+        });
         setHasPermission(status === 'authorized');
-        if (status === 'denied') {
+        if (status === 'denied' && Platform.OS === 'android') {
           setIsSensorListening(false);
         }
       })();
@@ -125,11 +138,28 @@ const CameraSensorCard = ({ title }) => {
     );
   };
 
+  const openPermissionSettings = () => {
+    openSettings().catch(() => console.warn('Cannot open settings'));
+  };
+
+  const renderOpenSettings = () => (
+    <View style={styles.allowCard}>
+      <CameraSvg />
+      <Text style={styles.allowText}>
+        {'Allow AWS IoT Bingsu to access\nyour camera'}
+      </Text>
+      <Text style={styles.allowTextDesc}>
+        {'This lets you view video sensor data'}
+      </Text>
+      <Button light title={'Open Settings'} onPress={openPermissionSettings} />
+    </View>
+  );
+
   return (
     <View style={styles.root}>
       <Collapsible
         style={styles.card}
-        collapsed={!hasPermission || !isSensorListening}
+        collapsed={!isSensorListening}
         collapsedHeight={SENSOR_CARD_HEADER}
         enablePointerEvents>
         <View style={styles.content}>
@@ -144,8 +174,14 @@ const CameraSensorCard = ({ title }) => {
               value={isSensorListening}
             />
           </View>
-          {isSensorListening && renderCameraSwitchBtn()}
-          <View style={styles.cameraWrapper}>{renderCamera()}</View>
+          {isBlocked ? (
+            renderOpenSettings()
+          ) : (
+            <>
+              {isSensorListening && renderCameraSwitchBtn()}
+              <View style={styles.cameraWrapper}>{renderCamera()}</View>
+            </>
+          )}
         </View>
       </Collapsible>
     </View>
