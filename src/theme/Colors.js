@@ -12,6 +12,7 @@ const colors = {
   white100: '#FFFFFF',
   toggleOff: '#787880',
   orange: '#E59524',
+  orange2: '#FF9900',
   transparent: 'transparent',
 };
 
