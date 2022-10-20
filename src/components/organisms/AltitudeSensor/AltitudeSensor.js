@@ -8,7 +8,10 @@ import { locationAction } from '../../../redux/reducers/locationReducer';
 
 const AltitudeSensor = () => {
   const client = useContext(AwsContext);
-  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
   const {
     altitude,
     isAltitudeListening,
@@ -23,7 +26,8 @@ const AltitudeSensor = () => {
         entries: [
           getCommandEntry({
             entryId: 'AssetModelAltitudeMeasurement',
-            propertyAlias: qrData.AssetModelAltitudeMeasurement,
+            propertyAlias:
+              ASSET_MODEL_MEASUREMENTS_PREFIX + 'AltitudeMeasurement',
             value: altitude[altitude.length - 1],
           }),
         ],

@@ -16,7 +16,10 @@ const MagnetometerSensor = props => {
   const [magnetometerData, setMagnetometerData] = useState([]);
   const subscriptionMagnetometer = useRef(null);
   const client = useContext(AwsContext);
-  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
   const startMagnetometer = () => {
     setUpdateIntervalForType(
       SensorTypes.magnetometer,
@@ -30,17 +33,20 @@ const MagnetometerSensor = props => {
             entries: [
               getCommandEntry({
                 entryId: 'MagnetometerXMeasurement',
-                propertyAlias: qrData.AssetModelMagnetometerXMeasurement,
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'MagnetometerXMeasurement',
                 value: data.x,
               }),
               getCommandEntry({
                 entryId: 'MagnetometerYMeasurement',
-                propertyAlias: qrData.AssetModelMagnetometerYMeasurement,
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'MagnetometerYMeasurement',
                 value: data.y,
               }),
               getCommandEntry({
                 entryId: 'MagnetometerZMeasurement',
-                propertyAlias: qrData.AssetModelMagnetometerZMeasurement,
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'MagnetometerZMeasurement',
                 value: data.z,
               }),
             ],

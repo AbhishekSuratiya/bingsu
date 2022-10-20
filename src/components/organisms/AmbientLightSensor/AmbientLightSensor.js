@@ -17,7 +17,10 @@ const AmbientLightSensor = props => {
   const timer = useRef(null);
   const client = useContext(AwsContext);
 
-  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
 
   const startAmbientLight = () => {
     startLightSensor();
@@ -32,7 +35,8 @@ const AmbientLightSensor = props => {
               entries: [
                 getCommandEntry({
                   entryId: 'AssetModelAmbientLightMeasurement',
-                  propertyAlias: qrData.AssetModelAmbientLightMeasurement,
+                  propertyAlias:
+                    ASSET_MODEL_MEASUREMENTS_PREFIX + 'AmbientLightMeasurement',
                   value: data.lightValue,
                 }),
               ],

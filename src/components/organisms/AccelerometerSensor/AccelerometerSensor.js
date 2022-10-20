@@ -16,7 +16,10 @@ const AccelerometerSensor = props => {
   const [accelerometerData, setAccelerometerData] = useState([]);
   const subscriptionAccelerometer = useRef(null);
   const client = useContext(AwsContext);
-  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
 
   const startAccelerometer = () => {
     setUpdateIntervalForType(
@@ -31,17 +34,20 @@ const AccelerometerSensor = props => {
             entries: [
               getCommandEntry({
                 entryId: 'AccelerometerXMeasurement',
-                propertyAlias: qrData.AssetModelAccelerometerXMeasurement,
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'AccelerometerXMeasurement',
                 value: data.x,
               }),
               getCommandEntry({
                 entryId: 'AccelerometerYMeasurement',
-                propertyAlias: qrData.AssetModelAccelerometerYMeasurement,
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'AccelerometerYMeasurement',
                 value: data.y,
               }),
               getCommandEntry({
                 entryId: 'AccelerometerZMeasurement',
-                propertyAlias: qrData.AssetModelAccelerometerZMeasurement,
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'AccelerometerZMeasurement',
                 value: data.z,
               }),
             ],

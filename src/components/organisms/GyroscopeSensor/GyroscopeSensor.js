@@ -16,7 +16,10 @@ const GyroscopeSensor = props => {
   const [gyroscopeData, setGyroscopeData] = useState([]);
   const subscriptionGyroscope = useRef(null);
   const client = useContext(AwsContext);
-  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
   const startGyroscope = () => {
     setUpdateIntervalForType(SensorTypes.gyroscope, AWS_SEND_MESSAGE_INTERVAL);
     subscriptionGyroscope.current = gyroscope.subscribe({
@@ -27,17 +30,20 @@ const GyroscopeSensor = props => {
             entries: [
               getCommandEntry({
                 entryId: 'GyroscopeXMeasurement',
-                propertyAlias: qrData.AssetModelGyroscopeXMeasurement,
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'GyroscopeXMeasurement',
                 value: data.x,
               }),
               getCommandEntry({
                 entryId: 'GyroscopeYMeasurement',
-                propertyAlias: qrData.AssetModelGyroscopeYMeasurement,
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'GyroscopeYMeasurement',
                 value: data.y,
               }),
               getCommandEntry({
                 entryId: 'GyroscopeZMeasurement',
-                propertyAlias: qrData.AssetModelGyroscopeZMeasurement,
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'GyroscopeZMeasurement',
                 value: data.z,
               }),
             ],

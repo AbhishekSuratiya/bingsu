@@ -13,7 +13,10 @@ import { locationAction } from '../../../redux/reducers/locationReducer';
 
 const LocationSensorMap = ({ title }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
-  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
   const client = useContext(AwsContext);
   const dispatch = useDispatch();
   const {
@@ -29,12 +32,14 @@ const LocationSensorMap = ({ title }) => {
         entries: [
           getCommandEntry({
             entryId: 'AssetModelGPSLatMeasurement',
-            propertyAlias: qrData.AssetModelGPSLatMeasurement,
+            propertyAlias:
+              ASSET_MODEL_MEASUREMENTS_PREFIX + 'GPSLatMeasurement',
             value: coordinates.latitude,
           }),
           getCommandEntry({
             entryId: 'AssetModelGPSGPSLongMeasurement',
-            propertyAlias: qrData.AssetModelGPSGPSLongMeasurement,
+            propertyAlias:
+              ASSET_MODEL_MEASUREMENTS_PREFIX + 'GPSLongMeasurement',
             value: coordinates.longitude,
           }),
         ],

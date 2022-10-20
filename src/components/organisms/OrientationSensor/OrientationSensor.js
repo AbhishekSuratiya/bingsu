@@ -19,7 +19,10 @@ const OrientationSensor = props => {
   const subscriptionOrientationMag = useRef(null);
   const orientationXYData = useRef({});
   const client = useContext(AwsContext);
-  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
   const startOrientation = () => {
     setUpdateIntervalForType(
       SensorTypes.accelerometer,
@@ -47,17 +50,20 @@ const OrientationSensor = props => {
               entries: [
                 getCommandEntry({
                   entryId: 'AssetModelOrientationXMeasurement',
-                  propertyAlias: qrData.AssetModelOrientationXMeasurement,
+                  propertyAlias:
+                    ASSET_MODEL_MEASUREMENTS_PREFIX + 'OrientationXMeasurement',
                   value: x,
                 }),
                 getCommandEntry({
                   entryId: 'AssetModelOrientationYMeasurement',
-                  propertyAlias: qrData.AssetModelOrientationYMeasurement,
+                  propertyAlias:
+                    ASSET_MODEL_MEASUREMENTS_PREFIX + 'OrientationYMeasurement',
                   value: y,
                 }),
                 getCommandEntry({
                   entryId: 'AssetModelOrientationZMeasurement',
-                  propertyAlias: qrData.AssetModelOrientationZMeasurement,
+                  propertyAlias:
+                    ASSET_MODEL_MEASUREMENTS_PREFIX + 'OrientationZMeasurement',
                   value: data.z,
                 }),
               ],

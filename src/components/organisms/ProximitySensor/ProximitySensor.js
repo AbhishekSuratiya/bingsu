@@ -10,7 +10,10 @@ const ProximitySensor = props => {
   const [proximityData, setProximityData] = useState([]);
   const subscriptionProximity = useRef(null);
   const client = useContext(AwsContext);
-  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
   const startProximity = () => {
     subscriptionProximity.current = ({ proximity }) => {
       setProximityData(prev => [...prev.slice(-20), proximity ? 1 : 0]);
@@ -19,7 +22,7 @@ const ProximitySensor = props => {
           entries: [
             {
               entryId: 'AssetModelProximityValue',
-              propertyAlias: qrData.AssetModelProximityValue,
+              propertyAlias: ASSET_MODEL_MEASUREMENTS_PREFIX + 'ProximityValue',
               propertyValues: [
                 {
                   value: { integerValue: proximity ? 1 : 0 },
