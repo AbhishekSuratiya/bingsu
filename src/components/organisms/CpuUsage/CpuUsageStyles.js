@@ -31,7 +31,12 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     width: '100%',
   },
-  batteryLevelWrapper: {
+  dataText: {
+    color: Colors.white100,
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  cpuUsageWrapper: {
     height: 24,
     width: '100%',
     backgroundColor: Colors.dark4,
@@ -39,17 +44,12 @@ const styles = StyleSheet.create({
     marginTop: 12,
     overflow: 'hidden',
   },
-  dataText: {
-    color: Colors.white100,
-    fontSize: 14,
-    marginBottom: 4,
+  cpuUsage: {
+    height: '100%',
+    backgroundColor: Colors.green,
   },
   dataTextColored: {
-    color: Colors.orange2,
-  },
-  batteryLevel: {
-    height: '100%',
-    backgroundColor: Colors.orange2,
+    color: Colors.green,
   },
 });
 

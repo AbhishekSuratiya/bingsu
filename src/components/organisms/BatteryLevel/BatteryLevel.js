@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Switch, Text, View } from 'react-native';
 import styles from '../BatteryLevel/BatteryLevelStyles';
 import Collapsible from 'react-native-collapsible';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 import Colors from '../../../theme/Colors';
-import DeviceInfo from 'react-native-device-info/src/index';
+import { usePowerState } from 'react-native-device-info';
 
 const BatteryLevel = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
-  const [batteryLevel, setBatteryLevel] = useState(0);
-  const [isCharging, setIsCharging] = useState(false);
-
-  useEffect(() => {
-    DeviceInfo.getBatteryLevel().then(level => {
-      console.log({ level });
-      setBatteryLevel(level * 100);
-    });
-    DeviceInfo.isBatteryCharging().then(state => {
-      setIsCharging(state);
-    });
-  }, []);
+  const powerState = usePowerState();
+  const batteryLevel = powerState?.batteryLevel * 100;
+  const isCharging = powerState?.batteryState === 'charging' ? 'Yes' : 'No';
 
   return (
     <View style={styles.root}>
@@ -42,7 +33,14 @@ const BatteryLevel = props => {
           </View>
 
           <View>
-            <Text style={styles.dataText}>{`Level: ${batteryLevel}%`}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.dataText}>{'Level: '}</Text>
+              <Text
+                style={[
+                  styles.dataText,
+                  styles.dataTextColored,
+                ]}>{`${batteryLevel}%`}</Text>
+            </View>
             <Text style={styles.dataText}>{`Charging: ${
               isCharging ? 'Yes' : 'No'
             }`}</Text>

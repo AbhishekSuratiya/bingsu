@@ -17,6 +17,8 @@ import BarometerSensor from '../../organisms/BarometerSensor/BarometerSensor';
 import AmbientLightSensor from '../../organisms/AmbientLightSensor/AmbientLightSensor';
 import LocationManager from '../../atoms/LocationManager';
 import BatteryLevel from '../../organisms/BatteryLevel/BatteryLevel';
+import WifiStatus from '../../organisms/WifiStatus/WifiStatus';
+import CpuUsage from '../../organisms/CpuUsage/CpuUsage';
 
 const SensorScreen = ({ navigation }) => {
   const [isBarometerAvailable, setIsBarometerAvailable] = useState(true);
@@ -50,7 +52,6 @@ const SensorScreen = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.root}>
       {!isAwsConnected && renderConnectToAwsCard()}
-      <BatteryLevel />
       <LocationManager />
       <AccelerometerSensor />
       <GyroscopeSensor />
@@ -64,6 +65,9 @@ const SensorScreen = ({ navigation }) => {
       <AltitudeSensor />
       <ProximitySensor />
       <AmbientLightSensor />
+      <BatteryLevel />
+      <WifiStatus />
+      <CpuUsage />
     </ScrollView>
   );
 };

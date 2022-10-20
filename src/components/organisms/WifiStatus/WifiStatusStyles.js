@@ -31,25 +31,10 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     width: '100%',
   },
-  batteryLevelWrapper: {
-    height: 24,
-    width: '100%',
-    backgroundColor: Colors.dark4,
-    borderRadius: 8,
-    marginTop: 12,
-    overflow: 'hidden',
-  },
   dataText: {
     color: Colors.white100,
     fontSize: 14,
     marginBottom: 4,
-  },
-  dataTextColored: {
-    color: Colors.orange2,
-  },
-  batteryLevel: {
-    height: '100%',
-    backgroundColor: Colors.orange2,
   },
 });
 
