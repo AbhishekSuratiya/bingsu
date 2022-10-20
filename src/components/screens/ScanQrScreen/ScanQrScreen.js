@@ -120,7 +120,7 @@ export default function ScanQrScreen({ navigation }) {
               {
                 borderColor: isScanning
                   ? Colors.green
-                  : !isValidQr && Colors.red,
+                  : !isValidQr && Colors.red2,
               },
             ]}>
             {(!isScanning || isConnecting) && (

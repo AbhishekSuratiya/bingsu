@@ -29,7 +29,7 @@ const CpuUsage = props => {
     subscriptionCpu.current = PerformanceStats.addListener(stats => {
       if (Date.now() - timer.current > AWS_SEND_MESSAGE_INTERVAL) {
         timer.current = Date.now();
-        setCpuUsage(stats.usedCpu);
+        setCpuUsage(stats.usedCpu.toFixed(2));
       }
     });
     PerformanceStats.start(true);

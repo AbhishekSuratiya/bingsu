@@ -8,15 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* bingsuMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* bingsuMobileTests.m */; };
+		06B3555C9AB92028443131C3 /* libPods-bingsuMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD9B51E889B3A6D5DEA4AEF6 /* libPods-bingsuMobile.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		461078B828EA973A00869B34 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 461078B728EA973A00869B34 /* BootSplash.storyboard */; };
 		4683A4A128DD3CA0000C082A /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4683A4A028DD3CA0000C082A /* icomoon.ttf */; };
 		4694D26728EDF92F004D25EF /* Web.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4694D26628EDF92F004D25EF /* Web.bundle */; };
-		7F1B417633D713F15DBBEF83 /* libPods-bingsuMobile-bingsuMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F50AE12534B569AA93DCFD87 /* libPods-bingsuMobile-bingsuMobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		A04B9D9AAC80A0AE7C1BC017 /* libPods-bingsuMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 118BEAA7C572912E16BC6CC9 /* libPods-bingsuMobile.a */; };
+		FB26AC5AB8A8AA5D575F6DC1 /* libPods-bingsuMobile-bingsuMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A5EB1862C07128F5A1B9BB /* libPods-bingsuMobile-bingsuMobileTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,23 +33,23 @@
 		00E356EE1AD99517003FC87E /* bingsuMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bingsuMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* bingsuMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bingsuMobileTests.m; sourceTree = "<group>"; };
-		118BEAA7C572912E16BC6CC9 /* libPods-bingsuMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bingsuMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* bingsuMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bingsuMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = bingsuMobile/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = bingsuMobile/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = bingsuMobile/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = bingsuMobile/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = bingsuMobile/main.m; sourceTree = "<group>"; };
+		15444BAC6F13A43F2852CEA3 /* Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-bingsuMobile-bingsuMobileTests/Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
+		449CD4948E8BFF7FB16ED563 /* Pods-bingsuMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile.release.xcconfig"; path = "Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile.release.xcconfig"; sourceTree = "<group>"; };
 		461078B728EA973A00869B34 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = bingsuMobile/BootSplash.storyboard; sourceTree = "<group>"; };
 		4683A4A028DD3CA0000C082A /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = icomoon.ttf; path = ../assets/fonts/icomoon.ttf; sourceTree = "<group>"; };
 		4694D26628EDF92F004D25EF /* Web.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Web.bundle; path = ../kvsWeb/Web.bundle; sourceTree = "<group>"; };
+		7A25B2EE543E0039576C27A3 /* Pods-bingsuMobile-bingsuMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile-bingsuMobileTests.release.xcconfig"; path = "Target Support Files/Pods-bingsuMobile-bingsuMobileTests/Pods-bingsuMobile-bingsuMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = bingsuMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		AA738D0FABE34C2AC68D9DBA /* Pods-bingsuMobile-bingsuMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile-bingsuMobileTests.release.xcconfig"; path = "Target Support Files/Pods-bingsuMobile-bingsuMobileTests/Pods-bingsuMobile-bingsuMobileTests.release.xcconfig"; sourceTree = "<group>"; };
-		D6D5185F53FBADC744A2414B /* Pods-bingsuMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile.release.xcconfig"; path = "Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile.release.xcconfig"; sourceTree = "<group>"; };
+		86A5EB1862C07128F5A1B9BB /* libPods-bingsuMobile-bingsuMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bingsuMobile-bingsuMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD9B51E889B3A6D5DEA4AEF6 /* libPods-bingsuMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bingsuMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E053CBC390C4ADFC9F1F6C1D /* Pods-bingsuMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile.debug.xcconfig"; path = "Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F1E55BBABDFF8E915AD7B289 /* Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-bingsuMobile-bingsuMobileTests/Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
-		F3F0543E76BB2304429B60EC /* Pods-bingsuMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile.debug.xcconfig"; path = "Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile.debug.xcconfig"; sourceTree = "<group>"; };
-		F50AE12534B569AA93DCFD87 /* libPods-bingsuMobile-bingsuMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bingsuMobile-bingsuMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7F1B417633D713F15DBBEF83 /* libPods-bingsuMobile-bingsuMobileTests.a in Frameworks */,
+				FB26AC5AB8A8AA5D575F6DC1 /* libPods-bingsuMobile-bingsuMobileTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A04B9D9AAC80A0AE7C1BC017 /* libPods-bingsuMobile.a in Frameworks */,
+				06B3555C9AB92028443131C3 /* libPods-bingsuMobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,8 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				118BEAA7C572912E16BC6CC9 /* libPods-bingsuMobile.a */,
-				F50AE12534B569AA93DCFD87 /* libPods-bingsuMobile-bingsuMobileTests.a */,
+				AD9B51E889B3A6D5DEA4AEF6 /* libPods-bingsuMobile.a */,
+				86A5EB1862C07128F5A1B9BB /* libPods-bingsuMobile-bingsuMobileTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -149,10 +149,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F3F0543E76BB2304429B60EC /* Pods-bingsuMobile.debug.xcconfig */,
-				D6D5185F53FBADC744A2414B /* Pods-bingsuMobile.release.xcconfig */,
-				F1E55BBABDFF8E915AD7B289 /* Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig */,
-				AA738D0FABE34C2AC68D9DBA /* Pods-bingsuMobile-bingsuMobileTests.release.xcconfig */,
+				E053CBC390C4ADFC9F1F6C1D /* Pods-bingsuMobile.debug.xcconfig */,
+				449CD4948E8BFF7FB16ED563 /* Pods-bingsuMobile.release.xcconfig */,
+				15444BAC6F13A43F2852CEA3 /* Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig */,
+				7A25B2EE543E0039576C27A3 /* Pods-bingsuMobile-bingsuMobileTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -164,12 +164,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "bingsuMobileTests" */;
 			buildPhases = (
-				B48228757CA9BEFA7EE75716 /* [CP] Check Pods Manifest.lock */,
+				751ECB444ABD13408E6B42AB /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				502D8263BB3542876F82A211 /* [CP] Embed Pods Frameworks */,
-				41455D574848205146A9E6FC /* [CP] Copy Pods Resources */,
+				24253AA8067513899AE3BDE9 /* [CP] Embed Pods Frameworks */,
+				1F8BE41C5DF3576E454DAEE2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -185,14 +185,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "bingsuMobile" */;
 			buildPhases = (
-				AD71C41CA28C8255FD318F52 /* [CP] Check Pods Manifest.lock */,
+				355DFEEF96DCA6BBCB422E7F /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				EE84A6467355DB2BA5990CEE /* [CP] Embed Pods Frameworks */,
-				B181858F2125E6EC30568E7B /* [CP] Copy Pods Resources */,
+				AF50435C26733F3696CA8D03 /* [CP] Embed Pods Frameworks */,
+				853DFEFFE13CB13DB70C7C87 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -278,7 +278,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\nexport NODE_BINARY=node\nexport NODE_ARGS=--max-old-space-size=8192\nexport NODE_OPTIONS=--max-old-space-size=8192\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		41455D574848205146A9E6FC /* [CP] Copy Pods Resources */ = {
+		1F8BE41C5DF3576E454DAEE2 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -295,7 +295,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-bingsuMobile-bingsuMobileTests/Pods-bingsuMobile-bingsuMobileTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		502D8263BB3542876F82A211 /* [CP] Embed Pods Frameworks */ = {
+		24253AA8067513899AE3BDE9 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -312,7 +312,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-bingsuMobile-bingsuMobileTests/Pods-bingsuMobile-bingsuMobileTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AD71C41CA28C8255FD318F52 /* [CP] Check Pods Manifest.lock */ = {
+		355DFEEF96DCA6BBCB422E7F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -334,24 +334,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B181858F2125E6EC30568E7B /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B48228757CA9BEFA7EE75716 /* [CP] Check Pods Manifest.lock */ = {
+		751ECB444ABD13408E6B42AB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -373,7 +356,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EE84A6467355DB2BA5990CEE /* [CP] Embed Pods Frameworks */ = {
+		853DFEFFE13CB13DB70C7C87 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AF50435C26733F3696CA8D03 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -442,7 +442,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F1E55BBABDFF8E915AD7B289 /* Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig */;
+			baseConfigurationReference = 15444BAC6F13A43F2852CEA3 /* Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -469,7 +469,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AA738D0FABE34C2AC68D9DBA /* Pods-bingsuMobile-bingsuMobileTests.release.xcconfig */;
+			baseConfigurationReference = 7A25B2EE543E0039576C27A3 /* Pods-bingsuMobile-bingsuMobileTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -493,7 +493,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F3F0543E76BB2304429B60EC /* Pods-bingsuMobile.debug.xcconfig */;
+			baseConfigurationReference = E053CBC390C4ADFC9F1F6C1D /* Pods-bingsuMobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -522,7 +522,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6D5185F53FBADC744A2414B /* Pods-bingsuMobile.release.xcconfig */;
+			baseConfigurationReference = 449CD4948E8BFF7FB16ED563 /* Pods-bingsuMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

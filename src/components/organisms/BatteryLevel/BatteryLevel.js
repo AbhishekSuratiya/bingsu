@@ -9,7 +9,7 @@ import { usePowerState } from 'react-native-device-info';
 const BatteryLevel = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const powerState = usePowerState();
-  const batteryLevel = powerState?.batteryLevel * 100;
+  const batteryLevel = (powerState?.batteryLevel * 100).toFixed(2);
   const isCharging = powerState?.batteryState === 'charging' ? 'Yes' : 'No';
 
   return (
