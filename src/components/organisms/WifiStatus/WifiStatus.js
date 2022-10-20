@@ -36,7 +36,7 @@ const WifiStatus = props => {
             }`}</Text>
             <Text style={styles.dataText}>{`Signal strength: ${
               netInfo?.details?.strength || 0
-            }`}</Text>
+            }%`}</Text>
           </View>
         </View>
       </Collapsible>

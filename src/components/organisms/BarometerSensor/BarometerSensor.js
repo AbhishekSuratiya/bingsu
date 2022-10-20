@@ -58,7 +58,7 @@ const BarometerSensor = props => {
       title={'Barometer'}
       startSensor={startBarometer}
       stopSensor={stopBarometer}
-      units={'hPA'}
+      units={'hPa'}
     />
   );
 };
