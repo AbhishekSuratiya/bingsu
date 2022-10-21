@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Switch, Text, View } from 'react-native';
 import styles from '../WifiStatus/WifiStatusStyles';
 import Collapsible from 'react-native-collapsible';
@@ -8,7 +8,14 @@ import { useNetInfo } from '@react-native-community/netinfo';
 
 const WifiStatus = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const [strength, setStrength] = useState(false);
   const netInfo = useNetInfo();
+
+  useEffect(() => {
+    setIsConnected(netInfo?.type === 'wifi' ? 'Yes' : 'No');
+    setStrength(netInfo?.details?.strength || 0);
+  }, [netInfo]);
 
   return (
     <View style={styles.root}>
@@ -31,12 +38,10 @@ const WifiStatus = props => {
           </View>
 
           <View>
-            <Text style={styles.dataText}>{`Connected: ${
-              netInfo?.isConnected ? 'Yes' : 'No'
-            }`}</Text>
-            <Text style={styles.dataText}>{`Signal strength: ${
-              netInfo?.details?.strength || 0
-            }%`}</Text>
+            <Text
+              style={styles.dataText}>{`Wifi connected: ${isConnected}`}</Text>
+            <Text
+              style={styles.dataText}>{`Signal strength: ${strength}%`}</Text>
           </View>
         </View>
       </Collapsible>
