@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Switch, Text, View } from 'react-native';
 import styles from '../BatteryLevel/BatteryLevelStyles';
 import Collapsible from 'react-native-collapsible';
@@ -9,8 +9,10 @@ import { usePowerState } from 'react-native-device-info';
 const BatteryLevel = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const powerState = usePowerState();
-  const batteryLevel = (powerState?.batteryLevel * 100).toFixed(2);
-  const isCharging = powerState?.batteryState === 'charging' ? 'Yes' : 'No';
+  const batteryLevel = useMemo(
+    () => (powerState?.batteryLevel * 100).toFixed(2),
+    [powerState],
+  );
 
   return (
     <View style={styles.root}>
@@ -41,9 +43,10 @@ const BatteryLevel = props => {
                   styles.dataTextColored,
                 ]}>{`${batteryLevel}%`}</Text>
             </View>
-            <Text style={styles.dataText}>{`Charging: ${
-              isCharging ? 'Yes' : 'No'
-            }`}</Text>
+            <Text
+              style={
+                styles.dataText
+              }>{`Charging: ${powerState?.batteryState?.toUpperCase()}`}</Text>
           </View>
 
           <View style={styles.batteryLevelWrapper}>
