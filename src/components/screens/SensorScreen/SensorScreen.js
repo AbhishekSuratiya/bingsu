@@ -19,6 +19,7 @@ import LocationManager from '../../atoms/LocationManager';
 import BatteryLevel from '../../organisms/BatteryLevel/BatteryLevel';
 import WifiStatus from '../../organisms/WifiStatus/WifiStatus';
 import CpuUsage from '../../organisms/CpuUsage/CpuUsage';
+import CellularStatus from '../../organisms/CellularStatus/CellularSatus';
 
 const SensorScreen = ({ navigation }) => {
   const [isBarometerAvailable, setIsBarometerAvailable] = useState(true);
@@ -68,6 +69,7 @@ const SensorScreen = ({ navigation }) => {
       <BatteryLevel />
       <WifiStatus />
       <CpuUsage />
+      <CellularStatus />
     </ScrollView>
   );
 };
