@@ -69,6 +69,7 @@ const AccelerometerSensor = props => {
       startSensor={startAccelerometer}
       stopSensor={stopAccelerometer}
       style={styles.sensorCard}
+      units={'m/s²'}
       defaultListening
     />
   );

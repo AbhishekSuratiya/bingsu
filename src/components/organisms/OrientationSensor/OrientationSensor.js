@@ -87,6 +87,9 @@ const OrientationSensor = props => {
       startSensor={startOrientation}
       stopSensor={stopOrientation}
       style={styles.sensorCard}
+      unitX={'m/s²'}
+      unitY={'m/s²'}
+      unitZ={'°/s'}
     />
   );
 };

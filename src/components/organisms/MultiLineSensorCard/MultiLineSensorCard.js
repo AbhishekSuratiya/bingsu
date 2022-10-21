@@ -5,7 +5,10 @@ import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import styles from './MultiLineSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
-import { SENSOR_CARD_HEADER } from '../../../utils/contants';
+import {
+  SENSOR_CARD_HEADER,
+  SENSOR_CARD_HEADER_EXPANDED,
+} from '../../../utils/contants';
 import { useSelector } from 'react-redux';
 import { AwsContext } from '../../../containers/InitialiseAws';
 
@@ -16,6 +19,10 @@ const MultiLineSensorCard = ({
   stopSensor,
   style,
   defaultListening,
+  units = '',
+  unitX = '',
+  unitY = '',
+  unitZ = '',
 }) => {
   const [isSensorListening, setIsSensorListening] = useState(defaultListening);
   const { isAwsConnected } = useSelector(state => state.awsStore);
@@ -60,26 +67,34 @@ const MultiLineSensorCard = ({
   const verticalContentInset = { top: 10, bottom: 10 };
 
   const renderCoordinates = () => (
-    <View>
-      <View style={styles.coordinatesContainer}>
-        <View style={styles.coordinatesText}>
-          <Text style={styles.coordinates}>x:</Text>
-          <Text style={{ color: Colors.red }}>
-            {xCoordinate[xCoordinate.length - 1]?.toFixed(4)}
-          </Text>
-        </View>
-        <View style={styles.coordinatesText}>
-          <Text style={styles.coordinates}>y:</Text>
-          <Text style={{ color: Colors.green }}>
-            {yCoordinate[yCoordinate.length - 1]?.toFixed(4)}
-          </Text>
-        </View>
-        <View style={styles.coordinatesText}>
-          <Text style={styles.coordinates}>z:</Text>
-          <Text style={{ color: Colors.blue }}>
-            {zCoordinate[zCoordinate.length - 1]?.toFixed(4)}
-          </Text>
-        </View>
+    <View
+      style={[
+        styles.coordinatesContainer,
+        (units || unitX || unitY || unitZ) && { flexWrap: 'wrap' },
+      ]}>
+      <View style={styles.coordinatesText}>
+        <Text style={styles.coordinates}>x:</Text>
+        <Text style={{ color: Colors.red }}>
+          {xCoordinate[xCoordinate.length - 1]?.toFixed(4) +
+            ' ' +
+            (units || unitX)}
+        </Text>
+      </View>
+      <View style={styles.coordinatesText}>
+        <Text style={styles.coordinates}>y:</Text>
+        <Text style={{ color: Colors.green }}>
+          {yCoordinate[yCoordinate.length - 1]?.toFixed(4) +
+            ' ' +
+            (units + unitY)}
+        </Text>
+      </View>
+      <View style={styles.coordinatesText}>
+        <Text style={styles.coordinates}>z:</Text>
+        <Text style={{ color: Colors.blue }}>
+          {zCoordinate[zCoordinate.length - 1]?.toFixed(4) +
+            ' ' +
+            (units + unitZ)}
+        </Text>
       </View>
     </View>
   );
@@ -107,7 +122,11 @@ const MultiLineSensorCard = ({
         collapsed={!isSensorListening}
         collapsedHeight={SENSOR_CARD_HEADER}
         enablePointerEvents>
-        <View style={styles.header}>
+        <View
+          style={[
+            styles.header,
+            isSensorListening && { height: SENSOR_CARD_HEADER_EXPANDED },
+          ]}>
           <View style={styles.title}>
             <Text style={styles.sensorTitle}>{title}</Text>
             {isSensorListening && renderCoordinates()}

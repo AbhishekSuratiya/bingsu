@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
-import Fonts from '../../../theme/Fonts';
 import {
   SENSOR_CARD_HEADER,
   SENSOR_CARD_HEIGHT,
@@ -35,7 +34,10 @@ const styles = StyleSheet.create({
   root: {
     width: '100%',
   },
-  title: { justifyContent: 'center' },
+  title: {
+    justifyContent: 'center',
+    flex: 1,
+  },
 });
 
 export default styles;

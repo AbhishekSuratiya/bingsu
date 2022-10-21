@@ -64,6 +64,7 @@ const GyroscopeSensor = props => {
       startSensor={startGyroscope}
       stopSensor={stopGyroscope}
       style={styles.sensorCard}
+      units={'°/s'}
     />
   );
 };

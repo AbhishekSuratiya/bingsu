@@ -67,6 +67,7 @@ const MagnetometerSensor = props => {
       startSensor={startMagnetometer}
       stopSensor={stopMagnetometer}
       style={styles.sensorCard}
+      units={'µT'}
     />
   );
 };
