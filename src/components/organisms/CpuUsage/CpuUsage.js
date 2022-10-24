@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Switch, Text, View } from 'react-native';
 import styles from '../CpuUsage/CpuUsageStyles';
 import Collapsible from 'react-native-collapsible';
@@ -9,13 +9,20 @@ import {
 import Colors from '../../../theme/Colors';
 import PerformanceStats from 'react-native-performance-stats';
 import { useSelector } from 'react-redux';
+import { AwsContext } from '../../../containers/InitialiseAws';
+import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
+import getCommandEntry from '../../../utils/getCommandEntry';
 
 const CpuUsage = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const [cpuUsage, setCpuUsage] = useState(0);
   const subscriptionCpu = useRef(null);
   const timer = useRef(null);
-  const { isAwsConnected } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
+  const client = useContext(AwsContext);
 
   useEffect(() => {
     if (!isSensorListening) {
@@ -30,6 +37,19 @@ const CpuUsage = props => {
       if (Date.now() - timer.current > AWS_SEND_MESSAGE_INTERVAL) {
         timer.current = Date.now();
         setCpuUsage(stats.usedCpu.toFixed(2));
+        if (isAwsConnected && isSensorListening) {
+          const command = new BatchPutAssetPropertyValueCommand({
+            entries: [
+              getCommandEntry({
+                entryId: 'CPULevelMeasurement',
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'CPULevelMeasurement',
+                value: stats.usedCpu,
+              }),
+            ],
+          });
+          client?.send(command);
+        }
       }
     });
     PerformanceStats.start(true);
