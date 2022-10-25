@@ -57,6 +57,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   animatedIcon: { width: '50%' },
+  allowText: {
+    fontSize: 16,
+    color: Colors.white100,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginTop: 24,
+  },
+  allowTextDesc: {
+    fontSize: 13,
+    color: Colors.grey80,
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 40,
+  },
+  allowCard: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    padding: 32,
+    backgroundColor: Colors.dark4,
+  },
 });
 
 export default styles;

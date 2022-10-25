@@ -5,7 +5,7 @@ import { BarcodeFormat, useScanBarcodes } from 'vision-camera-code-scanner';
 import { useDispatch, useSelector } from 'react-redux';
 import { awsAction } from '../../../redux/reducers/awsReducer';
 import Button from '../../atoms/Button';
-import { CheckSvg } from '../../../../assets/images/svg';
+import { CameraSvg, CheckSvg } from '../../../../assets/images/svg';
 import isJsonString from '../../../utils/isJsonString';
 import styles from './ScanQrScreenStyles';
 import Bullet from '../../atoms/Bullet/Bullet';
@@ -16,11 +16,18 @@ import Success from '../../../../assets/images/json/success.json';
 import Fail from '../../../../assets/images/json/fail.json';
 import Loading from '../../../../assets/images/json/loading.json';
 import { removeData, storeData } from '../../../utils/asyncStorage';
+import {
+  check,
+  openSettings,
+  PERMISSIONS,
+  RESULTS,
+} from 'react-native-permissions';
 
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(true);
   const [isValidQr, setIsValidQr] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
   const { isAwsConnected, isScanning, isConnecting } = useSelector(
     state => state.awsStore,
   );
@@ -35,6 +42,11 @@ export default function ScanQrScreen({ navigation }) {
     (async () => {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'authorized');
+      check(PERMISSIONS.IOS.CAMERA).then(result => {
+        if (result === RESULTS.BLOCKED) {
+          setIsBlocked(true);
+        }
+      });
     })();
     return () => {
       dispatch(awsAction.setIsScanning(false));
@@ -87,6 +99,39 @@ export default function ScanQrScreen({ navigation }) {
     dispatch(awsAction.setSecretAccessKey(null));
     removeData('qrCode');
   };
+  const openPermissionSettings = () => {
+    openSettings().catch(() => console.warn('Cannot open settings'));
+  };
+  const renderOpenSettings = () => {
+    return (
+      <View style={styles.allowCard}>
+        <CameraSvg />
+        <Text style={styles.allowText}>
+          {'Allow AWS IoT Bingsu to access\nyour camera'}
+        </Text>
+        <Text style={styles.allowTextDesc}>
+          {'This lets you scan the QR code and connect to web dashboard'}
+        </Text>
+        <Button
+          light
+          title={'Open Settings'}
+          onPress={openPermissionSettings}
+        />
+      </View>
+    );
+  };
+  const renderInstructions = () => {
+    return (
+      <View style={styles.stepsWrapper}>
+        <Text style={styles.barcodeHeading}>{'How to connect to AWS?'}</Text>
+        {SETUP_INSTRUCTIONS.map((e, i) => (
+          <Bullet number={i + 1} style={styles.bullets} key={i}>
+            <Text style={styles.steps}>{e}</Text>
+          </Bullet>
+        ))}
+      </View>
+    );
+  };
 
   if (isAwsConnected) {
     return (
@@ -133,15 +178,14 @@ export default function ScanQrScreen({ navigation }) {
             )}
           </View>
         </View>
-
-        <View style={styles.stepsWrapper}>
-          <Text style={styles.barcodeHeading}>{'How to connect to AWS?'}</Text>
-          {SETUP_INSTRUCTIONS.map((e, i) => (
-            <Bullet number={i + 1} style={styles.bullets} key={i}>
-              <Text style={styles.steps}>{e}</Text>
-            </Bullet>
-          ))}
-        </View>
+        {renderInstructions()}
+      </>
+    );
+  } else if (isBlocked) {
+    return (
+      <>
+        {renderOpenSettings()}
+        {renderInstructions()}
       </>
     );
   } else {
