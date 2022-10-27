@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Switch, Text, View } from 'react-native';
 import styles from '../BatteryLevel/BatteryLevelStyles';
 import Collapsible from 'react-native-collapsible';
@@ -8,14 +8,12 @@ import { usePowerState } from 'react-native-device-info';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import { useSelector } from 'react-redux';
 import { AwsContext } from '../../../containers/InitialiseAws';
+import { useBatteryLevel } from 'react-native-device-info';
 
 const BatteryLevel = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const powerState = usePowerState();
-  const batteryLevel = useMemo(
-    () => (powerState?.batteryLevel * 100).toFixed(2),
-    [powerState],
-  );
+  const batteryLevelNew = useBatteryLevel();
   const {
     isAwsConnected,
     qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
@@ -33,7 +31,7 @@ const BatteryLevel = props => {
             propertyValues: [
               {
                 value: {
-                  doubleValue: powerState?.batteryLevel * 100,
+                  doubleValue: batteryLevelNew * 100,
                 },
                 timestamp: { timeInSeconds: Date.now() / 1000 },
               },
@@ -60,7 +58,7 @@ const BatteryLevel = props => {
       });
       client?.send(command);
     }
-  }, [powerState, isAwsConnected, isSensorListening]);
+  }, [powerState, isAwsConnected, isSensorListening, batteryLevelNew]);
 
   return (
     <View style={styles.root}>
@@ -85,11 +83,9 @@ const BatteryLevel = props => {
           <View>
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.dataText}>{'Level: '}</Text>
-              <Text
-                style={[
-                  styles.dataText,
-                  styles.dataTextColored,
-                ]}>{`${batteryLevel}%`}</Text>
+              <Text style={[styles.dataText, styles.dataTextColored]}>{`${(
+                batteryLevelNew * 100
+              ).toFixed(2)}%`}</Text>
             </View>
             <Text style={styles.dataText}>{`Charging: ${
               ['charging', 'full'].includes(powerState?.batteryState)
@@ -103,7 +99,7 @@ const BatteryLevel = props => {
               style={[
                 styles.batteryLevel,
                 {
-                  width: `${batteryLevel}%`,
+                  width: `${batteryLevelNew * 100}%`,
                 },
               ]}
             />
