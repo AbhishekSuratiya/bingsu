@@ -6,10 +6,12 @@ import ScanQrScreen from '../components/screens/ScanQrScreen/ScanQrScreen';
 import SensorScreen from '../components/screens/SensorScreen/SensorScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Colors from '../theme/Colors';
-import { QrCodeSvg, SensorSvg, InfoSvg } from '../../assets/images/svg';
+import { InfoSvg, QrCodeSvg, SensorSvg } from '../../assets/images/svg';
 import RNBootSplash from 'react-native-bootsplash';
 import LearnMoreScreen from '../components/screens/LearnMoreScreen/LearnMoreScreen';
 import { LEARN_MORE_LINK } from '../utils/contants';
+import { useNetInfo } from '@react-native-community/netinfo';
+import NoInternetToast from '../components/molecules/NoInternetToast/NoInternetToast';
 
 const Tab = createBottomTabNavigator();
 
@@ -87,6 +89,7 @@ const navigationTheme = {
 };
 
 const Navigator = () => {
+  const netInfo = useNetInfo();
   return (
     <>
       <SafeAreaView style={{ flex: 0, backgroundColor: Colors.black }} />
@@ -119,6 +122,7 @@ const Navigator = () => {
               );
             })}
           </Tab.Navigator>
+          {!netInfo?.isConnected && <NoInternetToast />}
         </NavigationContainer>
       </SafeAreaView>
     </>
