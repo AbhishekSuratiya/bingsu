@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Switch, Text, View } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { BarcodeFormat, useScanBarcodes } from 'vision-camera-code-scanner';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,11 @@ import { CameraSvg, CheckSvg } from '../../../../assets/images/svg';
 import isJsonString from '../../../utils/isJsonString';
 import styles from './ScanQrScreenStyles';
 import Bullet from '../../atoms/Bullet/Bullet';
-import { SETUP_INSTRUCTIONS } from '../../../utils/contants';
+import {
+  DISABLE_LOGGING,
+  ENABLE_LOGGING,
+  SETUP_INSTRUCTIONS,
+} from '../../../utils/contants';
 import Colors from '../../../theme/Colors';
 import Lottie from 'lottie-react-native';
 import Success from '../../../../assets/images/json/success.json';
@@ -36,6 +40,7 @@ export default function ScanQrScreen({ navigation }) {
     secretAccessKey,
     sessionToken,
     accessKeyId,
+    isLoggingEnabled,
   } = useSelector(state => state.awsStore);
   const dispatch = useDispatch();
   const devices = useCameraDevices();
@@ -170,7 +175,33 @@ export default function ScanQrScreen({ navigation }) {
             title={'View Sensors'}
             onPress={() => navigation.navigate('Sensor')}
           />
+          <View style={styles.loggerWrapper}>
+            <Text style={styles.loggerTxt}>{'Enable logs'}</Text>
+            <Switch
+              trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
+              thumbColor={Colors.white100}
+              onValueChange={() => {
+                isLoggingEnabled
+                  ? fetch(DISABLE_LOGGING)
+                      .then(res => res.json())
+                      .then(json => {
+                        console.log(json);
+                        cloudWatchLog('Logging disabled');
+                        dispatch(awsAction.setLoggingEnabled(false));
+                      })
+                  : fetch(ENABLE_LOGGING)
+                      .then(res => res.json())
+                      .then(json => {
+                        console.log(json);
+                        cloudWatchLog('Logging enabled');
+                        dispatch(awsAction.setLoggingEnabled(true));
+                      });
+              }}
+              value={isLoggingEnabled}
+            />
+          </View>
         </View>
+
         <Button negative title={'Disconnect'} onPress={disconnectFromAws} />
       </View>
     );

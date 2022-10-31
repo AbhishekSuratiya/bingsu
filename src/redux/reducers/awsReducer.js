@@ -12,6 +12,7 @@ const initialState = {
   accessKeyId: '',
   isConnecting: false,
   showValidatedAnimation: false,
+  isLoggingEnabled: false,
 };
 
 const awsSlice = createSlice({
@@ -50,6 +51,9 @@ const awsSlice = createSlice({
     },
     setShowValidatedAnimation(state, action) {
       state.showValidatedAnimation = action.payload;
+    },
+    setLoggingEnabled(state, action) {
+      state.isLoggingEnabled = action.payload;
     },
   },
 });

@@ -3,6 +3,7 @@ import {
   cloudWatchDescribeLogStreams,
   cloudWatchPutLogEvents,
 } from '../utils/cloudWatch';
+import { useSelector } from 'react-redux';
 
 export const LoggerContext = React.createContext();
 
@@ -10,6 +11,7 @@ const Logger = ({ children }) => {
   let nextSequenceToken = useRef(null).current;
   const eventsQueue = useRef([]).current;
   let interval = useRef(null).current;
+  const { isLoggingEnabled } = useSelector(state => state.awsStore);
 
   async function startLogQueueToCloudWatch() {
     if (interval == null) {
@@ -21,7 +23,6 @@ const Logger = ({ children }) => {
         }
         const event = eventsQueue.shift();
         try {
-          console.log(event);
           const res = await cloudWatchPutLogEvents(
             [event],
             '/AWSIotBingsu/bingsu-v2-1/app-logs',
@@ -37,6 +38,9 @@ const Logger = ({ children }) => {
   }
 
   async function log(message) {
+    if (!isLoggingEnabled) {
+      return;
+    }
     if (nextSequenceToken == null) {
       const res = await cloudWatchDescribeLogStreams(
         '/AWSIotBingsu/bingsu-v2-1/app-logs',

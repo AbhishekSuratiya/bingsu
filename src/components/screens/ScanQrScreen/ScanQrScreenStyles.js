@@ -79,6 +79,20 @@ const styles = StyleSheet.create({
     padding: 32,
     backgroundColor: Colors.dark4,
   },
+  loggerWrapper: {
+    backgroundColor: Colors.dark4,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 12,
+    borderRadius: 8,
+    width: '100%',
+    marginTop: 16,
+    flexDirection: 'row',
+  },
+  loggerTxt: {
+    color: Colors.white100,
+    fontSize: 16,
+  },
 });
 
 export default styles;
