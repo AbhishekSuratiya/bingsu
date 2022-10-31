@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import store from '../redux/store';
 import InitialiseAws from './InitialiseAws';
 import { LogBox } from 'react-native';
+import Logger from './Logger';
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 LogBox.ignoreAllLogs();
 
@@ -11,7 +12,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <InitialiseAws>
-        <Navigator />
+        <Logger>
+          <Navigator />
+        </Logger>
       </InitialiseAws>
     </Provider>
   );

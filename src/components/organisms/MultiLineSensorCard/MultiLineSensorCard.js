@@ -11,6 +11,7 @@ import {
 } from '../../../utils/contants';
 import { useSelector } from 'react-redux';
 import { AwsContext } from '../../../containers/InitialiseAws';
+import { LoggerContext } from '../../../containers/Logger';
 
 const MultiLineSensorCard = ({
   sensorData,
@@ -27,6 +28,7 @@ const MultiLineSensorCard = ({
   const [isSensorListening, setIsSensorListening] = useState(defaultListening);
   const { isAwsConnected } = useSelector(state => state.awsStore);
   const client = useContext(AwsContext);
+  const cloudWatchLog = useContext(LoggerContext);
 
   useEffect(() => {
     if (isSensorListening) {
@@ -106,8 +108,10 @@ const MultiLineSensorCard = ({
       onValueChange={() => {
         if (isSensorListening) {
           stopSensor();
+          cloudWatchLog(`${title} stopped`);
         } else {
           startSensor();
+          cloudWatchLog(`${title} started`);
         }
         setIsSensorListening(val => !val);
       }}
