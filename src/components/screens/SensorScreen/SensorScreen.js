@@ -20,10 +20,12 @@ import BatteryLevel from '../../organisms/BatteryLevel/BatteryLevel';
 import WifiStatus from '../../organisms/WifiStatus/WifiStatus';
 import CpuUsage from '../../organisms/CpuUsage/CpuUsage';
 import CellularStatus from '../../organisms/CellularStatus/CellularSatus';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 const SensorScreen = ({ navigation }) => {
   const [isBarometerAvailable, setIsBarometerAvailable] = useState(true);
   const { isAwsConnected } = useSelector(state => state.awsStore);
+  const netInfo = useNetInfo();
 
   const renderConnectToAwsCard = () => {
     return (
@@ -43,6 +45,7 @@ const SensorScreen = ({ navigation }) => {
           <Button
             title={'Connect'}
             onPress={() => navigation.navigate('ScanQr')}
+            disabled={!netInfo?.isConnected}
             light
           />
         </View>

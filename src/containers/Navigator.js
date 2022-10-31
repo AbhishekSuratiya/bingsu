@@ -124,6 +124,9 @@ const Navigator = () => {
                         cloudWatchLog('Opening learn more URL');
                         Linking.openURL(LEARN_MORE_LINK);
                       } else if (name === 'ScanQr') {
+                        if (!netInfo?.isConnected) {
+                          e.preventDefault();
+                        }
                         cloudWatchLog('Focused scan qr screen');
                       } else {
                         cloudWatchLog('Focused sensor screen');
