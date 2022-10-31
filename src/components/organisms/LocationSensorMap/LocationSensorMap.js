@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AwsContext } from '../../../containers/InitialiseAws';
 import getCommandEntry from '../../../utils/getCommandEntry';
 import { locationAction } from '../../../redux/reducers/locationReducer';
+import { LoggerContext } from '../../../containers/Logger';
 
 const LocationSensorMap = ({ title }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
@@ -25,6 +26,7 @@ const LocationSensorMap = ({ title }) => {
     hasLocationPermission,
     checkingForPermission,
   } = useSelector(state => state.locationStore);
+  const cloudWatchLog = useContext(LoggerContext);
 
   useEffect(() => {
     if (isAwsConnected && isGpsListening) {
@@ -75,8 +77,10 @@ const LocationSensorMap = ({ title }) => {
   useEffect(() => {
     if (isSensorListening) {
       startGps();
+      cloudWatchLog(`${title} started`);
     } else {
       stopGps();
+      cloudWatchLog(`${title} stopped`);
     }
     return stopGps;
   }, [isSensorListening]);

@@ -11,6 +11,7 @@ import { AwsContext } from '../../../containers/InitialiseAws';
 import { useSelector } from 'react-redux';
 import styles from '../../screens/SensorScreen/SensorScreenStyles';
 import MultiLineSensorCard from '../MultiLineSensorCard/MultiLineSensorCard';
+import { LoggerContext } from '../../../containers/Logger';
 
 const AccelerometerSensor = props => {
   const [accelerometerData, setAccelerometerData] = useState([]);
@@ -20,6 +21,7 @@ const AccelerometerSensor = props => {
     isAwsConnected,
     qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
   } = useSelector(state => state.awsStore);
+  const cloudWatchLog = useContext(LoggerContext);
 
   const startAccelerometer = () => {
     setUpdateIntervalForType(
@@ -55,7 +57,10 @@ const AccelerometerSensor = props => {
           client?.send(command);
         }
       },
-      error: error => console.log('The sensor is not available', error),
+      error: error => {
+        console.log('The sensor is not available', error);
+        cloudWatchLog('Accelerometer is not available');
+      },
     });
   };
   const stopAccelerometer = () => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Colors from '../../../theme/Colors';
 import {
   ActivityIndicator,
@@ -18,6 +18,7 @@ import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Button from '../../atoms/Button';
 import { CameraSvg } from '../../../../assets/images/svg';
 import { openSettings } from 'react-native-permissions';
+import { LoggerContext } from '../../../containers/Logger';
 
 const { rear, front } = CAMERA_VIEW;
 const CameraSensorCard = ({ title }) => {
@@ -27,6 +28,7 @@ const CameraSensorCard = ({ title }) => {
   const [cameraFacing, setCameraFacing] = useState(rear);
   const { isAwsConnected, qrData, secretAccessKey, sessionToken, accessKeyId } =
     useSelector(state => state.awsStore);
+  const cloudWatchLog = useContext(LoggerContext);
   const script = useMemo(() => {
     return `
             formValues.channelName = '${qrData.KinesisVideoChannelName}'
@@ -58,10 +60,17 @@ const CameraSensorCard = ({ title }) => {
               setIsSensorListening(false);
             }
             setIsBlocked(true);
+            cloudWatchLog('Camera permission blocked');
           }
         });
         setHasPermission(status === 'authorized');
+        if (status === 'authorized') {
+          cloudWatchLog('Camera permission granted');
+        } else {
+          cloudWatchLog('Camera permission denied');
+        }
         if (status === 'denied' && Platform.OS === 'android') {
+          cloudWatchLog('Closed video sensor');
           setIsSensorListening(false);
         }
       })();
@@ -140,6 +149,7 @@ const CameraSensorCard = ({ title }) => {
 
   const openPermissionSettings = () => {
     openSettings().catch(() => console.warn('Cannot open settings'));
+    cloudWatchLog('Open camera permission settingsw');
   };
 
   const renderOpenSettings = () => (
@@ -169,6 +179,11 @@ const CameraSensorCard = ({ title }) => {
               trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
               thumbColor={Colors.white100}
               onValueChange={() => {
+                if (isSensorListening) {
+                  cloudWatchLog(`${title} stopped`);
+                } else {
+                  cloudWatchLog(`${title} started`);
+                }
                 setIsSensorListening(val => !val);
               }}
               value={isSensorListening}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { BarcodeFormat, useScanBarcodes } from 'vision-camera-code-scanner';
@@ -22,29 +22,49 @@ import {
   PERMISSIONS,
   RESULTS,
 } from 'react-native-permissions';
+import { LoggerContext } from '../../../containers/Logger';
 
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(true);
   const [isValidQr, setIsValidQr] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
-  const { isAwsConnected, isScanning, isConnecting } = useSelector(
-    state => state.awsStore,
-  );
+  const {
+    isAwsConnected,
+    isScanning,
+    isConnecting,
+    secretAccessKey,
+    sessionToken,
+    accessKeyId,
+  } = useSelector(state => state.awsStore);
   const dispatch = useDispatch();
   const devices = useCameraDevices();
   const device = devices.back;
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,
   });
+  const cloudWatchLog = useContext(LoggerContext);
+
+  useEffect(() => {
+    if (accessKeyId && secretAccessKey && sessionToken) {
+      cloudWatchLog('Connected to AWS');
+    }
+  }, [accessKeyId, secretAccessKey, sessionToken]);
 
   useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
-      setHasPermission(status === 'authorized');
+      if (status === 'authorized') {
+        setHasPermission(true);
+        cloudWatchLog('Camera permission granted');
+      } else {
+        setHasPermission(false);
+        cloudWatchLog('Camera permission denied');
+      }
       check(PERMISSIONS.IOS.CAMERA).then(result => {
         if (result === RESULTS.BLOCKED) {
           setIsBlocked(true);
+          cloudWatchLog('Camera permission blocked');
         }
       });
     })();
@@ -56,6 +76,7 @@ export default function ScanQrScreen({ navigation }) {
   useEffect(() => {
     if (device != null && hasPermission && !isAwsConnected) {
       dispatch(awsAction.setIsScanning(true));
+      cloudWatchLog('Scanning started');
     }
   }, [device, hasPermission, isAwsConnected]);
 
@@ -67,6 +88,7 @@ export default function ScanQrScreen({ navigation }) {
       if (REGION && COGNITO_POOL_ID && COGNITO_UNAUTH_ROLE_ARN) {
         dispatch(awsAction.setIsScanning(false));
         dispatch(awsAction.setIsConnecting(true));
+        cloudWatchLog('Valid QR Code scanned and Scanning stopped');
         setIsCameraActive(false);
         setIsValidQr(true);
         dispatch(awsAction.setQrData(JSON.parse(barcodes[0].displayValue)));
@@ -78,9 +100,11 @@ export default function ScanQrScreen({ navigation }) {
         dispatch(awsAction.setIsScanning(false));
         setIsCameraActive(false);
         setIsValidQr(false);
+        cloudWatchLog('Invalid QR code scanned');
 
         setTimeout(() => {
           dispatch(awsAction.setIsScanning(true));
+          cloudWatchLog('Scanning started');
           setIsCameraActive(true);
         }, 5000);
       }
@@ -98,8 +122,10 @@ export default function ScanQrScreen({ navigation }) {
     dispatch(awsAction.setSessionToken(null));
     dispatch(awsAction.setSecretAccessKey(null));
     removeData('qrCode');
+    cloudWatchLog('Disconnected form AWS');
   };
   const openPermissionSettings = () => {
+    cloudWatchLog('Opening permission settings');
     openSettings().catch(() => console.warn('Cannot open settings'));
   };
   const renderOpenSettings = () => {

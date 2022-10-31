@@ -11,6 +11,7 @@ import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import getCommandEntry from '../../../utils/getCommandEntry';
 import styles from '../../screens/SensorScreen/SensorScreenStyles';
 import MultiLineSensorCard from '../MultiLineSensorCard/MultiLineSensorCard';
+import { LoggerContext } from '../../../containers/Logger';
 
 const MagnetometerSensor = props => {
   const [magnetometerData, setMagnetometerData] = useState([]);
@@ -20,6 +21,8 @@ const MagnetometerSensor = props => {
     isAwsConnected,
     qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
   } = useSelector(state => state.awsStore);
+  const cloudWatchLog = useContext(LoggerContext);
+
   const startMagnetometer = () => {
     setUpdateIntervalForType(
       SensorTypes.magnetometer,
@@ -54,7 +57,10 @@ const MagnetometerSensor = props => {
           client?.send(command);
         }
       },
-      error: error => console.log('The sensor is not available', error),
+      error: error => {
+        console.log('The sensor is not available', error);
+        cloudWatchLog('Magnetometer is not available');
+      },
     });
   };
   const stopMagnetometer = () => {

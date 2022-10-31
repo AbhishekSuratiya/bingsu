@@ -11,6 +11,7 @@ import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import getCommandEntry from '../../../utils/getCommandEntry';
 import styles from '../../screens/SensorScreen/SensorScreenStyles';
 import MultiLineSensorCard from '../MultiLineSensorCard/MultiLineSensorCard';
+import { LoggerContext } from '../../../containers/Logger';
 
 const GyroscopeSensor = props => {
   const [gyroscopeData, setGyroscopeData] = useState([]);
@@ -20,6 +21,8 @@ const GyroscopeSensor = props => {
     isAwsConnected,
     qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
   } = useSelector(state => state.awsStore);
+  const cloudWatchLog = useContext(LoggerContext);
+
   const startGyroscope = () => {
     setUpdateIntervalForType(SensorTypes.gyroscope, AWS_SEND_MESSAGE_INTERVAL);
     subscriptionGyroscope.current = gyroscope.subscribe({
@@ -51,7 +54,10 @@ const GyroscopeSensor = props => {
           client?.send(command);
         }
       },
-      error: error => console.log('The sensor is not available', error),
+      error: error => {
+        console.log('The sensor is not available', error);
+        cloudWatchLog('Gyroscope is not available');
+      },
     });
   };
   const stopGyroscope = () => {

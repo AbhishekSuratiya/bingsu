@@ -2,7 +2,8 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import { useDispatch, useSelector } from 'react-redux';
 import { locationAction } from '../../redux/reducers/locationReducer';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
+import { LoggerContext } from '../../containers/Logger';
 
 const LocationManager = () => {
   const subscriptionLocation = useRef(null);
@@ -10,6 +11,7 @@ const LocationManager = () => {
   const { isAltitudeListening, isGpsListening } = useSelector(
     state => state.locationStore,
   );
+  const cloudWatchLog = useContext(LoggerContext);
   const requestLocationPermission = async () => {
     dispatch(locationAction.setCheckingForPermission(true));
     if (Platform.OS === 'android') {
@@ -20,12 +22,22 @@ const LocationManager = () => {
         dispatch(
           locationAction.setHasLocationPermission(response === 'granted'),
         );
+        if (response === 'granted') {
+          cloudWatchLog('Location access granted');
+        } else {
+          cloudWatchLog('Location access denied');
+        }
       } catch (err) {
         console.log(err);
       }
     } else {
       const response = await Geolocation.requestAuthorization('whenInUse');
       dispatch(locationAction.setHasLocationPermission(response === 'granted'));
+      if (response === 'granted') {
+        cloudWatchLog('Location access granted');
+      } else {
+        cloudWatchLog('Location access denied');
+      }
     }
     dispatch(locationAction.setCheckingForPermission(false));
   };

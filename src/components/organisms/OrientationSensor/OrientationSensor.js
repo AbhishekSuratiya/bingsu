@@ -12,6 +12,7 @@ import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import getCommandEntry from '../../../utils/getCommandEntry';
 import styles from '../../screens/SensorScreen/SensorScreenStyles';
 import MultiLineSensorCard from '../MultiLineSensorCard/MultiLineSensorCard';
+import { LoggerContext } from '../../../containers/Logger';
 
 const OrientationSensor = props => {
   const [orientationData, setOrientationData] = useState([]);
@@ -23,6 +24,8 @@ const OrientationSensor = props => {
     isAwsConnected,
     qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
   } = useSelector(state => state.awsStore);
+  const cloudWatchLog = useContext(LoggerContext);
+
   const startOrientation = () => {
     setUpdateIntervalForType(
       SensorTypes.accelerometer,
@@ -72,7 +75,10 @@ const OrientationSensor = props => {
           }
         }
       },
-      error: error => console.log('The sensor is not available', error),
+      error: error => {
+        console.log('The sensor is not available', error);
+        cloudWatchLog('Orientation is not available');
+      },
     });
   };
   const stopOrientation = () => {

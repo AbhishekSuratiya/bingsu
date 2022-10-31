@@ -10,12 +10,14 @@ import getCommandEntry from '../../../utils/getCommandEntry';
 import { AwsContext } from '../../../containers/InitialiseAws';
 import { useSelector } from 'react-redux';
 import SingleLineSensorCard from '../SingleLineSensorCard/SingleLineSensorCard';
+import { LoggerContext } from '../../../containers/Logger';
 
 const BarometerSensor = props => {
   const [barometerData, setBarometerData] = useState([]);
   const subscriptionBarometer = useRef(null);
   const client = useContext(AwsContext);
   const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const cloudWatchLog = useContext(LoggerContext);
 
   const startBarometer = () => {
     setUpdateIntervalForType(SensorTypes.barometer, AWS_SEND_MESSAGE_INTERVAL);
@@ -38,6 +40,7 @@ const BarometerSensor = props => {
       error: error => {
         props.setIsBarometerAvailable(false);
         console.log('The sensor is not available', error);
+        cloudWatchLog('Barometer is not available');
       },
     });
   };

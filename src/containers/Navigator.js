@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Linking, SafeAreaView, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Header from '../components/molecules/Header/Header';
@@ -12,6 +12,7 @@ import LearnMoreScreen from '../components/screens/LearnMoreScreen/LearnMoreScre
 import { LEARN_MORE_LINK } from '../utils/contants';
 import { useNetInfo } from '@react-native-community/netinfo';
 import NoInternetToast from '../components/molecules/NoInternetToast/NoInternetToast';
+import { LoggerContext } from './Logger';
 
 const Tab = createBottomTabNavigator();
 
@@ -90,6 +91,12 @@ const navigationTheme = {
 
 const Navigator = () => {
   const netInfo = useNetInfo();
+  const cloudWatchLog = useContext(LoggerContext);
+  useEffect(() => {
+    if (netInfo?.isConnected) {
+      cloudWatchLog('Has internet access');
+    }
+  }, [netInfo?.isConnected]);
   return (
     <>
       <SafeAreaView style={{ flex: 0, backgroundColor: Colors.black }} />
@@ -114,7 +121,12 @@ const Navigator = () => {
                     tabPress: e => {
                       if (name === 'LearnMore') {
                         e.preventDefault();
+                        cloudWatchLog('Opening learn more URL');
                         Linking.openURL(LEARN_MORE_LINK);
+                      } else if (name === 'ScanQr') {
+                        cloudWatchLog('Focused scan qr screen');
+                      } else {
+                        cloudWatchLog('Focused sensor screen');
                       }
                     },
                   }}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Switch, Text, View } from 'react-native';
 import styles from './SingleLineSensorCardStyles';
 import Collapsible from 'react-native-collapsible';
@@ -7,6 +7,7 @@ import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import { useSelector } from 'react-redux';
+import { LoggerContext } from '../../../containers/Logger';
 
 const SingleLineSensorCard = ({
   title,
@@ -22,6 +23,7 @@ const SingleLineSensorCard = ({
 }) => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const { isAwsConnected } = useSelector(state => state.awsStore);
+  const cloudWatchLog = useContext(LoggerContext);
 
   useEffect(() => {
     if (isSensorListening) {
@@ -42,8 +44,10 @@ const SingleLineSensorCard = ({
   useEffect(() => {
     if (isSensorListening) {
       startSensor();
+      cloudWatchLog(`${title} started`);
     } else {
       stopSensor();
+      cloudWatchLog(`${title} stopped`);
     }
   }, [isSensorListening]);
 
