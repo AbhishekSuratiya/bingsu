@@ -1,17 +1,40 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import AWS from 'aws-sdk';
 import {
   cloudWatchDescribeLogStreams,
   cloudWatchPutLogEvents,
 } from '../utils/cloudWatch';
 import { useSelector } from 'react-redux';
+import getLogStream from '../utils/getLogStream';
 
 export const LoggerContext = React.createContext();
 
 const Logger = ({ children }) => {
+  const [streamName, setStreamName] = useState('');
   let nextSequenceToken = useRef(null).current;
   const eventsQueue = useRef([]).current;
   let interval = useRef(null).current;
-  const { isLoggingEnabled } = useSelector(state => state.awsStore);
+  const {
+    isLoggingEnabled,
+    isAwsConnected,
+    qrData: { LOG_GROUP_NAME: logGroupName },
+  } = useSelector(state => state.awsStore);
+  useEffect(() => {
+    if (!isAwsConnected) {
+      return;
+    }
+    const logStreamName = getLogStream();
+    const cloudWatchLogs = new AWS.CloudWatchLogs();
+    const params = { logGroupName, logStreamName };
+    cloudWatchLogs.createLogStream(params, (err, data) => {
+      if (err) {
+        console.log(err, err.stack);
+      } else {
+        setStreamName(logStreamName);
+        console.log(data);
+      }
+    });
+  }, [isAwsConnected]);
 
   async function startLogQueueToCloudWatch() {
     if (interval == null) {
@@ -25,8 +48,8 @@ const Logger = ({ children }) => {
         try {
           const res = await cloudWatchPutLogEvents(
             [event],
-            '/AWSIotBingsu/bingsu-v2-1/app-logs',
-            'testLogStream',
+            logGroupName,
+            streamName,
             nextSequenceToken,
           );
           nextSequenceToken = res.nextSequenceToken;
@@ -42,9 +65,7 @@ const Logger = ({ children }) => {
       return;
     }
     if (nextSequenceToken == null) {
-      const res = await cloudWatchDescribeLogStreams(
-        '/AWSIotBingsu/bingsu-v2-1/app-logs',
-      );
+      const res = await cloudWatchDescribeLogStreams(logGroupName);
       nextSequenceToken = res.logStreams[0].uploadSequenceToken;
     }
     eventsQueue.push({

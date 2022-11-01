@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Switch, Text, View } from 'react-native';
 import styles from '../CellularStatus/CellularSatusStyles';
 import Collapsible from 'react-native-collapsible';
@@ -6,12 +6,14 @@ import { SENSOR_CARD_HEADER } from '../../../utils/contants';
 import Colors from '../../../theme/Colors';
 import { useNetInfo } from '@react-native-community/netinfo';
 import * as NetInfo from '@react-native-community/netinfo';
+import { LoggerContext } from '../../../containers/Logger';
 
 const CellularStatus = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const [carrier, setCarrier] = useState('');
   const [generation, setGeneration] = useState('');
   const netInfo = useNetInfo();
+  const cloudWatchLog = useContext(LoggerContext);
 
   useEffect(() => {
     NetInfo.fetch('cellular').then(state => {
@@ -34,6 +36,11 @@ const CellularStatus = props => {
               trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
               thumbColor={Colors.white100}
               onValueChange={() => {
+                if (isSensorListening) {
+                  cloudWatchLog('Cellular status monitoring stopped');
+                } else {
+                  cloudWatchLog('Cellular status monitoring started');
+                }
                 setIsSensorListening(val => !val);
               }}
               value={isSensorListening}

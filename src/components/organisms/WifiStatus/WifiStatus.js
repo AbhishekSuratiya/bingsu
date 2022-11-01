@@ -8,6 +8,7 @@ import { useNetInfo } from '@react-native-community/netinfo';
 import { useSelector } from 'react-redux';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import { AwsContext } from '../../../containers/InitialiseAws';
+import { LoggerContext } from '../../../containers/Logger';
 
 const WifiStatus = () => {
   const [isSensorListening, setIsSensorListening] = useState(false);
@@ -19,6 +20,7 @@ const WifiStatus = () => {
     qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
   } = useSelector(state => state.awsStore);
   const client = useContext(AwsContext);
+  const cloudWatchLog = useContext(LoggerContext);
 
   useEffect(() => {
     setIsConnected(netInfo?.type === 'wifi' ? 'Yes' : 'No');
@@ -68,6 +70,11 @@ const WifiStatus = () => {
               trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
               thumbColor={Colors.white100}
               onValueChange={() => {
+                if (isSensorListening) {
+                  cloudWatchLog('Wifi usage monitoring stopped');
+                } else {
+                  cloudWatchLog('Wifi usage monitoring started');
+                }
                 setIsSensorListening(val => !val);
               }}
               value={isSensorListening}

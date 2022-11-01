@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { AwsContext } from '../../../containers/InitialiseAws';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import getCommandEntry from '../../../utils/getCommandEntry';
+import { LoggerContext } from '../../../containers/Logger';
 
 const CpuUsage = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
@@ -23,6 +24,7 @@ const CpuUsage = props => {
     qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
   } = useSelector(state => state.awsStore);
   const client = useContext(AwsContext);
+  const cloudWatchLog = useContext(LoggerContext);
 
   useEffect(() => {
     if (!isSensorListening) {
@@ -83,6 +85,11 @@ const CpuUsage = props => {
               trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
               thumbColor={Colors.white100}
               onValueChange={() => {
+                if (isSensorListening) {
+                  cloudWatchLog('CPU usage monitoring stopped');
+                } else {
+                  cloudWatchLog('CPU usage monitoring started');
+                }
                 setIsSensorListening(val => !val);
               }}
               value={isSensorListening}
