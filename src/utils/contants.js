@@ -12,7 +12,3 @@ export const CAMERA_VIEW = {
   rear: 'environment',
   front: 'user',
 };
-export const ENABLE_LOGGING =
-  'https://9c3qeuz513.execute-api.us-east-1.amazonaws.com/amazon-iot-logging?enable';
-export const DISABLE_LOGGING =
-  'https://9c3qeuz513.execute-api.us-east-1.amazonaws.com/amazon-iot-logging?disable';

@@ -9,11 +9,7 @@ import { CameraSvg, CheckSvg } from '../../../../assets/images/svg';
 import isJsonString from '../../../utils/isJsonString';
 import styles from './ScanQrScreenStyles';
 import Bullet from '../../atoms/Bullet/Bullet';
-import {
-  DISABLE_LOGGING,
-  ENABLE_LOGGING,
-  SETUP_INSTRUCTIONS,
-} from '../../../utils/contants';
+import { SETUP_INSTRUCTIONS } from '../../../utils/contants';
 import Colors from '../../../theme/Colors';
 import Lottie from 'lottie-react-native';
 import Success from '../../../../assets/images/json/success.json';
@@ -41,6 +37,7 @@ export default function ScanQrScreen({ navigation }) {
     sessionToken,
     accessKeyId,
     isLoggingEnabled,
+    qrData,
   } = useSelector(state => state.awsStore);
   const dispatch = useDispatch();
   const devices = useCameraDevices();
@@ -182,14 +179,14 @@ export default function ScanQrScreen({ navigation }) {
               thumbColor={Colors.white100}
               onValueChange={() => {
                 isLoggingEnabled
-                  ? fetch(DISABLE_LOGGING)
+                  ? fetch(qrData?.LOGGING_TOGGLE_URL + '?disable')
                       .then(res => res.json())
                       .then(json => {
                         console.log(json);
                         cloudWatchLog('Logging disabled');
                         dispatch(awsAction.setLoggingEnabled(false));
                       })
-                  : fetch(ENABLE_LOGGING)
+                  : fetch(qrData?.LOGGING_TOGGLE_URL + '?enable')
                       .then(res => res.json())
                       .then(json => {
                         console.log(json);
