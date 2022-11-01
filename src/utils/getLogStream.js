@@ -11,7 +11,7 @@ function randomId(length) {
 
 const getLogStream = () => {
   const date = new Date().toLocaleDateString();
-  return date + '-' + randomId(5);
+  return date + '-' + Date.now() + '-' + randomId(10);
 };
 
 export default getLogStream;

@@ -64,7 +64,7 @@ const Logger = ({ children }) => {
     if (!isLoggingEnabled || !logGroupName) {
       return;
     }
-    if (nextSequenceToken == null) {
+    if (nextSequenceToken === null) {
       const res = await cloudWatchDescribeLogStreams(logGroupName);
       nextSequenceToken = res.logStreams[0].uploadSequenceToken;
     }
