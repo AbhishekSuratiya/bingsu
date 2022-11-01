@@ -36,15 +36,17 @@ Two categories of Logs are present in the AWS IOT Bingsu APP:
 
 - AWS Sitewise logs are on the following Path:
 
+![image](https://user-images.githubusercontent.com/114899075/199219755-8074ad1e-e9a3-47c2-bc5a-b863320608d8.png)
 
 
 - API Gateway logs are on the following Path:
 
+![image](https://user-images.githubusercontent.com/114899075/199219867-52694a5c-6c38-4339-98a0-4a9693ed46ee.png)
 
 
 - Cloud Trail logs are on the following Path:
 
-
+![image](https://user-images.githubusercontent.com/114899075/199219903-ed62330f-4fa7-4626-ac90-018654cfeb29.png)
 
 
 
@@ -52,21 +54,26 @@ Two categories of Logs are present in the AWS IOT Bingsu APP:
 
 
 All the logs from the Mobile APP are transmitted to cloud watch on the following Path:
-![](Aspose.Words.94d56e75-e62c-487f-bdca-c5d71a3776d8.004.png)
 
-Note: The part ‘/bingsu-v2-1’ may change as this is the name of the stack that we provide while uploading cloudformation template.
+![image](https://user-images.githubusercontent.com/114899075/199219968-6ea00195-1781-48f3-b685-bd5a75374bbf.png)
+
+
+**Note:** The part ‘/bingsu-v2-1’ may change as this is the name of the stack that we provide while uploading cloudformation template.
 
 
 ## **3) Video Streaming:**
 
 KVS Video streaming is available on the following path:
-![](Aspose.Words.94d56e75-e62c-487f-bdca-c5d71a3776d8.005.png)
+
+![image](https://user-images.githubusercontent.com/114899075/199220016-136b5e9c-dc25-4795-804e-ab7b53211c3a.png)
+
+
 
 **Note:** The part ‘/bingsu-v2-1’ may change as this is the name of the stack that we provide while uploading cloudformation template. The location url will be available from the output section in while uploading cloud formation template, For e.g:
 
-![](Aspose.Words.94d56e75-e62c-487f-bdca-c5d71a3776d8.006.png)
+![image](https://user-images.githubusercontent.com/114899075/199220075-861296a5-aafe-4ce5-aa06-8fdc237e4bf2.png)
 
-`						`Fig 1
+<div align="center">Fig 1</div>
 
 ## **4) QR Code Scanning:**
 The location url will be available from the output section while uploading cloud formation template, see Fig 1.
