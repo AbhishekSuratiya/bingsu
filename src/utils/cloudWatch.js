@@ -23,6 +23,7 @@ function cloudWatchDescribeLogStreams(group) {
     const cloudWatchLogs = new AWS.CloudWatchLogs();
     const params = {
       logGroupName: group,
+      orderBy: 'LastEventTime',
     };
     cloudWatchLogs.describeLogStreams(params, (err, data) => {
       if (err) {
