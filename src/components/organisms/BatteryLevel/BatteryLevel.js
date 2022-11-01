@@ -14,7 +14,7 @@ import { LoggerContext } from '../../../containers/Logger';
 const BatteryLevel = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const powerState = usePowerState();
-  const batteryLevelNew = useBatteryLevel();
+  const batteryLevel = useBatteryLevel();
   const {
     isAwsConnected,
     qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
@@ -33,7 +33,7 @@ const BatteryLevel = props => {
             propertyValues: [
               {
                 value: {
-                  doubleValue: batteryLevelNew * 100,
+                  doubleValue: batteryLevel * 100,
                 },
                 timestamp: { timeInSeconds: Date.now() / 1000 },
               },
@@ -60,7 +60,7 @@ const BatteryLevel = props => {
       });
       client?.send(command);
     }
-  }, [powerState, isAwsConnected, isSensorListening, batteryLevelNew]);
+  }, [powerState, isAwsConnected, isSensorListening, batteryLevel]);
 
   return (
     <View style={styles.root}>
@@ -91,7 +91,7 @@ const BatteryLevel = props => {
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.dataText}>{'Level: '}</Text>
               <Text style={[styles.dataText, styles.dataTextColored]}>{`${(
-                batteryLevelNew * 100
+                batteryLevel * 100
               ).toFixed(2)}%`}</Text>
             </View>
             <Text style={styles.dataText}>{`Charging: ${
@@ -106,7 +106,7 @@ const BatteryLevel = props => {
               style={[
                 styles.batteryLevel,
                 {
-                  width: `${batteryLevelNew * 100}%`,
+                  width: `${batteryLevel * 100}%`,
                 },
               ]}
             />
