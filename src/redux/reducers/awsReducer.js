@@ -12,7 +12,7 @@ const initialState = {
   accessKeyId: '',
   isConnecting: false,
   showValidatedAnimation: false,
-  isLoggingEnabled: false,
+  isLoggingEnabled: true,
 };
 
 const awsSlice = createSlice({

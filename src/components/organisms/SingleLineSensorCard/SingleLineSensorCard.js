@@ -44,10 +44,8 @@ const SingleLineSensorCard = ({
   useEffect(() => {
     if (isSensorListening) {
       startSensor();
-      cloudWatchLog(`${title} started`);
     } else {
       stopSensor();
-      cloudWatchLog(`${title} stopped`);
     }
   }, [isSensorListening]);
 
@@ -73,7 +71,14 @@ const SingleLineSensorCard = ({
           <Switch
             trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
             thumbColor={Colors.white100}
-            onValueChange={() => setIsSensorListening(val => !val)}
+            onValueChange={() => {
+              if (isSensorListening) {
+                cloudWatchLog(`${title} stopped`);
+              } else {
+                cloudWatchLog(`${title} started`);
+              }
+              setIsSensorListening(val => !val);
+            }}
             value={isSensorListening}
           />
         </View>

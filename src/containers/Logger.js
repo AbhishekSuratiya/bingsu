@@ -20,7 +20,7 @@ const Logger = ({ children }) => {
     qrData: { LOG_GROUP_NAME: logGroupName },
   } = useSelector(state => state.awsStore);
   useEffect(() => {
-    if (!isAwsConnected) {
+    if (!isAwsConnected || !logGroupName) {
       return;
     }
     const logStreamName = getLogStream();
@@ -61,7 +61,7 @@ const Logger = ({ children }) => {
   }
 
   async function log(message) {
-    if (!isLoggingEnabled) {
+    if (!isLoggingEnabled || !logGroupName) {
       return;
     }
     if (nextSequenceToken == null) {
