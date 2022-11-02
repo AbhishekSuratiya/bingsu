@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.dark5,
     borderRadius: 8,
+    height: 300,
     minHeight: SENSOR_CARD_HEADER,
   },
   title: {
@@ -36,6 +37,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 4,
   },
+  yAxisContainer: { flexDirection: 'row', flex: 1 },
+  lineChartContainer: { flex: 1, marginLeft: 10 },
+  lineChart: { flex: 1 },
 });
 
 export default styles;

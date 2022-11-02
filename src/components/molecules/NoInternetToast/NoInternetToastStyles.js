@@ -31,6 +31,9 @@ const styles = StyleSheet.create({
     fontSize: 13,
     paddingHorizontal: 24,
   },
+  rootIos: {
+    bottom: 116,
+  },
 });
 
 export default styles;
