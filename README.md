@@ -1,7 +1,7 @@
-# **About AWS IOT Bingsu:**
+# **About AWS IoT Bingsu:**
 AWS IOT Bingsu is a Mobile App which can transmit the mobile sensors data to an AWS Sitewise Dashboard in realtime.
 
-# **AWS IOT Bingsu Components:**
+# **AWS IoT Bingsu Components:**
 
 ## **1) Sensors:** 
 Here is the list of all sensors with what each platform currently support:
