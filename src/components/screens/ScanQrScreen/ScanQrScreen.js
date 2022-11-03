@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Switch, Text, View } from 'react-native';
+import { ActivityIndicator, Switch, Text, View } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { BarcodeFormat, useScanBarcodes } from 'vision-camera-code-scanner';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,6 +29,7 @@ export default function ScanQrScreen({ navigation }) {
   const [isCameraActive, setIsCameraActive] = useState(true);
   const [isValidQr, setIsValidQr] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
+  const [isToggleEnable, setIsToggleEnabled] = useState(true);
   const {
     isAwsConnected,
     isScanning,
@@ -161,6 +162,30 @@ export default function ScanQrScreen({ navigation }) {
     );
   };
 
+  const disableLogging = () => {
+    setIsToggleEnabled(false);
+    fetch(qrData?.LOGGING_TOGGLE_URL + '?disable')
+      .then(res => res.json())
+      .then(json => {
+        console.log(json);
+        cloudWatchLog('Logging disabled');
+        dispatch(awsAction.setLoggingEnabled(false));
+        setIsToggleEnabled(true);
+      });
+  };
+
+  const enableLogging = () => {
+    setIsToggleEnabled(false);
+    fetch(qrData?.LOGGING_TOGGLE_URL + '?enable')
+      .then(res => res.json())
+      .then(json => {
+        console.log(json);
+        cloudWatchLog('Logging enabled');
+        dispatch(awsAction.setLoggingEnabled(true));
+        setIsToggleEnabled(true);
+      });
+  };
+
   if (isAwsConnected) {
     return (
       <View style={styles.connectedWrapper}>
@@ -174,28 +199,22 @@ export default function ScanQrScreen({ navigation }) {
           />
           <View style={styles.loggerWrapper}>
             <Text style={styles.loggerTxt}>{'Enable logs'}</Text>
-            <Switch
-              trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
-              thumbColor={Colors.white100}
-              onValueChange={() => {
-                isLoggingEnabled
-                  ? fetch(qrData?.LOGGING_TOGGLE_URL + '?disable')
-                      .then(res => res.json())
-                      .then(json => {
-                        console.log(json);
-                        cloudWatchLog('Logging disabled');
-                        dispatch(awsAction.setLoggingEnabled(false));
-                      })
-                  : fetch(qrData?.LOGGING_TOGGLE_URL + '?enable')
-                      .then(res => res.json())
-                      .then(json => {
-                        console.log(json);
-                        cloudWatchLog('Logging enabled');
-                        dispatch(awsAction.setLoggingEnabled(true));
-                      });
-              }}
-              value={isLoggingEnabled}
-            />
+            {isToggleEnable ? (
+              <Switch
+                disabled={!isToggleEnable}
+                trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
+                thumbColor={Colors.white100}
+                onValueChange={() => {
+                  isLoggingEnabled ? disableLogging() : enableLogging();
+                }}
+                value={isLoggingEnabled}
+              />
+            ) : (
+              <ActivityIndicator
+                style={styles.activityIndicator}
+                color={Colors.blue}
+              />
+            )}
           </View>
         </View>
 

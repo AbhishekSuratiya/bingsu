@@ -88,11 +88,13 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 16,
     flexDirection: 'row',
+    height: 50,
   },
   loggerTxt: {
     color: Colors.white100,
     fontSize: 16,
   },
+  activityIndicator: { marginRight: 16 },
 });
 
 export default styles;
