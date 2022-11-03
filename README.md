@@ -1,7 +1,7 @@
-# **About AWS IOT Bingsu:**
+# **About AWS IoT Bingsu:**
 AWS IOT Bingsu is a Mobile App which can transmit the mobile sensors data to an AWS Sitewise Dashboard in realtime.
 
-# **AWS IOT Bingsu Components:**
+# **AWS IoT Bingsu Components:**
 
 ## **1) Sensors:** 
 Here is the list of all sensors with what each platform currently support:
@@ -15,7 +15,7 @@ Here is the list of all sensors with what each platform currently support:
 |Gyroscope(x,y,z)|x,y,z coordinate values|Degree/s|YES|YES|
 |KVS Video Stream|Camera streaming in Portrait or Landscape||YES|YES|
 |GPS Coordinates(Lat,Long)|Latitude and Longitude positions||YES|YES|
-|Altitude|IOS: values above sea level<br>Android: values above the WGS 84 reference ellipsoid  |m|YES|YES|
+|Altitude|iOS: values above sea level<br>Android: values above the WGS 84 reference ellipsoid  |m|YES|YES|
 |Barometer|Barometer sensor readings|hPa|YES|YES|
 |Proximity|Shows whether sensor is active. When you hover over the screen near speaker, it will change to 1 means active.||YES|YES|
 |Battery Level|Current Battery Level (0-100%)|Percent (%)|YES|YES|
