@@ -31,7 +31,7 @@ const CameraSensorCard = ({ title }) => {
   const cloudWatchLog = useContext(LoggerContext);
   const script = useMemo(() => {
     return `
-            formValues.channelName = '${qrData.KinesisVideoChannelName}'
+            formValues.channelName = '${qrData.KINESIS_VIDEO_CHANNEL_NAME}'
             formValues.region = '${qrData.REGION}'
             formValues.accessKeyId = '${accessKeyId}'
             formValues.secretAccessKey = '${secretAccessKey}'
