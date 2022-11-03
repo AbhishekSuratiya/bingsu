@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import styles from './SensorScreenStyles';
 import Button from '../../atoms/Button';
@@ -14,18 +14,19 @@ import OrientationSensor from '../../organisms/OrientationSensor/OrientationSens
 import AltitudeSensor from '../../organisms/AltitudeSensor/AltitudeSensor';
 import ProximitySensor from '../../organisms/ProximitySensor/ProximitySensor';
 import BarometerSensor from '../../organisms/BarometerSensor/BarometerSensor';
-import AmbientLightSensor from '../../organisms/AmbientLightSensor/AmbientLightSensor';
 import LocationManager from '../../atoms/LocationManager';
 import BatteryLevel from '../../organisms/BatteryLevel/BatteryLevel';
 import WifiStatus from '../../organisms/WifiStatus/WifiStatus';
 import CpuUsage from '../../organisms/CpuUsage/CpuUsage';
 import CellularStatus from '../../organisms/CellularStatus/CellularSatus';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { LoggerContext } from '../../../containers/Logger';
 
 const SensorScreen = ({ navigation }) => {
   const [isBarometerAvailable, setIsBarometerAvailable] = useState(true);
   const { isAwsConnected } = useSelector(state => state.awsStore);
   const netInfo = useNetInfo();
+  const cloudWatchLog = useContext(LoggerContext);
 
   const renderConnectToAwsCard = () => {
     return (
@@ -44,7 +45,10 @@ const SensorScreen = ({ navigation }) => {
           </View>
           <Button
             title={'Connect'}
-            onPress={() => navigation.navigate('ScanQr')}
+            onPress={() => {
+              navigation.navigate('ScanQr');
+              cloudWatchLog('Focused scan qr screen');
+            }}
             disabled={!netInfo?.isConnected}
             light
           />
@@ -68,7 +72,8 @@ const SensorScreen = ({ navigation }) => {
       )}
       <AltitudeSensor />
       <ProximitySensor />
-      <AmbientLightSensor />
+      {/*Commented ambient light to have feature parity between both platforms*/}
+      {/*<AmbientLightSensor />*/}
       <BatteryLevel />
       <WifiStatus />
       <CpuUsage />

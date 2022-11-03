@@ -195,7 +195,10 @@ export default function ScanQrScreen({ navigation }) {
           <Button
             light
             title={'View Sensors'}
-            onPress={() => navigation.navigate('Sensor')}
+            onPress={() => {
+              navigation.navigate('Sensor');
+              cloudWatchLog('Focused sensor screen');
+            }}
           />
           <View style={styles.loggerWrapper}>
             <Text style={styles.loggerTxt}>{'Enable logs'}</Text>
