@@ -38,7 +38,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 0,
   },
-  stepsWrapper: { paddingHorizontal: 16 },
+  stepsWrapper: {
+    paddingHorizontal: 16,
+    marginBottom: 32,
+  },
   cameraOverlay: {
     position: 'absolute',
     top: 0,

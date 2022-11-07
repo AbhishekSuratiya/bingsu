@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, Switch, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  Switch,
+  Text,
+  View,
+} from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { BarcodeFormat, useScanBarcodes } from 'vision-camera-code-scanner';
 import { useDispatch, useSelector } from 'react-redux';
@@ -226,7 +232,7 @@ export default function ScanQrScreen({ navigation }) {
     );
   } else if (device != null && hasPermission) {
     return (
-      <>
+      <ScrollView>
         <Camera
           style={styles.cameraRoot}
           device={device}
@@ -255,7 +261,7 @@ export default function ScanQrScreen({ navigation }) {
           </View>
         </View>
         {renderInstructions()}
-      </>
+      </ScrollView>
     );
   } else if (isBlocked) {
     return (
