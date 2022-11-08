@@ -6,6 +6,7 @@ import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 import { IoTSiteWiseClient } from '@aws-sdk/client-iotsitewise';
 import { getData } from '../utils/asyncStorage';
+import validateQrCode from '../utils/validateQrCode';
 
 export const AwsContext = React.createContext();
 
@@ -27,6 +28,11 @@ const InitialiseAws = ({ children }) => {
     if (qrCode !== null) {
       dispatch(awsAction.setIsConnecting(true));
       const qrCodeObject = JSON.parse(qrCode);
+      const isValidQr = validateQrCode(qrCodeObject);
+      if (!isValidQr) {
+        console.error('Invalid QR');
+        return;
+      }
       dispatch(awsAction.setAwsRegion(qrCodeObject.REGION));
       dispatch(awsAction.setCognitoIdentityPool(qrCodeObject.COGNITO_POOL_ID));
       dispatch(awsAction.setRoleArn(qrCodeObject.COGNITO_UNAUTH_ROLE_ARN));

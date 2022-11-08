@@ -29,6 +29,7 @@ import {
   RESULTS,
 } from 'react-native-permissions';
 import { LoggerContext } from '../../../containers/Logger';
+import validateQrCode from '../../../utils/validateQrCode';
 
 export default function ScanQrScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(false);
@@ -80,7 +81,11 @@ export default function ScanQrScreen({ navigation }) {
       const { REGION, COGNITO_POOL_ID, COGNITO_UNAUTH_ROLE_ARN } =
         isJsonString(barcodes[0].displayValue) &&
         JSON.parse(barcodes[0].displayValue);
-      if (REGION && COGNITO_POOL_ID && COGNITO_UNAUTH_ROLE_ARN) {
+      const isValidQrCode = validateQrCode(
+        isJsonString(barcodes[0].displayValue) &&
+          JSON.parse(barcodes[0].displayValue),
+      );
+      if (isValidQrCode) {
         dispatch(awsAction.setIsScanning(false));
         dispatch(awsAction.setIsConnecting(true));
         cloudWatchLog('Valid QR Code scanned and Scanning stopped');
@@ -92,6 +97,7 @@ export default function ScanQrScreen({ navigation }) {
         dispatch(awsAction.setRoleArn(COGNITO_UNAUTH_ROLE_ARN));
         storeData('qrCode', barcodes[0].displayValue);
       } else {
+        console.error('Invalid QR');
         dispatch(awsAction.setIsScanning(false));
         setIsCameraActive(false);
         setIsValidQr(false);
