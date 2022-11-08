@@ -29,20 +29,25 @@ const LocationSensorMap = ({ title }) => {
   const cloudWatchLog = useContext(LoggerContext);
 
   useEffect(() => {
-    if (isAwsConnected && isGpsListening) {
+    if (
+      isAwsConnected &&
+      isGpsListening &&
+      coordinates.latitude &&
+      coordinates.longitude
+    ) {
       const command = new BatchPutAssetPropertyValueCommand({
         entries: [
           getCommandEntry({
             entryId: 'AssetModelGPSLatMeasurement',
             propertyAlias:
               ASSET_MODEL_MEASUREMENTS_PREFIX + 'GPSLatMeasurement',
-            value: coordinates.latitude,
+            value: Number(coordinates.latitude.toFixed(6)),
           }),
           getCommandEntry({
             entryId: 'AssetModelGPSGPSLongMeasurement',
             propertyAlias:
               ASSET_MODEL_MEASUREMENTS_PREFIX + 'GPSLongMeasurement',
-            value: coordinates.longitude,
+            value: Number(coordinates.longitude.toFixed(6)),
           }),
         ],
       });
@@ -100,7 +105,9 @@ const LocationSensorMap = ({ title }) => {
             <Text style={styles.title}>{title}</Text>
             {isSensorListening && (
               <Text style={styles.currentValue}>
-                {`Latitude: ${coordinates.latitude}\nLongitude: ${coordinates.longitude}`}
+                {`Latitude: ${
+                  coordinates.latitude?.toFixed(6) || 0
+                }\nLongitude: ${coordinates.longitude?.toFixed(6) || 0}`}
               </Text>
             )}
           </View>
