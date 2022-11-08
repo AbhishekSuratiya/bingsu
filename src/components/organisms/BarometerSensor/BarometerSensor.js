@@ -16,7 +16,10 @@ const BarometerSensor = props => {
   const [barometerData, setBarometerData] = useState([]);
   const subscriptionBarometer = useRef(null);
   const client = useContext(AwsContext);
-  const { isAwsConnected, qrData } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
   const cloudWatchLog = useContext(LoggerContext);
 
   const startBarometer = () => {
@@ -29,7 +32,8 @@ const BarometerSensor = props => {
             entries: [
               getCommandEntry({
                 entryId: 'AssetModelBarometerMeasurement',
-                propertyAlias: qrData.AssetModelBarometerMeasurement,
+                propertyAlias:
+                  ASSET_MODEL_MEASUREMENTS_PREFIX + 'BarometerMeasurement',
                 value: data.pressure,
               }),
             ],
