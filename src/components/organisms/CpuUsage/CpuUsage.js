@@ -14,7 +14,7 @@ import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import getCommandEntry from '../../../utils/getCommandEntry';
 import { LoggerContext } from '../../../containers/Logger';
 
-const CpuUsage = props => {
+const CpuUsage = () => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const [cpuUsage, setCpuUsage] = useState(0);
   const subscriptionCpu = useRef(null);
@@ -80,7 +80,7 @@ const CpuUsage = props => {
         enablePointerEvents>
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.title}>{'CPU'}</Text>
+            <Text style={styles.title}>{'CPU Utilization'}</Text>
             <Switch
               trackColor={{ false: Colors.toggleOff, true: Colors.blue }}
               thumbColor={Colors.white100}
