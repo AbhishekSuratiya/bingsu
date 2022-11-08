@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import styles from './SensorScreenStyles';
 import Button from '../../atoms/Button';
@@ -24,9 +24,21 @@ import { LoggerContext } from '../../../containers/Logger';
 
 const SensorScreen = ({ navigation }) => {
   const [isBarometerAvailable, setIsBarometerAvailable] = useState(true);
-  const { isAwsConnected } = useSelector(state => state.awsStore);
+  const {
+    isAwsConnected,
+    secretAccessKey,
+    sessionToken,
+    accessKeyId,
+    logStreamName,
+  } = useSelector(state => state.awsStore);
   const netInfo = useNetInfo();
   const cloudWatchLog = useContext(LoggerContext);
+
+  useEffect(() => {
+    if (accessKeyId && secretAccessKey && sessionToken && logStreamName) {
+      cloudWatchLog('Connected to AWS');
+    }
+  }, [accessKeyId, secretAccessKey, sessionToken, logStreamName]);
 
   const renderConnectToAwsCard = () => {
     return (

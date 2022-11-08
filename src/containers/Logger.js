@@ -4,8 +4,9 @@ import {
   cloudWatchDescribeLogStreams,
   cloudWatchPutLogEvents,
 } from '../utils/cloudWatch';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import getLogStream from '../utils/getLogStream';
+import { awsAction } from '../redux/reducers/awsReducer';
 
 export const LoggerContext = React.createContext();
 
@@ -14,6 +15,7 @@ const Logger = ({ children }) => {
   let nextSequenceToken = useRef(null).current;
   const eventsQueue = useRef([]).current;
   let interval = useRef(null).current;
+  const dispatch = useDispatch();
   const {
     isLoggingEnabled,
     isAwsConnected,
@@ -28,15 +30,19 @@ const Logger = ({ children }) => {
     const params = { logGroupName, logStreamName };
     cloudWatchLogs.createLogStream(params, (err, data) => {
       if (err) {
-        console.log(err, err.stack);
+        console.log(err);
       } else {
         setStreamName(logStreamName);
+        dispatch(awsAction.setLogStreamName(logStreamName));
         console.log(data);
       }
     });
   }, [isAwsConnected]);
 
   async function startLogQueueToCloudWatch() {
+    if (!streamName) {
+      return;
+    }
     if (interval == null) {
       interval = setInterval(async () => {
         if (eventsQueue.length === 0) {
@@ -56,7 +62,7 @@ const Logger = ({ children }) => {
         } catch (error) {
           console.log(error);
         }
-      }, 1000);
+      }, 2000);
     }
   }
 

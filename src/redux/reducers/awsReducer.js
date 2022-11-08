@@ -13,6 +13,7 @@ const initialState = {
   isConnecting: false,
   showValidatedAnimation: false,
   isLoggingEnabled: true,
+  logStreamName: '',
 };
 
 const awsSlice = createSlice({
@@ -54,6 +55,9 @@ const awsSlice = createSlice({
     },
     setLoggingEnabled(state, action) {
       state.isLoggingEnabled = action.payload;
+    },
+    setLogStreamName(state, action) {
+      state.logStreamName = action.payload;
     },
   },
 });

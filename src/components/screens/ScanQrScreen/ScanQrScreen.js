@@ -36,16 +36,8 @@ export default function ScanQrScreen({ navigation }) {
   const [isValidQr, setIsValidQr] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [isToggleEnable, setIsToggleEnabled] = useState(true);
-  const {
-    isAwsConnected,
-    isScanning,
-    isConnecting,
-    secretAccessKey,
-    sessionToken,
-    accessKeyId,
-    isLoggingEnabled,
-    qrData,
-  } = useSelector(state => state.awsStore);
+  const { isAwsConnected, isScanning, isConnecting, isLoggingEnabled, qrData } =
+    useSelector(state => state.awsStore);
   const dispatch = useDispatch();
   const devices = useCameraDevices();
   const device = devices.back;
@@ -53,12 +45,6 @@ export default function ScanQrScreen({ navigation }) {
     checkInverted: true,
   });
   const cloudWatchLog = useContext(LoggerContext);
-
-  useEffect(() => {
-    if (accessKeyId && secretAccessKey && sessionToken) {
-      cloudWatchLog('Connected to AWS');
-    }
-  }, [accessKeyId, secretAccessKey, sessionToken]);
 
   useEffect(() => {
     (async () => {

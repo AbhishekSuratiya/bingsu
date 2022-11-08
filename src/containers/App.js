@@ -13,11 +13,11 @@ const App = () => {
   useKeepAwake();
   return (
     <Provider store={store}>
-      <InitialiseAws>
-        <Logger>
+      <Logger>
+        <InitialiseAws>
           <Navigator />
-        </Logger>
-      </InitialiseAws>
+        </InitialiseAws>
+      </Logger>
     </Provider>
   );
 };
