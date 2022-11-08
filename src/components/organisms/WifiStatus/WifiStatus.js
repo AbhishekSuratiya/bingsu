@@ -11,7 +11,7 @@ import { AwsContext } from '../../../containers/InitialiseAws';
 import { LoggerContext } from '../../../containers/Logger';
 import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 
-const yAxisValues = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+const yAxisValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 const WifiStatus = () => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
