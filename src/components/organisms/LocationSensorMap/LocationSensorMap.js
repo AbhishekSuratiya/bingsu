@@ -8,7 +8,6 @@ import MapView from 'react-native-maps';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import { useDispatch, useSelector } from 'react-redux';
 import { AwsContext } from '../../../containers/InitialiseAws';
-import getCommandEntry from '../../../utils/getCommandEntry';
 import { locationAction } from '../../../redux/reducers/locationReducer';
 import { LoggerContext } from '../../../containers/Logger';
 
@@ -37,18 +36,32 @@ const LocationSensorMap = ({ title }) => {
     ) {
       const command = new BatchPutAssetPropertyValueCommand({
         entries: [
-          getCommandEntry({
+          {
             entryId: 'AssetModelGPSLatMeasurement',
             propertyAlias:
               ASSET_MODEL_MEASUREMENTS_PREFIX + 'GPSLatMeasurement',
-            value: Number(coordinates.latitude.toFixed(6)),
-          }),
-          getCommandEntry({
-            entryId: 'AssetModelGPSGPSLongMeasurement',
+            propertyValues: [
+              {
+                value: {
+                  stringValue: coordinates.latitude.toFixed(6),
+                },
+                timestamp: { timeInSeconds: Date.now() / 1000 },
+              },
+            ],
+          },
+          {
+            entryId: 'AssetModelGPSLongMeasurement',
             propertyAlias:
               ASSET_MODEL_MEASUREMENTS_PREFIX + 'GPSLongMeasurement',
-            value: Number(coordinates.longitude.toFixed(6)),
-          }),
+            propertyValues: [
+              {
+                value: {
+                  stringValue: coordinates.latitude.toFixed(6),
+                },
+                timestamp: { timeInSeconds: Date.now() / 1000 },
+              },
+            ],
+          },
         ],
       });
       client?.send(command);
