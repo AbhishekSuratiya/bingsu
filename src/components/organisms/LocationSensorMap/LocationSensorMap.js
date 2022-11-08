@@ -118,7 +118,9 @@ const LocationSensorMap = ({ title }) => {
             value={isSensorListening}
           />
         </View>
-        {isSensorListening && <MapView style={styles.map} showsUserLocation />}
+        {isSensorListening && (
+          <MapView style={styles.map} showsUserLocation followsUserLocation />
+        )}
       </Collapsible>
     </View>
   );
