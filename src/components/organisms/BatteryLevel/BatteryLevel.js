@@ -90,9 +90,9 @@ const BatteryLevel = props => {
           <View>
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.dataText}>{'Level: '}</Text>
-              <Text style={[styles.dataText, styles.dataTextColored]}>{`${(
+              <Text style={[styles.dataText, styles.dataTextColored]}>{`${
                 batteryLevel * 100
-              ).toFixed(2)}%`}</Text>
+              }%`}</Text>
             </View>
             <Text style={styles.dataText}>{`Charging: ${
               ['charging', 'full'].includes(powerState?.batteryState)
