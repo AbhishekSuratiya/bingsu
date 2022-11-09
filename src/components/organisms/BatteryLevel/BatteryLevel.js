@@ -10,9 +10,11 @@ import { useSelector } from 'react-redux';
 import { AwsContext } from '../../../containers/InitialiseAws';
 import { useBatteryLevel } from 'react-native-device-info';
 import { LoggerContext } from '../../../containers/Logger';
+import DeviceInfo from 'react-native-device-info';
 
 const BatteryLevel = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
+  const [isCharging, setIsCharging] = useState('');
   const powerState = usePowerState();
   const batteryLevel = useBatteryLevel();
   const {
@@ -23,43 +25,43 @@ const BatteryLevel = props => {
   const cloudWatchLog = useContext(LoggerContext);
 
   useEffect(() => {
-    if (isAwsConnected && isSensorListening) {
-      const command = new BatchPutAssetPropertyValueCommand({
-        entries: [
-          {
-            entryId: 'BatteryLevelMeasurement',
-            propertyAlias:
-              ASSET_MODEL_MEASUREMENTS_PREFIX + 'BatteryLevelMeasurement',
-            propertyValues: [
-              {
-                value: {
-                  doubleValue: batteryLevel * 100,
+    (async () => {
+      if (isAwsConnected && isSensorListening) {
+        const charging = await DeviceInfo.isBatteryCharging();
+        setIsCharging(charging ? 'Yes' : 'No');
+        const command = new BatchPutAssetPropertyValueCommand({
+          entries: [
+            {
+              entryId: 'BatteryLevelMeasurement',
+              propertyAlias:
+                ASSET_MODEL_MEASUREMENTS_PREFIX + 'BatteryLevelMeasurement',
+              propertyValues: [
+                {
+                  value: {
+                    doubleValue: batteryLevel * 100,
+                  },
+                  timestamp: { timeInSeconds: Date.now() / 1000 },
                 },
-                timestamp: { timeInSeconds: Date.now() / 1000 },
-              },
-            ],
-          },
-          {
-            entryId: 'ChargingStatusMeasurement',
-            propertyAlias:
-              ASSET_MODEL_MEASUREMENTS_PREFIX + 'ChargingStatusMeasurement',
-            propertyValues: [
-              {
-                value: {
-                  stringValue: ['charging', 'full'].includes(
-                    powerState?.batteryState,
-                  )
-                    ? 'Charging'
-                    : 'Not charging',
+              ],
+            },
+            {
+              entryId: 'ChargingStatusMeasurement',
+              propertyAlias:
+                ASSET_MODEL_MEASUREMENTS_PREFIX + 'ChargingStatusMeasurement',
+              propertyValues: [
+                {
+                  value: {
+                    stringValue: charging ? 'Yes' : 'No',
+                  },
+                  timestamp: { timeInSeconds: Date.now() / 1000 },
                 },
-                timestamp: { timeInSeconds: Date.now() / 1000 },
-              },
-            ],
-          },
-        ],
-      });
-      client?.send(command);
-    }
+              ],
+            },
+          ],
+        });
+        client?.send(command);
+      }
+    })();
   }, [powerState, isAwsConnected, isSensorListening, batteryLevel]);
 
   return (
@@ -90,15 +92,11 @@ const BatteryLevel = props => {
           <View>
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.dataText}>{'Level: '}</Text>
-              <Text style={[styles.dataText, styles.dataTextColored]}>{`${
+              <Text style={[styles.dataText, styles.dataTextColored]}>{`${(
                 batteryLevel * 100
-              }%`}</Text>
+              ).toFixed()}%`}</Text>
             </View>
-            <Text style={styles.dataText}>{`Charging: ${
-              ['charging', 'full'].includes(powerState?.batteryState)
-                ? 'Yes'
-                : 'No'
-            }`}</Text>
+            <Text style={styles.dataText}>{`Charging: ${isCharging}`}</Text>
           </View>
 
           <View style={styles.batteryLevelWrapper}>

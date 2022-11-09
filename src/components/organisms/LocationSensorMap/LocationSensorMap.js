@@ -56,7 +56,7 @@ const LocationSensorMap = ({ title }) => {
             propertyValues: [
               {
                 value: {
-                  stringValue: coordinates.latitude.toFixed(6),
+                  stringValue: coordinates.longitude.toFixed(6),
                 },
                 timestamp: { timeInSeconds: Date.now() / 1000 },
               },
