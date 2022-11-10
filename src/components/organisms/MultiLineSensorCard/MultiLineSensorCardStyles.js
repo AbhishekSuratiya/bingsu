@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
   },
+  yAxis: { minWidth: 48 },
 });
 
 export default styles;

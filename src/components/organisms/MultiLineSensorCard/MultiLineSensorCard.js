@@ -144,6 +144,7 @@ const MultiLineSensorCard = ({
               contentInset={verticalContentInset}
               svg={axesSvg}
               formatLabel={value => value?.toFixed(4)}
+              style={styles.yAxis}
             />
             <View style={styles.lineChartContainer}>
               <LineChart
