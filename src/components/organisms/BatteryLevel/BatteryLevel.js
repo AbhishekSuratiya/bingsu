@@ -12,17 +12,28 @@ import { useBatteryLevel } from 'react-native-device-info';
 import { LoggerContext } from '../../../containers/Logger';
 import DeviceInfo from 'react-native-device-info';
 
-const BatteryLevel = props => {
+const BatteryLevel = () => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const [isCharging, setIsCharging] = useState('');
   const powerState = usePowerState();
-  const batteryLevel = useBatteryLevel();
+  const batteryLevelFromHook = useBatteryLevel();
+  const [batteryLevel, setBatteryLevel] = useState(0);
   const {
     isAwsConnected,
     qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
   } = useSelector(state => state.awsStore);
   const client = useContext(AwsContext);
   const cloudWatchLog = useContext(LoggerContext);
+
+  useEffect(() => {
+    if (batteryLevel?.toFixed(2) === '0.99') {
+      setBatteryLevel(1);
+    }
+    if (batteryLevelFromHook === 1) {
+      return;
+    }
+    setBatteryLevel(batteryLevelFromHook);
+  }, [batteryLevelFromHook]);
 
   useEffect(() => {
     (async () => {
