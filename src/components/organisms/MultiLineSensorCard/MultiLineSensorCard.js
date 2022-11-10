@@ -47,8 +47,14 @@ const MultiLineSensorCard = ({
   const xMax = Math.max(...xCoordinate);
   const yMax = Math.max(...yCoordinate);
   const zMax = Math.max(...zCoordinate);
+  const xMin = Math.min(...xCoordinate);
+  const yMin = Math.min(...yCoordinate);
+  const zMin = Math.min(...zCoordinate);
   const maxValues = [xMax, yMax, zMax];
-  const max = maxValues.indexOf(Math.max(...maxValues));
+  const minValues = [xMin, yMin, zMin];
+  const minimumY = Math.min(...minValues);
+  const maximumY = Math.max(...maxValues);
+  const yAxisData = [minimumY, maximumY];
 
   const data = [
     {
@@ -140,7 +146,7 @@ const MultiLineSensorCard = ({
         {isSensorListening && sensorData.length > 0 && (
           <View style={styles.yAxisContainer}>
             <YAxis
-              data={data[max].data}
+              data={yAxisData}
               contentInset={verticalContentInset}
               svg={axesSvg}
               formatLabel={value => value?.toFixed(4)}
