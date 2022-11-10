@@ -19,7 +19,9 @@ const CellularStatus = props => {
     NetInfo.fetch('cellular').then(state => {
       setCarrier(state?.details?.carrier || 'No SIM card');
       setGeneration(
-        state?.details?.cellularGeneration || netInfo?.type === 'none'
+        state?.details?.cellularGeneration
+          ? state?.details?.cellularGeneration
+          : netInfo?.type === 'none'
           ? 'No network'
           : 'Connected to Wifi',
       );

@@ -26,9 +26,9 @@ const BatteryLevel = props => {
 
   useEffect(() => {
     (async () => {
+      const charging = await DeviceInfo.isBatteryCharging();
+      setIsCharging(charging ? 'Yes' : 'No');
       if (isAwsConnected && isSensorListening) {
-        const charging = await DeviceInfo.isBatteryCharging();
-        setIsCharging(charging ? 'Yes' : 'No');
         const command = new BatchPutAssetPropertyValueCommand({
           entries: [
             {
