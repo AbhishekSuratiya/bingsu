@@ -89,6 +89,7 @@ const SingleLineSensorCard = ({
               contentInset={verticalContentInset}
               svg={axesSvg}
               formatLabel={value => value?.toFixed(toFixed || 4)}
+              style={styles.yAxis}
             />
             <View style={styles.lineChartContainer}>
               <LineChart
