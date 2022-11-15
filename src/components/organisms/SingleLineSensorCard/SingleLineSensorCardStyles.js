@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     width: '100%',
     minHeight: SENSOR_CARD_HEADER,
   },
-  yAxis: { minWidth: 36 },
+  yAxis: { minWidth: 56 },
 });
 
 export default styles;

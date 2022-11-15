@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Linking, SafeAreaView, StatusBar } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Header from '../components/molecules/Header/Header';
 import ScanQrScreen from '../components/screens/ScanQrScreen/ScanQrScreen';
@@ -9,15 +9,35 @@ import Colors from '../theme/Colors';
 import { InfoSvg, QrCodeSvg, SensorSvg } from '../../assets/images/svg';
 import RNBootSplash from 'react-native-bootsplash';
 import LearnMoreScreen from '../components/screens/LearnMoreScreen/LearnMoreScreen';
-import { LEARN_MORE_LINK } from '../utils/contants';
 import { useNetInfo } from '@react-native-community/netinfo';
 import NoInternetToast from '../components/molecules/NoInternetToast/NoInternetToast';
 import { LoggerContext } from './Logger';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import TermsAndConditionsScreen from '../components/screens/TermsAndConditionsScreen/TermsAndConditionsScreen';
 
 const Tab = createBottomTabNavigator();
+const LearnMoreStack = createNativeStackNavigator();
 
 const tabBarActiveTintColor = Colors.blue;
 const tabBarInactiveTintColor = Colors.grey80;
+
+function LearnMoreMainScreen() {
+  return (
+    <LearnMoreStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <LearnMoreStack.Screen
+        name="LearnMoreScreen"
+        component={LearnMoreScreen}
+      />
+      <LearnMoreStack.Screen
+        name="TermsAndConditions"
+        component={TermsAndConditionsScreen}
+      />
+    </LearnMoreStack.Navigator>
+  );
+}
 
 const tabScreens = [
   {
@@ -55,7 +75,7 @@ const tabScreens = [
   },
   {
     name: 'LearnMore',
-    component: LearnMoreScreen,
+    component: LearnMoreMainScreen,
     options: {
       title: 'Learn More',
       tabBarActiveTintColor,
@@ -120,9 +140,7 @@ const Navigator = () => {
                   listeners={{
                     tabPress: e => {
                       if (name === 'LearnMore') {
-                        e.preventDefault();
-                        cloudWatchLog('Opening learn more URL');
-                        Linking.openURL(LEARN_MORE_LINK);
+                        cloudWatchLog('Opening learn more screen');
                       } else if (name === 'ScanQr') {
                         if (!netInfo?.isConnected) {
                           e.preventDefault();

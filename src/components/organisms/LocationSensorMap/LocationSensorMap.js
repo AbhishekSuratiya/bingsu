@@ -26,6 +26,7 @@ const LocationSensorMap = ({ title }) => {
     checkingForPermission,
   } = useSelector(state => state.locationStore);
   const cloudWatchLog = useContext(LoggerContext);
+  const [region, setRegion] = useState({});
 
   useEffect(() => {
     if (
@@ -132,7 +133,13 @@ const LocationSensorMap = ({ title }) => {
           />
         </View>
         {isSensorListening && (
-          <MapView style={styles.map} showsUserLocation followsUserLocation />
+          <MapView
+            style={styles.map}
+            showsUserLocation
+            followsUserLocation
+            region={region}
+            onRegionChangeComplete={r => setRegion(r)}
+          />
         )}
       </Collapsible>
     </View>

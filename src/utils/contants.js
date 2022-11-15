@@ -12,3 +12,5 @@ export const CAMERA_VIEW = {
   rear: 'environment',
   front: 'user',
 };
+export const TERMS_N_CONDITIONS =
+  'https://d34ppam693g2f8.cloudfront.net/appterms.md';

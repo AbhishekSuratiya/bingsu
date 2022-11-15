@@ -83,7 +83,7 @@ const MultiLineSensorCard = ({
       <View style={styles.coordinatesText}>
         <Text style={styles.coordinates}>x:</Text>
         <Text style={{ color: Colors.red }}>
-          {xCoordinate[xCoordinate.length - 1]?.toFixed(4) +
+          {(xCoordinate[xCoordinate.length - 1]?.toFixed(4) || 0) +
             ' ' +
             (units || unitX)}
         </Text>
@@ -91,7 +91,7 @@ const MultiLineSensorCard = ({
       <View style={styles.coordinatesText}>
         <Text style={styles.coordinates}>y:</Text>
         <Text style={{ color: Colors.green }}>
-          {yCoordinate[yCoordinate.length - 1]?.toFixed(4) +
+          {(yCoordinate[yCoordinate.length - 1]?.toFixed(4) || 0) +
             ' ' +
             (units + unitY)}
         </Text>
@@ -99,7 +99,7 @@ const MultiLineSensorCard = ({
       <View style={styles.coordinatesText}>
         <Text style={styles.coordinates}>z:</Text>
         <Text style={{ color: Colors.blue }}>
-          {zCoordinate[zCoordinate.length - 1]?.toFixed(4) +
+          {(zCoordinate[zCoordinate.length - 1]?.toFixed(4) || 0) +
             ' ' +
             (units + unitZ)}
         </Text>

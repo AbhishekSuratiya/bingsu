@@ -12,7 +12,7 @@ const initialState = {
   accessKeyId: '',
   isConnecting: false,
   showValidatedAnimation: false,
-  isLoggingEnabled: true,
+  isLoggingEnabled: false,
   logStreamName: '',
 };
 

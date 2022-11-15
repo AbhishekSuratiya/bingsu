@@ -9,14 +9,10 @@ import { useSelector } from 'react-redux';
 import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
 import { AwsContext } from '../../../containers/InitialiseAws';
 import { LoggerContext } from '../../../containers/Logger';
-import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 
-const yAxisValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 const WifiStatus = () => {
   const [isSensorListening, setIsSensorListening] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [strength, setStrength] = useState(false);
-  const [strengthData, setStrengthData] = useState([0]);
   const netInfo = useNetInfo();
   const {
     isAwsConnected,
@@ -27,22 +23,9 @@ const WifiStatus = () => {
 
   useEffect(() => {
     setIsConnected(netInfo?.type === 'wifi' ? 'Yes' : 'No');
-    setStrength(netInfo?.details?.strength || 0);
-    setStrengthData(prev => [...prev, netInfo?.details?.strength || 0]);
     if (isAwsConnected && isSensorListening) {
       const command = new BatchPutAssetPropertyValueCommand({
         entries: [
-          {
-            entryId: 'WifiSignalsMeasurement',
-            propertyAlias:
-              ASSET_MODEL_MEASUREMENTS_PREFIX + 'WifiSignalsMeasurement',
-            propertyValues: [
-              {
-                value: { doubleValue: netInfo?.details?.strength },
-                timestamp: { timeInSeconds: Date.now() / 1000 },
-              },
-            ],
-          },
           {
             entryId: 'WifiConnectMeasurement',
             propertyAlias:
@@ -59,9 +42,6 @@ const WifiStatus = () => {
       client?.send(command);
     }
   }, [netInfo, isSensorListening, isAwsConnected]);
-
-  const verticalContentInset = { top: 10, bottom: 10 };
-  const axesSvg = { fontSize: 10, fill: Colors.white80 };
 
   return (
     <View style={styles.root}>
@@ -88,30 +68,8 @@ const WifiStatus = () => {
             />
           </View>
 
-          <View>
-            <Text
-              style={styles.dataText}>{`Wifi connected: ${isConnected}`}</Text>
-            <Text
-              style={styles.dataText}>{`Signal strength: ${strength}%`}</Text>
-          </View>
-
-          <View style={styles.yAxisContainer}>
-            <YAxis
-              data={yAxisValues}
-              contentInset={verticalContentInset}
-              svg={axesSvg}
-              formatLabel={value => value?.toFixed(1)}
-            />
-            <View style={styles.lineChartContainer}>
-              <LineChart
-                style={styles.lineChart}
-                data={strengthData}
-                svg={{ strokeWidth: 2.5, stroke: Colors.blue }}
-                contentInset={verticalContentInset}>
-                <Grid svg={{ stroke: Colors.grey }} />
-              </LineChart>
-            </View>
-          </View>
+          <Text
+            style={styles.dataText}>{`Wifi connected: ${isConnected}`}</Text>
         </View>
       </Collapsible>
     </View>

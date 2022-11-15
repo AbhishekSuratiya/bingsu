@@ -198,6 +198,7 @@ export default function ScanQrScreen({ navigation }) {
               cloudWatchLog('Focused sensor screen');
             }}
           />
+          {/* Disable logger
           <View style={styles.loggerWrapper}>
             <Text style={styles.loggerTxt}>{'Enable logs'}</Text>
             {isToggleEnable ? (
@@ -217,6 +218,7 @@ export default function ScanQrScreen({ navigation }) {
               />
             )}
           </View>
+          */}
         </View>
 
         <Button negative title={'Disconnect'} onPress={disconnectFromAws} />

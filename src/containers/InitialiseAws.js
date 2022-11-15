@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import AWS from 'aws-sdk';
 import { useDispatch, useSelector } from 'react-redux';
 import { awsAction } from '../redux/reducers/awsReducer';
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 import { IoTSiteWiseClient } from '@aws-sdk/client-iotsitewise';
-import { getData } from '../utils/asyncStorage';
+import { getData, removeData } from '../utils/asyncStorage';
 import validateQrCode from '../utils/validateQrCode';
 
 export const AwsContext = React.createContext();
@@ -18,8 +18,10 @@ const InitialiseAws = ({ children }) => {
     secretAccessKey,
     sessionToken,
     accessKeyId,
+    qrData,
   } = useSelector(state => state.awsStore);
   const [awsClient, setAwsClient] = useState(null);
+  const stackDetectionRef = useRef(null);
 
   const dispatch = useDispatch();
 
@@ -44,6 +46,24 @@ const InitialiseAws = ({ children }) => {
     getStoredCred();
   }, []);
 
+  const checkStackDeletion = () => {
+    const cloudformation = new AWS.CloudFormation();
+    cloudformation.describeStacks({ StackName: qrData?.PROJECT_NAME }, err => {
+      if (err) {
+        dispatch(awsAction.setIsAwsConnected(false));
+        dispatch(awsAction.setQrData({}));
+        dispatch(awsAction.setAwsRegion(''));
+        dispatch(awsAction.setCognitoIdentityPool(''));
+        dispatch(awsAction.setRoleArn(''));
+        dispatch(awsAction.setIsAwsConnected(false));
+        dispatch(awsAction.setAccessKeyId(null));
+        dispatch(awsAction.setSessionToken(null));
+        dispatch(awsAction.setSecretAccessKey(null));
+        removeData('qrCode');
+      }
+    });
+  };
+
   const getClient = async () => {
     const client = new IoTSiteWiseClient({
       region: awsRegion,
@@ -57,6 +77,7 @@ const InitialiseAws = ({ children }) => {
       dispatch(awsAction.setShowValidatedAnimation(false));
       dispatch(awsAction.setIsAwsConnected(true));
     }, 1000);
+    stackDetectionRef.current = setInterval(checkStackDeletion, 5000);
   };
 
   const initialise = async () => {
@@ -83,6 +104,10 @@ const InitialiseAws = ({ children }) => {
       getClient();
     }
   }, [accessKeyId, secretAccessKey, sessionToken]);
+
+  useEffect(() => {
+    return () => clearInterval(stackDetectionRef.current);
+  }, []);
 
   return (
     <AwsContext.Provider value={awsClient}>{children}</AwsContext.Provider>
