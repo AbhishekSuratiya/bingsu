@@ -26,7 +26,7 @@ const LocationSensorMap = ({ title }) => {
     checkingForPermission,
   } = useSelector(state => state.locationStore);
   const cloudWatchLog = useContext(LoggerContext);
-  const [region, setRegion] = useState({});
+  const [region, setRegion] = useState(null);
 
   useEffect(() => {
     if (
@@ -137,7 +137,7 @@ const LocationSensorMap = ({ title }) => {
             style={styles.map}
             showsUserLocation
             followsUserLocation
-            region={region}
+            region={region && region}
             onRegionChangeComplete={r => setRegion(r)}
           />
         )}
