@@ -88,7 +88,8 @@ const SensorScreen = ({ navigation }) => {
       {/*<AmbientLightSensor />*/}
       <BatteryLevel />
       <WifiStatus />
-      <CpuUsage />
+      {/*Commented CPU Usage to have feature parity between both platforms*/}
+      {/*<CpuUsage />*/}
       <CellularStatus />
     </ScrollView>
   );
