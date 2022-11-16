@@ -7,6 +7,9 @@ import Colors from '../../../theme/Colors';
 import { useNetInfo } from '@react-native-community/netinfo';
 import * as NetInfo from '@react-native-community/netinfo';
 import { LoggerContext } from '../../../containers/Logger';
+import { BatchPutAssetPropertyValueCommand } from '@aws-sdk/client-iotsitewise';
+import { useSelector } from 'react-redux';
+import { AwsContext } from '../../../containers/InitialiseAws';
 
 const CellularStatus = props => {
   const [isSensorListening, setIsSensorListening] = useState(false);
@@ -14,19 +17,72 @@ const CellularStatus = props => {
   const [generation, setGeneration] = useState('');
   const netInfo = useNetInfo();
   const cloudWatchLog = useContext(LoggerContext);
+  const {
+    isAwsConnected,
+    qrData: { ASSET_MODEL_MEASUREMENTS_PREFIX },
+  } = useSelector(state => state.awsStore);
+  const client = useContext(AwsContext);
 
   useEffect(() => {
     NetInfo.fetch('cellular').then(state => {
-      setCarrier(state?.details?.carrier || 'No SIM card');
-      setGeneration(
-        state?.details?.cellularGeneration
-          ? state?.details?.cellularGeneration
-          : netInfo?.type === 'none'
-          ? 'No network'
-          : 'Connected to Wifi',
-      );
+      const carrierDetail = state?.details?.carrier || 'No SIM card';
+      const generationDetail = state?.details?.cellularGeneration
+        ? state?.details?.cellularGeneration
+        : netInfo?.type === 'none'
+        ? 'No network'
+        : 'Connected to Wifi';
+      setCarrier(carrierDetail);
+      setGeneration(generationDetail);
+
+      if (isAwsConnected && isSensorListening) {
+        const command = new BatchPutAssetPropertyValueCommand({
+          entries: [
+            {
+              entryId: 'AssetModelCarrierName',
+              propertyAlias: ASSET_MODEL_MEASUREMENTS_PREFIX + 'CarrierName',
+              propertyValues: [
+                {
+                  value: {
+                    stringValue: carrierDetail,
+                  },
+                  timestamp: { timeInSeconds: Date.now() / 1000 },
+                },
+              ],
+            },
+            {
+              entryId: 'AssetModelCarrierGeneration',
+              propertyAlias:
+                ASSET_MODEL_MEASUREMENTS_PREFIX + 'CarrierGeneration',
+              propertyValues: [
+                {
+                  value: {
+                    stringValue: generationDetail,
+                  },
+                  timestamp: { timeInSeconds: Date.now() / 1000 },
+                },
+              ],
+            },
+            {
+              entryId: 'AssetModelIsCarrierExpensive',
+              propertyAlias:
+                ASSET_MODEL_MEASUREMENTS_PREFIX + 'IsCarrierExpensive',
+              propertyValues: [
+                {
+                  value: {
+                    stringValue: netInfo?.details?.isConnectionExpensive
+                      ? 'Yes'
+                      : 'No',
+                  },
+                  timestamp: { timeInSeconds: Date.now() / 1000 },
+                },
+              ],
+            },
+          ],
+        });
+        client?.send(command);
+      }
     });
-  }, [netInfo]);
+  }, [netInfo, isAwsConnected, isSensorListening]);
 
   return (
     <View style={styles.root}>
