@@ -19,6 +19,7 @@ const InitialiseAws = ({ children }) => {
     sessionToken,
     accessKeyId,
     qrData,
+    isAwsConnected,
   } = useSelector(state => state.awsStore);
   const [awsClient, setAwsClient] = useState(null);
   const stackDetectionRef = useRef(null);
@@ -106,8 +107,10 @@ const InitialiseAws = ({ children }) => {
   }, [accessKeyId, secretAccessKey, sessionToken]);
 
   useEffect(() => {
-    return () => clearInterval(stackDetectionRef.current);
-  }, []);
+    if (!isAwsConnected) {
+      clearInterval(stackDetectionRef.current);
+    }
+  }, [isAwsConnected]);
 
   return (
     <AwsContext.Provider value={awsClient}>{children}</AwsContext.Provider>
