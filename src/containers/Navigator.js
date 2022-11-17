@@ -140,6 +140,9 @@ const Navigator = () => {
                   listeners={{
                     tabPress: e => {
                       if (name === 'LearnMore') {
+                        if (!netInfo?.isConnected) {
+                          e.preventDefault();
+                        }
                         cloudWatchLog('Opening learn more screen');
                       } else if (name === 'ScanQr') {
                         if (!netInfo?.isConnected) {
