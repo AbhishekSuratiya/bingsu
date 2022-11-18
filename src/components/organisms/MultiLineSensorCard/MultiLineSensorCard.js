@@ -59,15 +59,15 @@ const MultiLineSensorCard = ({
   const data = [
     {
       data: xCoordinate,
-      svg: { stroke: Colors.red },
+      svg: { stroke: Colors.blue },
     },
     {
       data: yCoordinate,
-      svg: { stroke: Colors.green },
+      svg: { stroke: Colors.red },
     },
     {
       data: zCoordinate,
-      svg: { stroke: Colors.blue },
+      svg: { stroke: Colors.green },
     },
   ];
 
@@ -82,7 +82,7 @@ const MultiLineSensorCard = ({
       ]}>
       <View style={styles.coordinatesText}>
         <Text style={styles.coordinates}>x:</Text>
-        <Text style={{ color: Colors.red }}>
+        <Text style={{ color: Colors.blue }}>
           {(xCoordinate[xCoordinate.length - 1]?.toFixed(4) || 0) +
             ' ' +
             (units || unitX)}
@@ -90,7 +90,7 @@ const MultiLineSensorCard = ({
       </View>
       <View style={styles.coordinatesText}>
         <Text style={styles.coordinates}>y:</Text>
-        <Text style={{ color: Colors.green }}>
+        <Text style={{ color: Colors.red }}>
           {(yCoordinate[yCoordinate.length - 1]?.toFixed(4) || 0) +
             ' ' +
             (units + unitY)}
@@ -98,7 +98,7 @@ const MultiLineSensorCard = ({
       </View>
       <View style={styles.coordinatesText}>
         <Text style={styles.coordinates}>z:</Text>
-        <Text style={{ color: Colors.blue }}>
+        <Text style={{ color: Colors.green }}>
           {(zCoordinate[zCoordinate.length - 1]?.toFixed(4) || 0) +
             ' ' +
             (units + unitZ)}
