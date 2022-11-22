@@ -1,6 +1,7 @@
 import React from 'react';
 import Colors from '../../theme/Colors';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import Fonts from '../../theme/Fonts';
 
 const Button = ({ title, light, negative, ...rest }) => {
   return (
@@ -35,5 +36,6 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     fontWeight: 'bold',
     fontSize: 16,
+    fontFamily: Fonts.AmazonEmberBold,
   },
 });

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   root: {
@@ -18,6 +19,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     paddingRight: 24,
     flex: 1,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   retryBtn: {
     backgroundColor: Colors.white100,
@@ -30,6 +32,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontSize: 13,
     paddingHorizontal: 24,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   rootIos: {
     bottom: 116,

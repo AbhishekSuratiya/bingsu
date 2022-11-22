@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   barcodeHeading: {
@@ -8,11 +9,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 40,
     marginBottom: 16,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   steps: {
     fontSize: 13,
     color: Colors.grey80,
     flex: 1,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   bullets: {
     marginBottom: 12,
@@ -23,6 +26,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 24,
     marginTop: 38,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   connectedContainer: {
     flex: 1,
@@ -67,6 +71,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     marginTop: 24,
+    fontFamily: Fonts.AmazonEmberBold,
   },
   allowTextDesc: {
     fontSize: 13,
@@ -74,6 +79,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 8,
     marginBottom: 40,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   allowCard: {
     justifyContent: 'center',

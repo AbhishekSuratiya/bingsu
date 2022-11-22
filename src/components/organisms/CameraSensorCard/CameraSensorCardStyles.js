@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   card: {
@@ -19,6 +20,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.white100,
     fontSize: 16,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   header: {
     flexDirection: 'row',
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
   cameraBtnText: {
     fontSize: 13,
     color: Colors.white100,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   allowText: {
     fontSize: 16,
@@ -70,6 +73,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     marginTop: 24,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   allowTextDesc: {
     fontSize: 16,
@@ -77,6 +81,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 8,
     marginBottom: 40,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   allowCard: {
     justifyContent: 'center',

@@ -1,12 +1,17 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   lineChart: { flex: 1 },
   lineChartContainer: { flex: 1, marginLeft: 10 },
   yAxisContainer: { flexDirection: 'row', flex: 1 },
-  currentValue: { color: Colors.white80, marginTop: 8 },
+  currentValue: {
+    color: Colors.white80,
+    marginTop: 8,
+    fontFamily: Fonts.AmazonEmberRegular,
+  },
   card: {
     padding: 16,
     paddingTop: 0,
@@ -19,6 +24,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.white100,
     fontSize: 16,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   header: {
     flexDirection: 'row',

@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
 import { SENSOR_CARD_HEADER } from '../../../utils/contants';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   currentValue: { color: Colors.white80, marginTop: 8 },
@@ -16,6 +17,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.white100,
     fontSize: 16,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   header: {
     flexDirection: 'row',

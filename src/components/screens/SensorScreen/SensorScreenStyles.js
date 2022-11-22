@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   root: {
@@ -12,11 +13,13 @@ const styles = StyleSheet.create({
   saveYourData: {
     color: Colors.grey80,
     fontSize: 13,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   connectToAws: {
     color: Colors.white100,
     marginBottom: 4,
     fontSize: 16,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   connectToAwsWrapper: {
     padding: 16,

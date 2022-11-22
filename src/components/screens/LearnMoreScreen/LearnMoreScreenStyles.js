@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   root: {
@@ -11,10 +12,12 @@ const styles = StyleSheet.create({
     color: Colors.blue,
     fontSize: 24,
     marginBottom: 24,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   tnc: {
     color: Colors.blue,
     fontSize: 24,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
 });
 

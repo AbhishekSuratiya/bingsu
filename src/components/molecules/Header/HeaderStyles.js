@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/Colors';
+import Fonts from '../../../theme/Fonts';
 
 export default StyleSheet.create({
   mainContainer: {
@@ -11,13 +12,15 @@ export default StyleSheet.create({
   title: {
     fontSize: 28,
     color: Colors.white100,
-    fontWeight: '500',
+    fontWeight: 'bold',
     marginTop: 16,
     marginBottom: 4,
+    fontFamily: Fonts.AmazonEmberBold,
   },
   connectionStatus: {
     fontSize: 13,
     color: Colors.grey,
+    fontFamily: Fonts.AmazonEmberRegular,
   },
   animationContainer: {
     width: 6,
