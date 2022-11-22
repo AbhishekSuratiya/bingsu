@@ -43,6 +43,11 @@
 	<string>$(PRODUCT_NAME) needs access to your Camera.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs to get your location...</string>
+    <key>UIAppFonts</key>
+    <array>
+        <string>AmazonEmber-Regular.ttf</string>
+        <string>AmazonEmber-Bold.ttf</string>
+    </array>
 	<key>UILaunchStoryboardName</key>
 	<string>BootSplash</string>
 	<key>UIRequiredDeviceCapabilities</key>

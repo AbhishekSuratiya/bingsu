@@ -13,6 +13,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		461078B828EA973A00869B34 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 461078B728EA973A00869B34 /* BootSplash.storyboard */; };
+		469089FF292CCFBE004D0E74 /* AmazonEmber-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 469089FE292CCFBE004D0E74 /* AmazonEmber-Regular.ttf */; };
+		46908A01292CD3AC004D0E74 /* AmazonEmber-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46908A00292CD3AC004D0E74 /* AmazonEmber-Bold.ttf */; };
 		4694D26728EDF92F004D25EF /* Web.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4694D26628EDF92F004D25EF /* Web.bundle */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		FB26AC5AB8A8AA5D575F6DC1 /* libPods-bingsuMobile-bingsuMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A5EB1862C07128F5A1B9BB /* libPods-bingsuMobile-bingsuMobileTests.a */; };
@@ -41,6 +43,8 @@
 		15444BAC6F13A43F2852CEA3 /* Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-bingsuMobile-bingsuMobileTests/Pods-bingsuMobile-bingsuMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		449CD4948E8BFF7FB16ED563 /* Pods-bingsuMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile.release.xcconfig"; path = "Target Support Files/Pods-bingsuMobile/Pods-bingsuMobile.release.xcconfig"; sourceTree = "<group>"; };
 		461078B728EA973A00869B34 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = bingsuMobile/BootSplash.storyboard; sourceTree = "<group>"; };
+		469089FE292CCFBE004D0E74 /* AmazonEmber-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AmazonEmber-Regular.ttf"; path = "../../assets/fonts/AmazonEmber-Regular.ttf"; sourceTree = "<group>"; };
+		46908A00292CD3AC004D0E74 /* AmazonEmber-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AmazonEmber-Bold.ttf"; path = "../../assets/fonts/AmazonEmber-Bold.ttf"; sourceTree = "<group>"; };
 		4694D26628EDF92F004D25EF /* Web.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Web.bundle; path = ../kvsWeb/Web.bundle; sourceTree = "<group>"; };
 		7A25B2EE543E0039576C27A3 /* Pods-bingsuMobile-bingsuMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bingsuMobile-bingsuMobileTests.release.xcconfig"; path = "Target Support Files/Pods-bingsuMobile-bingsuMobileTests/Pods-bingsuMobile-bingsuMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = bingsuMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -112,6 +116,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		469089FD292CCFA9004D0E74 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				46908A00292CD3AC004D0E74 /* AmazonEmber-Bold.ttf */,
+				469089FE292CCFBE004D0E74 /* AmazonEmber-Regular.ttf */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -122,6 +135,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				469089FD292CCFA9004D0E74 /* Resources */,
 				13B07FAE1A68108700A75B9A /* bingsuMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* bingsuMobileTests */,
@@ -250,8 +264,10 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				469089FF292CCFBE004D0E74 /* AmazonEmber-Regular.ttf in Resources */,
 				4694D26728EDF92F004D25EF /* Web.bundle in Resources */,
 				461078B828EA973A00869B34 /* BootSplash.storyboard in Resources */,
+				46908A01292CD3AC004D0E74 /* AmazonEmber-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
